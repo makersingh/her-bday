@@ -4,12 +4,9 @@ window.onbeforeunload = function () {
 }
 window.scrollTo(0, 0);
 
-// --- SECTION 1: BOOK OPENING & MUSIC ---
+// --- SECTION 1: BOOK OPENING ---
 const bookCover = document.getElementById('book-cover');
 const magicWorld = document.getElementById('magic-world');
-const music = document.getElementById('bg-music');
-const musicBtn = document.getElementById('music-toggle');
-const musicIcon = document.getElementById('music-icon');
 
 if (bookCover) {
     bookCover.addEventListener('click', () => {
@@ -20,26 +17,27 @@ if (bookCover) {
             if (magicWorld) magicWorld.classList.add('show-world');
         }, 50);
         
-        if (music) {
-            music.play().catch(e => console.log("Music blocked by browser", e));
-            if (musicIcon) musicIcon.innerHTML = "🎶"; 
-        }
-        
         setTimeout(() => { 
             bookCover.style.display = 'none'; 
-            startMagicObservers(); // Starts the scrolling magic
+            startMagicObservers(); 
         }, 1500);
     });
 }
 
-if (musicBtn && music) {
-    musicBtn.addEventListener("click", () => {
-        if (music.paused) {
-            music.play();
-            if (musicIcon) musicIcon.innerHTML = "🎶"; 
+// --- NEW AESTHETIC MUSIC PLAYER LOGIC ---
+const lauvAudio = document.getElementById('lauv-audio');
+const customPlayBtn = document.getElementById('custom-play-btn');
+
+if (customPlayBtn && lauvAudio) {
+    customPlayBtn.addEventListener('click', () => {
+        if (lauvAudio.paused) {
+            lauvAudio.play();
+            customPlayBtn.innerHTML = "⏸"; // Changes to Pause icon
+            customPlayBtn.classList.add('playing');
         } else {
-            music.pause();
-            if (musicIcon) musicIcon.innerHTML = "⏸️"; 
+            lauvAudio.pause();
+            customPlayBtn.innerHTML = "▶"; // Changes back to Play icon
+            customPlayBtn.classList.remove('playing');
         }
     });
 }
@@ -191,15 +189,12 @@ function startMagicObservers() {
                 setTimeout(() => {
                     document.body.style.overflowY = 'hidden'; 
                     
-                    // Safely lower background music and play hat audio
-                    if (music) music.volume = 0.3; 
+                    // Plays the hat audio cleanly without looking for background music
                     if (hatAudio) {
                         hatAudio.play().catch(e => console.log("Audio blocked", e));
                     }
                     
                     playSortingHat(); 
-                    
-                    setTimeout(() => { if (music) music.volume = 1.0; }, 20000); 
                     
                 }, 800); 
             }
@@ -227,3 +222,4 @@ function startMagicObservers() {
     if (section2) observer.observe(section2);
     if (section3) observer.observe(section3);
 }
+  
