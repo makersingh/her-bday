@@ -4,7 +4,7 @@
 /* Loading the Lightning Bolt Font */
 @font-face {
     font-family: 'HarryPotter';
-    src: url('harryp.ttf') format('truetype');
+    src: url('harryp.TTF') format('truetype');
 }
 
 * {
