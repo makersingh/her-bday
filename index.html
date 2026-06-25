@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gawar ka bdayyy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- THE BOOK COVER -->
+    <div id="book-cover" class="book-cover">
+        <div class="book-content">
+            <p class="author">Some crazy guy Presents</p>
+            <h1 class="hp-title">Harry Potter</h1>
+            <h2 class="hp-subtitle">AND THE BEAUTY OF "MUNMUN PANDEY"</h2>
+            <div class="magic-wand-line"></div>
+            <p class="click-to-open">Tap to open...</p>
+        </div>
+    </div>
+
+    <!-- THE MAGICAL WORLD (Hidden completely until book opens) -->
+    <div id="magic-world" class="hidden-world" style="display: none;">
+        
+        <div class="music-container">
+            <audio id="bg-music" src="music.mp3" loop></audio>
+            <button id="music-toggle" class="music-btn playing">
+                <span id="music-icon">🎵</span>
+            </button>
+        </div>
+
+        <header class="hero">
+            <h1 class="glow-text">Happy Birthday, Munmun</h1>
+            <p class="subtitle">The magic is just beginning...</p>
+        </header>
+
+        <!-- THE SORTING CEREMONY (No hat image) -->
+        <section class="sorting-section" id="sorting-section">
+            <div class="sorting-container">
+                
+                <!-- THE NEW HEADING -->
+                <h3 class="sorting-title">The Sorting Hat is deciding your house...</h3>
+                <audio id="hat-audio" src="sorting-hat.mp3"></audio>
+                <img src="munmun-main.jpg" alt="Munmun Sorting" class="sorting-img">
+                <div class="hat-dialogue-box">
+                    <p id="hat-text">...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIME-TURNER MEMORY REEL -->
+        <section class="timeline-section" id="timeline-section">
+            <h2 class="section-title">A Pensieve of Precious Moments</h2>
+            
+            <div class="pensieve-layout">
+                
+                <div class="pensieve-left">
+                    <div class="slideshow-container">
+                        <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
+                    </div>
+                    <p id="special-text" class="magic-typewriter-text"></p>
+                </div>
+
+                <div class="pensieve-right" id="letter-section">
+                    <div class="letter-content">
+                        <p id="typing-text"></p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+/* --- GLOBAL --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
+
+/* Loading the Lightning Bolt Font */
+@font-face {
+    font-family: 'HarryPotter';
+    src: url('harryp.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+}
+
+body {
+    background: linear-gradient(135deg, #020202 0%, #0a1930 50%, #081a10 100%);
+    background-size: 400% 400%;
+    animation: darkGradientBG 15s ease infinite;
+    color: #e0e0e0;
+    overflow-x: hidden;
+    perspective: 1500px; 
+}
+
+@keyframes darkGradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+/* --- THE BOOK COVER --- */
+.book-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to right, #040b17, #0a1930); 
+    border-left: 20px solid #010408; 
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: left center;
+    transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1.5s ease;
+    box-shadow: inset 20px 0 50px rgba(0,0,0,0.8);
+    cursor: pointer;
+}
+
+.book-content {
+    text-align: center;
+    padding: 40px;
+    border: 2px solid rgba(192, 192, 192, 0.2);
+    border-radius: 5px;
+}
+
+.author {
+    color: #8faeb0;
+    font-family: 'Cinzel', serif; /* Cinematic movie font */
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.hp-title {
+    font-family: 'HarryPotter', sans-serif; /* The Lightning Bolt Font! */
+    font-size: 7.5rem; /* Made it bigger because this font runs a little small */
+    color: #c0c0c0; 
+    text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000; 
+    letter-spacing: 3px;
+    font-weight: normal;
+    line-height: 1;
+    margin-bottom: -10px;
+}
+
+.hp-subtitle {
+    font-family: 'Cinzel', serif; /* Sharp, elegant movie poster font */
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #8faeb0;
+    letter-spacing: 6px;
+    margin-top: 15px;
+    text-shadow: 1px 1px 5px #000;
+}
+
+.magic-wand-line {
+    height: 2px;
+    width: 80%;
+    margin: 30px auto;
+    background: linear-gradient(90deg, transparent, #1a472a, #c0c0c0, #1a472a, transparent);
+}
+
+.click-to-open {
+    margin-top: 40px;
+    font-style: italic;
+    color: #c0c0c0;
+    animation: pulseText 1.5s infinite;
+}
+
+.book-open-anim {
+    transform: rotateY(-110deg); 
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- THE MAGICAL WORLD --- */
+.hidden-world {
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+.show-world {
+    opacity: 1;
+}
+
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.glow-text {
+    font-size: 4rem;
+    color: #e0e0e0;
+    text-shadow: 0 0 25px rgba(26, 71, 42, 0.8), 0 0 10px rgba(79, 172, 254, 0.5); 
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #8faeb0;
+    font-style: italic;
+}
+
+/* --- THE SORTING CEREMONY --- */
+.sorting-section {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.sorting-container {
+    /* The New Sorting Heading */
+.sorting-title {
+    font-family: 'Cinzel', serif; /* Cinematic movie font */
+    font-size: 1.8rem;
+    color: #c0c0c0; /* Silver */
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px rgba(26, 71, 42, 0.5); /* Faint Slytherin glow */
+    animation: pulseDeciding 2s infinite ease-in-out;
+}
+
+/* Makes the text gently pulse to build suspense */
+@keyframes pulseDeciding {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 25px rgba(26, 71, 42, 0.9); }
+}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.sorting-img {
+    width: 250px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50% 50% 10px 10px; 
+    border: 3px solid #1a472a;
+    box-shadow: 0 10px 30px rgba(26, 71, 42, 0.6);
+    margin-bottom: 30px;
+    filter: sepia(20%) contrast(110%);
+}
+
+.hat-dialogue-box {
+    min-height: 120px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hat-text {
+    font-size: 2rem;
+    color: #c0c0c0;
+    font-style: italic;
+    transition: opacity 0.5s ease;
+    text-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+}
+
+/* THE MAGICAL SILVER SLYTHERIN REVEAL */
+.slytherin-shout {
+    font-family: 'HarryPotter', sans-serif !important; /* Uses the lightning bolt font */
+    font-size: 6.5rem !important;
+    color: #e8f0f2 !important; /* Shimmering Silver */
+    letter-spacing: 5px;
+    font-weight: normal !important;
+    font-style: normal !important;
+    text-shadow: 
+        0 0 20px #1a472a,   /* Inner green glow */
+        0 0 40px #2a623d,   /* Outer green glow */
+        0 0 60px #000,      /* Dark shadow for contrast */
+        2px 2px 5px rgba(255, 255, 255, 0.8) !important; /* Silver highlight edge */
+    
+    /* Adds the explosive zoom and a continuous magical pulse */
+    animation: slytherinExplode 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards, silverShimmer 3s infinite alternate !important;
+}
+
+/* The subtle magical shimmer after it explodes onto the screen */
+@keyframes silverShimmer {
+    0% { filter: brightness(1) drop-shadow(0 0 15px #1a472a); }
+    100% { filter: brightness(1.3) drop-shadow(0 0 30px #2a623d); }
+}
+
+@keyframes slytherinExplode {
+    0% { transform: scale(0.1); opacity: 0; filter: blur(10px); }
+    50% { transform: scale(1.1); opacity: 1; filter: blur(0); }
+    100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+
+
+/* =========================================
+   A PENSIEVE OF PRECIOUS MOMENTS (SIDE-BY-SIDE)
+========================================= */
+
+.timeline-section {
+    padding: 100px 20px;
+    text-align: center;
+    border-top: 1px solid rgba(26, 71, 42, 0.3);
+}
+
+.section-title {
+    font-size: 2.8rem;
+    color: #d4af37;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    margin-bottom: 50px;
+}
+
+/* The Master Grid: Left (Image/Text) & Right (Letter) */
+.pensieve-layout {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    gap: 60px;
+    max-width: 1200px; 
+    margin: 0 auto;
+    flex-wrap: wrap; 
+}
+
+/* --- LEFT SIDE: Image & Golden Text --- */
+.pensieve-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1; 
+    min-width: 380px;
+}
+
+.slideshow-container {
+    width: 100%;
+    max-width: 380px; 
+    aspect-ratio: 4/5;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(26, 71, 42, 0.3);
+    border: 1px solid rgba(192, 192, 192, 0.2);
+    transition: box-shadow 1.5s ease, border-color 1.5s ease;
+}
+
+.fade-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1.5s ease, transform 4.5s linear;
+    transform: scale(1);
+    opacity: 1;
+}
+
+.fade-img.hidden { opacity: 0; transition: opacity 1.5s ease; }
+.fade-img.zooming { transform: scale(1.08); }
+
+/* The Golden Pop Effects */
+.slideshow-container.golden-frame {
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 140, 0, 0.4) !important;
+    border-color: #ffd700 !important;
+}
+
+.fade-img.special-pop {
+    transform: scale(1.1) !important;
+    filter: sepia(40%) contrast(120%) brightness(110%) saturate(150%);
+}
+
+/* Golden text centered perfectly below the image */
+#special-text {
+    font-family: 'HarryPotter', sans-serif;
+    font-size: 3.5rem; 
+    color: #ffd700; 
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
+    margin-top: 25px; 
+    min-height: 60px; 
+    letter-spacing: 4px;
+    text-align: center; 
+}
+
+#special-text::after {
+    content: '|';
+    animation: pulseText 0.8s infinite;
+    color: #ffd700;
+    opacity: 0; 
+}
+
+#special-text.typing-active::after { opacity: 1; }
+
+/* --- RIGHT SIDE: The Final Letter --- */
+.pensieve-right {
+    flex: 1; 
+    min-width: 380px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.letter-content {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 45px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    text-align: left; 
+    margin-top: -90px; /* <--- ADD THIS EXACT LINE */
+}
+
+#typing-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: #e0e0e0;
+    line-height: 1.8;
+    min-height: 200px;
+}
+/* --- MUSIC PLAYER --- */
+.music-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.music-btn {
+    background: rgba(10, 25, 20, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(192, 192, 192, 0.4);
+    color: #c0c0c0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    border-color: #2a623d;
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
