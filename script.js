@@ -24,22 +24,40 @@ if (bookCover) {
     });
 }
 
-// --- NEW AESTHETIC MUSIC PLAYER LOGIC ---
-const lauvAudio = document.getElementById('lauv-audio');
-const customPlayBtn = document.getElementById('custom-play-btn');
+// --- NEW AESTHETIC PLAYLIST LOGIC ---
+const globalAudio = document.getElementById('global-audio');
+const trackRows = document.querySelectorAll('.track-row');
 
-if (customPlayBtn && lauvAudio) {
-    customPlayBtn.addEventListener('click', () => {
-        if (lauvAudio.paused) {
-            lauvAudio.play();
-            customPlayBtn.innerHTML = "⏸"; // Changes to Pause icon
-            customPlayBtn.classList.add('playing');
-        } else {
-            lauvAudio.pause();
-            customPlayBtn.innerHTML = "▶"; // Changes back to Play icon
-            customPlayBtn.classList.remove('playing');
-        }
+function playTrack(fileName, clickedRow) {
+    const playBtnIcon = clickedRow.querySelector('.row-play-btn');
+
+    // 1. If clicking the song that is ALREADY playing, just Pause it
+    if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
+        globalAudio.pause();
+        playBtnIcon.innerHTML = "▶";
+        return;
+    }
+    
+    // 2. If clicking the same song but it was paused, Resume it
+    if (clickedRow.classList.contains('playing-now') && globalAudio.paused) {
+        globalAudio.play();
+        playBtnIcon.innerHTML = "⏸";
+        return;
+    }
+
+    // 3. Otherwise, they clicked a NEW song! Reset all rows back to normal first
+    trackRows.forEach(row => {
+        row.classList.remove('playing-now');
+        row.querySelector('.row-play-btn').innerHTML = "▶";
     });
+
+    // Load the new song and play it
+    globalAudio.src = fileName;
+    globalAudio.play();
+    
+    // Light up the new row they just clicked
+    clickedRow.classList.add('playing-now');
+    playBtnIcon.innerHTML = "⏸";
 }
 
 // --- SECTION 2: THE SORTING HAT SCRIPT ---

@@ -45,17 +45,36 @@
             </div>
         </section>
         <section class="music-player-section" id="music-player-section">
-            <h3 class="player-title">Let's play your favourite music before we move on?</h3>
+            <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
             
-            <div class="aesthetic-player">
-                <div class="player-info">
-                    <span class="song-name">I Like Me Better</span>
-                    <span class="artist-name">Lauv</span>
+            <div class="aesthetic-playlist">
+                
+                <div class="track-row" onclick="playTrack('music1.mp3', this)">
+                    <div class="track-info">
+                        <span class="song-name">I Like Me Better</span>
+                        <span class="artist-name">Lauv</span>
+                    </div>
+                    <button class="row-play-btn">▶</button>
                 </div>
                 
-                <button id="custom-play-btn" class="custom-play-btn">▶</button>
+                <div class="track-row" onclick="playTrack('music2.mp3', this)">
+                    <div class="track-info">
+                        <span class="song-name">Othaiyadi Pathayila</span>
+                        <span class="artist-name">Dhibu Ninan Thomas</span>
+                    </div>
+                    <button class="row-play-btn">▶</button>
+                </div>
                 
-                <audio id="lauv-audio" src="music.mp3" loop></audio> 
+                <div class="track-row" onclick="playTrack('music3.mp3', this)">
+                    <div class="track-info">
+                        <span class="song-name">Safarnama</span>
+                        <span class="artist-name">Lucky Ali</span>
+                    </div>
+                    <button class="row-play-btn">▶</button>
+                </div>
+                
+                <audio id="global-audio" src="music1.mp3" loop></audio> 
+                
             </div>
         </section>
 

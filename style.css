@@ -370,27 +370,48 @@ body {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-/* Glassmorphism Card Effect */
-.aesthetic-player {
+/* Glassmorphism Playlist Box */
+.aesthetic-playlist {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 50px;
-    padding: 15px 30px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
+    border-radius: 25px;
+    padding: 20px;
+    width: 100%;
+    max-width: 450px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
     backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.aesthetic-player:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(212, 175, 55, 0.15);
-    border-color: rgba(212, 175, 55, 0.6);
+/* Individual Song Rows */
+.track-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.player-info {
+.track-row:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+}
+
+/* When a song is actively playing */
+.track-row.playing-now {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.track-info {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -398,7 +419,7 @@ body {
 
 .song-name {
     font-family: 'Cinzel', serif;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #d4af37;
     font-weight: bold;
     letter-spacing: 1px;
@@ -406,37 +427,23 @@ body {
 
 .artist-name {
     font-family: sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #a0a0a0;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     margin-top: 4px;
 }
 
-/* The Play/Pause Button */
-.custom-play-btn {
-    background: #d4af37;
-    color: #0b0d10;
+/* The small play/pause icon on the right of each row */
+.row-play-btn {
+    background: transparent;
+    color: #d4af37;
     border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-    padding-left: 4px; /* Centers the play triangle visually */
+    transition: transform 0.2s ease;
 }
 
-.custom-play-btn.playing {
-    padding-left: 0; /* Centers the pause bars perfectly */
-}
-
-.custom-play-btn:hover {
-    transform: scale(1.1);
-    background: #f1c40f;
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
+.track-row:hover .row-play-btn {
+    transform: scale(1.2);
 }
