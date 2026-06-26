@@ -22,20 +22,31 @@
     <!-- THE MAGICAL WORLD (Hidden completely until book opens) -->
     <div id="magic-world" class="hidden-world" style="display: none;">
         
-        <div class="music-container">
-            <audio id="bg-music" src="music.mp3" loop></audio>
-        </div>
-
-        <header class="hero">
+        <!-- SECTION 1: HAPPY BIRTHDAY HERO -->
+        <header class="hero" style="padding-top: 60px; text-align: center;">
             <h1 class="glow-text">Happy Birthday, Munmun</h1>
             <p class="subtitle">The magic is just beginning...</p>
         </header>
 
-        <!-- THE SORTING CEREMONY (No hat image) -->
-        <section class="sorting-section" id="sorting-section">
-            <div class="sorting-container">
+        <!-- SECTION 2: POTTERHEAD GREETING -->
+        <section class="potter-greeting-section" id="greeting-section">
+            <div class="greeting-content">
+                <h2 class="potter-callout">Hey there little potter head,</h2>
+                <p class="greeting-text">Look who's turned 16 now (maybe 17).</p>
+                <p class="greeting-text highlight-text">Let's decide which house you belong to, shall we?</p>
                 
-                <!-- THE NEW HEADING -->
+                <div class="scroll-indicator">↓ Scroll to the Sorting Ceremony ↓</div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THE SORTING CEREMONY -->
+        <section class="sorting-section" id="sorting-section">
+            
+            <div class="music-container">
+                <audio id="bg-music" src="music.mp3" loop></audio>
+            </div>
+
+            <div class="sorting-container">
                 <h3 class="sorting-title">The Sorting Hat is deciding your house...</h3>
                 <audio id="hat-audio" src="sorting-hat.mp3"></audio>
                 <img src="munmun-main.jpg" alt="Munmun Sorting" class="sorting-img">
@@ -44,6 +55,8 @@
                 </div>
             </div>
         </section>
+
+        <!-- SECTION 4: AESTHETIC MUSIC PLAYER -->
         <section class="music-player-section" id="music-player-section">
             <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
             
@@ -78,7 +91,7 @@
             </div>
         </section>
 
-        <!-- TIME-TURNER MEMORY REEL -->
+        <!-- SECTION 5: TIME-TURNER MEMORY REEL -->
         <section class="timeline-section" id="timeline-section">
             <h2 class="section-title">A Pensieve of Precious Moments</h2>
             
@@ -100,7 +113,7 @@
             </div>
         </section>
 
-    </div>
+    </div> <!-- END OF MAGICAL WORLD -->
 
     <script src="script.js"></script>
 </body>

@@ -134,6 +134,72 @@ body {
     color: #8faeb0;
     font-style: italic;
 }
+/* =========================================
+   POTTERHEAD GREETING SECTION
+========================================= */
+
+.potter-greeting-section {
+    min-height: 100vh; /* Takes up the whole screen initially */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: radial-gradient(circle at center, #1a1c23 0%, #0b0d10 80%);
+    position: relative;
+}
+
+/* The Glassmorphism Text Box */
+.greeting-content {
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 50px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(212, 175, 55, 0.05);
+    backdrop-filter: blur(5px);
+}
+
+/* The Big Harry Potter Font */
+.potter-callout {
+    font-family: 'HarryPotter', sans-serif;
+    font-size: 5rem;
+    color: #d4af37; /* Gold */
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    line-height: 1.1;
+}
+
+/* The Cinematic Subtext */
+.greeting-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: #c0c0c0; /* Silver */
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.highlight-text {
+    color: #e0e0e0;
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-top: 30px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Bouncing Scroll Hint */
+.scroll-indicator {
+    margin-top: 40px;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    color: #d4af37;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    animation: pulseDeciding 2s infinite ease-in-out; /* Uses the animation we built earlier */
+    opacity: 0.7;
+}
 
 /* --- THE SORTING CEREMONY --- */
 .sorting-section {
