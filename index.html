@@ -107,7 +107,14 @@
                 </div>
                 
                 <audio id="global-audio" src="music1.mp3" loop></audio> 
+        
             </div>
+            <div class="room-transition">
+            <p class="magical-transition-text">All set? Let's move on to the headmaster's office for a surprise, shall we?</p>
+            <button class="back-to-map-btn" onclick="travelTo('headmaster-office')">
+                Enter The Headmaster's Office
+            </button>
+        </div>
         </section>
 
         <section id="headmaster-office" class="magic-room hidden-room">
@@ -128,6 +135,11 @@
                     </div>
                 </div>
             </div>
+            <div class="room-transition">
+            <button class="back-to-map-btn" onclick="travelTo('great-hall')">
+                Go to the Great Hall
+            </button>
+        </div>
         </section>
 
         <section id="great-hall" class="magic-room hidden-room">

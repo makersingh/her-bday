@@ -341,6 +341,7 @@ body {
 
 .section-title {
     font-size: 2.8rem;
+    text-align: center;
     color: #d4af37;
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     margin-bottom: 50px;
@@ -815,3 +816,64 @@ body {
     /* Add a soft glow to the text itself */
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.9);
 }
+
+/* =========================================
+   ROOM TRANSITION STYLES
+   ========================================= */
+.room-transition {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.magical-transition-text {
+    color: #d4af37 !important; /* Gold */
+    font-family: 'Cinzel', serif; /* Keeps it matching your HP theme */
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* FORCE THE MAP TO FIT THE SCREEN PERFECTLY */
+#magic-world { 
+    min-height: 100vh; /* 100% of the screen height */
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the map and buttons vertically */
+    align-items: center;     /* Centers everything horizontally */
+    box-sizing: border-box;
+    padding-bottom: 50px;    /* Adds that missing space at the very bottom */
+}
+
+/* If you have a container specifically for your map buttons, ensure it has space */
+.map-buttons-container {
+    margin-bottom: 40px; 
+}
+
+/* SLYTHERIN ROOM LAYOUT */
+#slytherin-common-room {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the whole room vertically */
+    align-items: center;
+}
+
+/* ADD SPACE BETWEEN HEADING AND MUSIC PLAYER */
+#slytherin-common-room h1, 
+#slytherin-common-room h2 {
+    margin-bottom: 60px !important; /* Forces a large gap under the heading */
+    text-align: center;
+}
+
+.aesthetic-playlist {
+    margin-top: 10px; /* Slight adjustment for perfect centering */
+    margin-bottom: 40px; /* Space before the 'All set?' transition text */
+}
+
