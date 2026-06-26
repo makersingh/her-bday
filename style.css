@@ -235,15 +235,49 @@ body {
     width: 100%;
 }
 
+/* Wrapper to keep hat and photo together */
+.sorting-image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 40px auto;
+}
+
+/* Photo style */
+/* Ensure the wrapper has enough room so the hat doesn't cover the title */
+.sorting-image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 80px auto 30px auto; /* Increased top margin to clear the text */
+}
+
+/* Photo style - slightly scaled for better visibility */
 .sorting-img {
-    width: 250px;
-    height: 300px;
+    width: 320px; 
+    height: 400px;
     object-fit: cover;
-    border-radius: 50% 50% 10px 10px; 
-    border: 3px solid #1a472a;
-    box-shadow: 0 10px 30px rgba(26, 71, 42, 0.6);
-    margin-bottom: 30px;
-    filter: sepia(20%) contrast(110%);
+    border-radius: 15px;
+    border: 2px solid #1a472a;
+    box-shadow: 0 0 30px rgba(26, 71, 42, 0.6);
+    display: block;
+    /* Smooth transition for the image swap */
+    transition: opacity 0.6s ease-in-out; 
+    opacity: 1;
+}
+
+/* The Hat - Adjusted for balance */
+.floating-hat {
+    position: absolute;
+    top: -95px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px; /* Adjusted size */
+    z-index: 10;
+    filter: drop-shadow(0 15px 10px rgba(0,0,0,0.7));
+    animation: floatHat 4s ease-in-out infinite;
+}
+@keyframes floatHat {
+    0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+    50% { transform: translateX(-50%) translateY(-12px) rotate(3deg); }
 }
 
 .hat-dialogue-box {

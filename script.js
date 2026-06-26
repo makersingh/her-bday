@@ -63,6 +63,7 @@ function playTrack(fileName, clickedRow) {
 // --- SECTION 2: THE SORTING HAT SCRIPT ---
 const hatTextElement = document.getElementById('hat-text');
 const hatAudio = document.getElementById('hat-audio'); 
+const sortingPhoto = document.getElementById('sorting-photo'); // Grabs the photo
 
 const hatLines = [
     "Hmm... difficult. Very difficult...",
@@ -73,7 +74,17 @@ const hatLines = [
     "SLYTHERIN!"
 ];
 
-// TIMING FOR YOUR AUDIO FILE (Milliseconds)
+// NEW: The images that match the lines! 
+// Make sure you have 6 images named exactly like this in your folder.
+const sortingImages = [
+    "sort1.jpg", // Shows during "Hmm... difficult..."
+    "sort2.jpg", // Shows during "So much beauty..."
+    "sort3.jpg", // Shows during "Loyal, yes..."
+    "sort4.jpg", // Shows during "A heart that knows..."
+    "sort5.jpg", // Shows during "I know exactly where to put you..."
+    "sort6.jpg"  // Shows during the big "SLYTHERIN!" shout
+];
+
 const textTiming = [ 3500, 3500, 3700, 2800, 2500 ];
 
 let hatIndex = 0;
@@ -81,29 +92,32 @@ let sortingStarted = false;
 
 function playSortingHat() {
     if (hatTextElement && hatIndex < hatLines.length) {
+        // 1. Fade out BOTH text and image
         hatTextElement.style.opacity = 0; 
+        if (sortingPhoto) sortingPhoto.style.opacity = 0; 
         
         setTimeout(() => {
+            // 2. Swap text and image while invisible
             hatTextElement.innerHTML = hatLines[hatIndex]; 
+            if (sortingPhoto && sortingImages[hatIndex]) {
+                sortingPhoto.src = sortingImages[hatIndex];
+            }
+            
+            // 3. Fade them back in
+            hatTextElement.style.opacity = 1;
+            if (sortingPhoto) sortingPhoto.style.opacity = 1;
             
             if (hatIndex === hatLines.length - 1) {
                 hatTextElement.classList.add('slytherin-shout');
-                hatTextElement.style.opacity = 1;
-                
-                setTimeout(() => {
-                    document.body.style.overflowY = 'auto'; // Unlocks screen
-                }, 2000);
-                
+                setTimeout(() => { document.body.style.overflowY = 'auto'; }, 2000);
             } else {
-                hatTextElement.style.opacity = 1;
-                let waitTime = textTiming[hatIndex] || 3000; // Failsafe timing
+                let waitTime = textTiming[hatIndex] || 2000; 
                 hatIndex++;
                 setTimeout(playSortingHat, waitTime); 
             }
-        }, 500);
+        }, 400); // 0.6s duration for the cross-fade effect
     }
 }
-
 // --- SECTION 3: TIME-TURNER SLIDESHOW & TYPEWRITER ---
 const memoryImages = [
     "child1.jpg", "child2.jpg", "child3.jpg", "child4.jpg", "child5.jpg",
