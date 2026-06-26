@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- THE BOOK COVER -->
     <div id="book-cover" class="book-cover">
         <div class="book-content">
             <p class="author">Some crazy guy Presents</p>
@@ -19,29 +18,23 @@
         </div>
     </div>
 
-    <!-- THE MAGICAL WORLD (Hidden completely until book opens) -->
     <div id="magic-world" class="hidden-world" style="display: none;">
         
-        <!-- SECTION 1: HAPPY BIRTHDAY HERO -->
         <header class="hero" style="padding-top: 60px; text-align: center;">
             <h1 class="glow-text">Happy Birthday, Munmun</h1>
             <p class="subtitle">The magic is just beginning...</p>
         </header>
 
-        <!-- SECTION 2: POTTERHEAD GREETING -->
         <section class="potter-greeting-section" id="greeting-section">
             <div class="greeting-content">
-                <h2 class="potter-callout">Hey there little potter head,</h2>
+                <h2 class="potter-callout">Hey there little Potter Head,</h2>
                 <p class="greeting-text">Look who's turned 16 now (maybe 17).</p>
-                <p class="greeting-text highlight-text">Let's decide which house you belong to, shall we?</p>
-                
+                <p class="greeting-text highlight-text">Let's decide which house you belong to in the world of magic, shall we?</p>
                 <div class="scroll-indicator">↓ Scroll to the Sorting Ceremony ↓</div>
             </div>
         </section>
 
-        <!-- SECTION 3: THE SORTING CEREMONY -->
         <section class="sorting-section" id="sorting-section">
-            
             <div class="music-container">
                 <audio id="bg-music" src="music.mp3" loop></audio>
             </div>
@@ -52,7 +45,6 @@
                 
                 <div class="sorting-image-wrapper">
                     <img src="sorting-hat.png" alt="Sorting Hat" class="floating-hat">
-                    
                     <img id="sorting-photo" src="sort1.jpg" alt="Munmun Sorting" class="sorting-img">
                 </div>
 
@@ -62,10 +54,32 @@
             </div>
         </section>
 
-        <!-- SECTION 4: AESTHETIC MUSIC PLAYER -->
-        <section class="music-player-section" id="music-player-section">
-            <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
+        <section id="trivia-section" class="magic-room" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
             
+            <h3 class="potter-callout trivia-heading" style="text-align: center; margin-bottom: 30px;">Let's see if you're really as smart as the sorting hat thinks you are...</h3>
+            
+            <div id="trivia-gate" class="trivia-lock-overlay">
+                <p class="trivia-question" id="quiz-question">Loading magical security verification...</p>
+                <div class="trivia-options" id="quiz-options"></div>
+                <p id="trivia-feedback" class="nonchalant-feedback"></p>
+            </div>
+        </section>
+
+        <section id="marauders-map" class="map-section hidden-room">
+            <h2 class="potter-callout map-heading" style="text-align: center;">The Marauder's Map</h2>
+            <p class="greeting-text" style="text-align: center;">Tap a location to explore your magic...</p>
+            
+            <div class="map-container">
+                <button class="map-location" onclick="travelTo('slytherin-room')">🐍 The Slytherin Common Room</button>
+                <button class="map-location" onclick="travelTo('headmaster-office')">📜 The Headmaster's Office</button>
+                <button class="map-location" onclick="travelTo('great-hall')">✨ The Great Hall</button>
+            </div>
+        </section>
+
+        <section id="slytherin-room" class="magic-room hidden-room">
+            <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
+            
+            <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
             <div class="aesthetic-playlist">
                 
                 <div class="track-row" onclick="playTrack('music1.mp3', this)">
@@ -93,34 +107,52 @@
                 </div>
                 
                 <audio id="global-audio" src="music1.mp3" loop></audio> 
-                
             </div>
         </section>
 
-        <!-- SECTION 5: TIME-TURNER MEMORY REEL -->
-        <section class="timeline-section" id="timeline-section">
-            <h2 class="section-title">A Pensieve of Precious Moments</h2>
+        <section id="headmaster-office" class="magic-room hidden-room">
             
+            <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
+            
+            <h2 class="section-title">A Pensieve of Precious Moments</h2>
             <div class="pensieve-layout">
-                
                 <div class="pensieve-left">
                     <div class="slideshow-container">
                         <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
                     </div>
                     <p id="special-text" class="magic-typewriter-text"></p>
                 </div>
-
                 <div class="pensieve-right" id="letter-section">
                     <div class="letter-content">
                         <p id="typing-text"></p>
                     </div>
                 </div>
-
             </div>
         </section>
 
-    </div> <!-- END OF MAGICAL WORLD -->
+        <section id="great-hall" class="magic-room hidden-room">
+            <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
+            
+            <h2 class="section-title">A Heart Full of Magic</h2>
+            <div class="heart-collage-container" id="heart-grid">
+                <img src="collage1.jpg" class="heart-pic pic-1">
+                <img src="collage2.jpg" class="heart-pic pic-2">
+                <img src="collage3.jpg" class="heart-pic pic-3">
+                <img src="collage4.jpg" class="heart-pic pic-4">
+                <img src="collage5.jpg" class="heart-pic pic-5">
+                <img src="collage6.jpg" class="heart-pic pic-6">
+                <img src="collage7.jpg" class="heart-pic pic-7">
+                <img src="collage8.jpg" class="heart-pic pic-8">
+                <img src="collage9.jpg" class="heart-pic pic-9">
+                <img src="collage10.jpg" class="heart-pic pic-10">
+                <img src="collage11.jpg" class="heart-pic pic-11">
+                <img src="collage12.jpg" class="heart-pic pic-12">
+                <img src="collage13.jpg" class="heart-pic pic-13">
+                <img src="collage14.jpg" class="heart-pic pic-14">
+                <img src="collage15.jpg" class="heart-pic pic-15">
+            </div>
+        </section>
 
-    <script src="script.js"></script>
+    </div> <script src="script.js"></script>
 </body>
 </html>

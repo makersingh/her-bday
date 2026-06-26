@@ -29,6 +29,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 /* --- THE BOOK COVER --- */
+
 .book-cover {
     position: fixed;
     top: 0;
@@ -164,10 +165,11 @@ body {
 /* The Big Harry Potter Font */
 .potter-callout {
     font-family: 'HarryPotter', sans-serif;
-    font-size: 5rem;
+    font-size: 4.5rem;
     color: #d4af37; /* Gold */
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
     margin-bottom: 20px;
+    text-align: center;
     letter-spacing: 3px;
     line-height: 1.1;
 }
@@ -466,6 +468,7 @@ body {
     font-size: 1.6rem;
     color: #c0c0c0;
     margin-bottom: 30px;
+    text-align: center;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
@@ -483,19 +486,47 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers everything */
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* FORCE TRASPARENT BUTTONS */
+.back-to-map-btn {
+    background: transparent !important;
+    border: 1px solid #d4af37 !important;
+    color: #d4af37 !important;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+}
+
+
+.track-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 /* Individual Song Rows */
 .track-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
     border-radius: 15px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid transparent;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .track-row:hover {
@@ -546,4 +577,241 @@ body {
 
 .track-row:hover .row-play-btn {
     transform: scale(1.2);
+}
+/* =========================================
+   FEATURE 4: INTERACTIVE WAND SPARKLES
+========================================= */
+.wand-sparkle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #d4af37 0%, rgba(255,255,255,0) 70%);
+    box-shadow: 0 0 10px #d4af37, 0 0 20px #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    animation: fadeSparkle 0.8s ease-out forwards;
+}
+
+@keyframes fadeSparkle {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.2) translateY(30px); opacity: 0; }
+}
+
+/* =========================================
+   FEATURE 3: DYNAMIC SLYTHERIN THEME SHIFT
+========================================= */
+/* When this class is applied by JS, the entire world transforms */
+.slytherin-theme-active {
+    transition: background 3s ease-in-out;
+    background: radial-gradient(circle at center, #061c0e 0%, #020a05 90%) !important;
+}
+
+.slytherin-theme-active .glow-text,
+.slytherin-theme-active .sorting-title {
+    color: #2f8f53 !important;
+    text-shadow: 0 0 20px rgba(47, 143, 83, 0.8) !important;
+}
+
+/* =========================================
+   FEATURE 2: THE TRIVIA GATEWAY LOCK
+========================================= */
+.trivia-lock-overlay {
+    background: rgba(11, 13, 16, 0.95);
+    border: 2px solid rgba(212, 175, 55, 0.2);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    margin: 50px auto;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    transition: all 0.5s ease;
+}
+
+.trivia-question {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.trivia-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.trivia-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: all 0.3s ease;
+}
+
+.trivia-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: #d4af37;
+    transform: scale(1.02);
+}
+
+/* =========================================
+   MARAUDER'S MAP & ROOMS
+========================================= */
+.map-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.map-location {
+    background: rgba(212, 175, 55, 0.1);
+    border: 2px solid #d4af37;
+    color: #e0e0e0;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    padding: 15px 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    width: 350px;
+    box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.map-location:hover {
+    background: rgba(212, 175, 55, 0.4);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+.magic-room {
+    min-height: 100vh;
+    padding: 50px 20px;
+    animation: roomFadeIn 2s ease forwards;
+}
+
+@keyframes roomFadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   THE GREAT HALL (15-PHOTO HEART)
+========================================= */
+.heart-collage-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: 600px; /* Perfect square container */
+    margin: 40px auto;
+}
+
+.heart-pic {
+    position: absolute;
+    width: 80px; 
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%; /* Makes them aesthetic bubbles */
+    border: 2px solid #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy pop-in */
+}
+
+.heart-pic.revealed {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* THE MATHEMATICAL HEART COORDINATES */
+/* Row 1 (Top Humps) */
+.pic-1 { top: 20%; left: 25%; }
+.pic-2 { top: 20%; left: 40%; }
+.pic-3 { top: 20%; left: 60%; }
+.pic-4 { top: 20%; left: 75%; }
+/* Row 2 (Widest Part) */
+.pic-5 { top: 40%; left: 15%; }
+.pic-6 { top: 40%; left: 32.5%; }
+.pic-7 { top: 40%; left: 50%; }
+.pic-8 { top: 40%; left: 67.5%; }
+.pic-9 { top: 40%; left: 85%; }
+/* Row 3 (Tapering) */
+.pic-10 { top: 60%; left: 25%; }
+.pic-11 { top: 60%; left: 50%; }
+.pic-12 { top: 60%; left: 75%; }
+/* Row 4 (Lower Point) */
+.pic-13 { top: 75%; left: 35%; }
+.pic-14 { top: 75%; left: 65%; }
+/* Row 5 (The Tip) */
+.pic-15 { top: 90%; left: 50%; }
+
+/* =========================================
+   TRIVIA NONCHALANT POPUP
+========================================= */
+.nonchalant-feedback {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    min-height: 30px;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+/* =========================================
+   ROOM VISIBILITY TOGGLES (Required for JS)
+========================================= */
+.hidden-room {
+    display: none !important;
+}
+
+.visible-room {
+    display: block !important;
+    animation: fadeInRoom 0.8s ease forwards;
+}
+
+@keyframes fadeInRoom {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.golden-border {
+    /* No solid border here, just the soft aura */
+    border: none !important;
+    /* Soft, wide glow that pulses slightly */
+    box-shadow: 0 0 40px 15px rgba(212, 175, 55, 0.6), 
+                0 0 80px 25px rgba(212, 175, 55, 0.3) !important;
+    transition: all 0.8s ease-in-out;
+    animation: glow-pulse 2s infinite alternate;
+    position: relative; /* Essential for shadows to render correctly */
+    border: none !important;
+    animation: glow-pulse 2s infinite alternate;
+}
+@keyframes glow-pulse {
+    from {
+        box-shadow: 0 0 30px 10px rgba(212, 175, 55, 0.4);
+    }
+    to {
+        box-shadow: 0 0 60px 25px rgba(212, 175, 55, 0.8);
+    }
+}
+
+
+#special-text {
+    color: #fce8a6 !important; /* A softer, creamier gold */
+    font-family: 'HarryPotter', serif;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-top: 25px;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    /* Add a soft glow to the text itself */
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.9);
 }
