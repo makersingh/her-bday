@@ -1,3 +1,4 @@
+
 /* --- GLOBAL --- */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
 
@@ -7,20 +8,35 @@
     src: url('harryp.TTF') format('truetype');
 }
 
+:root {
+    /* Brand palette — pulled from the repeated literals in the file */
+    --gold: #d4af37;
+    --gold-bright: #ffd700;
+    --slytherin-green: #1a472a;
+    --silver: #c0c0c0;
+    --teal-silver: #8faeb0;
+    --cream: #e0e0e0;
+
+    /* Font stacks */
+    --font-display: 'Cinzel', serif;
+    --font-magic: 'HarryPotter', sans-serif;
+    --font-body: 'Georgia', serif;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Georgia', serif;
+    font-family: var(--font-body);
 }
 
 body {
     background: linear-gradient(135deg, #020202 0%, #0a1930 50%, #081a10 100%);
     background-size: 400% 400%;
     animation: darkGradientBG 15s ease infinite;
-    color: #e0e0e0;
+    color: var(--cream);
     overflow-x: hidden;
-    perspective: 1500px; 
+    perspective: 1500px;
 }
 
 @keyframes darkGradientBG {
@@ -28,6 +44,14 @@ body {
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+
+/* Drives the "click to open" pulse and the typed-letter cursor blink.
+   Both referenced this animation before, but it was never defined. */
+@keyframes pulseText {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}
+
 /* --- THE BOOK COVER --- */
 
 .book-cover {
@@ -36,8 +60,8 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(to right, #040b17, #0a1930); 
-    border-left: 20px solid #010408; 
+    background: linear-gradient(to right, #040b17, #0a1930);
+    border-left: 20px solid #010408;
     z-index: 2000;
     display: flex;
     justify-content: center;
@@ -56,8 +80,8 @@ body {
 }
 
 .author {
-    color: #8faeb0;
-    font-family: 'Cinzel', serif; /* Cinematic movie font */
+    color: var(--teal-silver);
+    font-family: var(--font-display); /* Cinematic movie font */
     font-size: 1rem;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -65,10 +89,10 @@ body {
 }
 
 .hp-title {
-    font-family: 'HarryPotter', sans-serif; /* The Lightning Bolt Font! */
-    font-size: 7.5rem; /* Made it bigger because this font runs a little small */
-    color: #c0c0c0; 
-    text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000; 
+    font-family: var(--font-magic); /* The Lightning Bolt Font! */
+    font-size: clamp(2.75rem, 14vw, 7.5rem); /* scales down on small screens */
+    color: var(--silver);
+    text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000;
     letter-spacing: 3px;
     font-weight: normal;
     line-height: 1;
@@ -76,10 +100,10 @@ body {
 }
 
 .hp-subtitle {
-    font-family: 'Cinzel', serif; /* Sharp, elegant movie poster font */
+    font-family: var(--font-display); /* Sharp, elegant movie poster font */
     font-weight: 700;
     font-size: 1.4rem;
-    color: #8faeb0;
+    color: var(--teal-silver);
     letter-spacing: 6px;
     margin-top: 15px;
     text-shadow: 1px 1px 5px #000;
@@ -89,18 +113,18 @@ body {
     height: 2px;
     width: 80%;
     margin: 30px auto;
-    background: linear-gradient(90deg, transparent, #1a472a, #c0c0c0, #1a472a, transparent);
+    background: linear-gradient(90deg, transparent, var(--slytherin-green), var(--silver), var(--slytherin-green), transparent);
 }
 
 .click-to-open {
     margin-top: 40px;
     font-style: italic;
-    color: #c0c0c0;
+    color: var(--silver);
     animation: pulseText 1.5s infinite;
 }
 
 .book-open-anim {
-    transform: rotateY(-110deg); 
+    transform: rotateY(-110deg);
     opacity: 0;
     pointer-events: none;
 }
@@ -126,13 +150,13 @@ body {
 
 .glow-text {
     font-size: 4rem;
-    color: #e0e0e0;
-    text-shadow: 0 0 25px rgba(26, 71, 42, 0.8), 0 0 10px rgba(79, 172, 254, 0.5); 
+    color: var(--cream);
+    text-shadow: 0 0 25px rgba(26, 71, 42, 0.8), 0 0 10px rgba(79, 172, 254, 0.5);
     margin-bottom: 10px;
 }
 
 .subtitle {
-    color: #8faeb0;
+    color: var(--teal-silver);
     font-style: italic;
 }
 /* =========================================
@@ -164,9 +188,9 @@ body {
 
 /* The Big Harry Potter Font */
 .potter-callout {
-    font-family: 'HarryPotter', sans-serif;
+    font-family: var(--font-magic);
     font-size: 4.5rem;
-    color: #d4af37; /* Gold */
+    color: var(--gold);
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
     margin-bottom: 20px;
     text-align: center;
@@ -176,15 +200,15 @@ body {
 
 /* The Cinematic Subtext */
 .greeting-text {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    color: #c0c0c0; /* Silver */
+    color: var(--silver); /* Silver */
     margin-bottom: 15px;
     line-height: 1.6;
 }
 
 .highlight-text {
-    color: #e0e0e0;
+    color: var(--cream);
     font-weight: bold;
     font-size: 1.8rem;
     margin-top: 30px;
@@ -196,11 +220,17 @@ body {
     margin-top: 40px;
     font-family: sans-serif;
     font-size: 0.9rem;
-    color: #d4af37;
+    color: var(--gold);
     letter-spacing: 4px;
     text-transform: uppercase;
-    animation: pulseDeciding 2s infinite ease-in-out; /* Uses the animation we built earlier */
+    animation: pulseDeciding 2s infinite ease-in-out;
     opacity: 0.7;
+}
+
+/* Makes the text gently pulse to build suspense */
+@keyframes pulseDeciding {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 25px rgba(26, 71, 42, 0.9); }
 }
 
 /* --- THE SORTING CEREMONY --- */
@@ -213,23 +243,6 @@ body {
 }
 
 .sorting-container {
-    /* The New Sorting Heading */
-.sorting-title {
-    font-family: 'Cinzel', serif; /* Cinematic movie font */
-    font-size: 1.8rem;
-    color: #c0c0c0; /* Silver */
-    text-align: center;
-    margin-bottom: 30px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 15px rgba(26, 71, 42, 0.5); /* Faint Slytherin glow */
-    animation: pulseDeciding 2s infinite ease-in-out;
-}
-
-/* Makes the text gently pulse to build suspense */
-@keyframes pulseDeciding {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 25px rgba(26, 71, 42, 0.9); }
-}
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,42 +250,50 @@ body {
     width: 100%;
 }
 
-/* Wrapper to keep hat and photo together */
+/* The New Sorting Heading */
+.sorting-title {
+    font-family: var(--font-display); /* Cinematic movie font */
+    font-size: 1.8rem;
+    color: var(--silver);
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px rgba(26, 71, 42, 0.5); /* Faint Slytherin glow */
+    animation: pulseDeciding 2s infinite ease-in-out;
+}
+
+/* Wrapper to keep hat and photo together.
+   (Was previously defined twice — merged into one, keeping the
+   larger top margin so the hat clears the heading above it.) */
 .sorting-image-wrapper {
     position: relative;
     display: inline-block;
-    margin: 40px auto;
+    margin: 80px auto 30px auto;
 }
 
-/* Photo style */
-/* Ensure the wrapper has enough room so the hat doesn't cover the title */
-.sorting-image-wrapper {
-    position: relative;
-    display: inline-block;
-    margin: 80px auto 30px auto; /* Increased top margin to clear the text */
-}
-
-/* Photo style - slightly scaled for better visibility */
+/* Photo style — slightly scaled for better visibility.
+   width/aspect-ratio now scale together instead of a fixed height,
+   so the photo doesn't stretch out of proportion on small screens. */
 .sorting-img {
-    width: 320px; 
-    height: 400px;
+    width: min(320px, 80vw);
+    aspect-ratio: 4 / 5;
+    height: auto;
     object-fit: cover;
     border-radius: 15px;
-    border: 2px solid #1a472a;
+    border: 2px solid var(--slytherin-green);
     box-shadow: 0 0 30px rgba(26, 71, 42, 0.6);
     display: block;
-    /* Smooth transition for the image swap */
-    transition: opacity 0.6s ease-in-out; 
+    transition: opacity 0.6s ease-in-out;
     opacity: 1;
 }
 
 /* The Hat - Adjusted for balance */
 .floating-hat {
     position: absolute;
-    top: -95px; 
+    top: -95px;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px; /* Adjusted size */
+    width: min(200px, 50vw);
     z-index: 10;
     filter: drop-shadow(0 15px 10px rgba(0,0,0,0.7));
     animation: floatHat 4s ease-in-out infinite;
@@ -292,7 +313,7 @@ body {
 
 #hat-text {
     font-size: 2rem;
-    color: #c0c0c0;
+    color: var(--silver);
     font-style: italic;
     transition: opacity 0.5s ease;
     text-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
@@ -300,25 +321,25 @@ body {
 
 /* THE MAGICAL SILVER SLYTHERIN REVEAL */
 .slytherin-shout {
-    font-family: 'HarryPotter', sans-serif !important; /* Uses the lightning bolt font */
-    font-size: 6.5rem !important;
-    color: #e8f0f2 !important; /* Shimmering Silver */
+    font-family: var(--font-magic) !important; /* Uses the lightning bolt font */
+    font-size: clamp(2.5rem, 13vw, 6.5rem) !important; /* scales down on small screens */
+    color: #e8f0f2 !important; /* Shimmering Silver — distinct shade, kept as-is */
     letter-spacing: 5px;
     font-weight: normal !important;
     font-style: normal !important;
-    text-shadow: 
-        0 0 20px #1a472a,   /* Inner green glow */
+    text-shadow:
+        0 0 20px var(--slytherin-green),   /* Inner green glow */
         0 0 40px #2a623d,   /* Outer green glow */
         0 0 60px #000,      /* Dark shadow for contrast */
         2px 2px 5px rgba(255, 255, 255, 0.8) !important; /* Silver highlight edge */
-    
+
     /* Adds the explosive zoom and a continuous magical pulse */
     animation: slytherinExplode 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards, silverShimmer 3s infinite alternate !important;
 }
 
 /* The subtle magical shimmer after it explodes onto the screen */
 @keyframes silverShimmer {
-    0% { filter: brightness(1) drop-shadow(0 0 15px #1a472a); }
+    0% { filter: brightness(1) drop-shadow(0 0 15px var(--slytherin-green)); }
     100% { filter: brightness(1.3) drop-shadow(0 0 30px #2a623d); }
 }
 
@@ -342,7 +363,7 @@ body {
 .section-title {
     font-size: 2.8rem;
     text-align: center;
-    color: #d4af37;
+    color: var(--gold);
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     margin-bottom: 50px;
 }
@@ -350,12 +371,12 @@ body {
 /* The Master Grid: Left (Image/Text) & Right (Letter) */
 .pensieve-layout {
     display: flex;
-    align-items: center; 
-    justify-content: center; 
+    align-items: center;
+    justify-content: center;
     gap: 60px;
-    max-width: 1200px; 
+    max-width: 1200px;
     margin: 0 auto;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
 }
 
 /* --- LEFT SIDE: Image & Golden Text --- */
@@ -364,13 +385,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1; 
+    flex: 1;
     min-width: 380px;
 }
 
 .slideshow-container {
     width: 100%;
-    max-width: 380px; 
+    max-width: 380px;
     aspect-ratio: 4/5;
     position: relative;
     border-radius: 15px;
@@ -395,7 +416,7 @@ body {
 /* The Golden Pop Effects */
 .slideshow-container.golden-frame {
     box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 140, 0, 0.4) !important;
-    border-color: #ffd700 !important;
+    border-color: var(--gold-bright) !important;
 }
 
 .fade-img.special-pop {
@@ -403,33 +424,42 @@ body {
     filter: sepia(40%) contrast(120%) brightness(110%) saturate(150%);
 }
 
-/* Golden text centered perfectly below the image */
+/* Golden text centered perfectly below the image.
+   This was previously defined a second time, later in the file
+   (under "Room Visibility Toggles"), with a smaller font-size,
+   a creamier gold, and an unexplained opacity: 0. Consolidated
+   into one rule here — kept the larger size + brighter gold since
+   it matches the golden-frame reveal theme used right above it.
+   If your JS expects the smaller/creamier version, swap the
+   color/font-size back and see the note further down the file. */
 #special-text {
-    font-family: 'HarryPotter', sans-serif;
-    font-size: 3.5rem; 
-    color: #ffd700; 
+    font-family: var(--font-magic);
+    font-size: clamp(1.8rem, 7vw, 3.5rem);
+    color: var(--gold-bright);
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
-    margin-top: 25px; 
-    min-height: 60px; 
+    margin-top: 25px;
+    min-height: 60px;
     letter-spacing: 4px;
-    text-align: center; 
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
 }
 
 #special-text::after {
     content: '|';
     animation: pulseText 0.8s infinite;
-    color: #ffd700;
-    opacity: 0; 
+    color: var(--gold-bright);
+    opacity: 0;
 }
 
 #special-text.typing-active::after { opacity: 1; }
 
 /* --- RIGHT SIDE: The Final Letter --- */
 .pensieve-right {
-    flex: 1; 
+    flex: 1;
     min-width: 380px;
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
 }
 
@@ -440,14 +470,14 @@ body {
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    text-align: left; 
-    margin-top: -90px; /* <--- ADD THIS EXACT LINE */
+    text-align: left;
+    margin-top: -90px; /* Pulls the letter up to align with the photo beside it */
 }
 
 #typing-text {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-display);
     font-size: 1.4rem;
-    color: #e0e0e0;
+    color: var(--cream);
     line-height: 1.8;
     min-height: 200px;
 }
@@ -465,57 +495,49 @@ body {
 }
 
 .player-title {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-display);
     font-size: 1.6rem;
-    color: #c0c0c0;
+    color: var(--silver);
     margin-bottom: 30px;
     text-align: center;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-/* Glassmorphism Playlist Box */
+/* Glassmorphism Playlist Box.
+   (Was previously defined with several properties repeated inside
+   itself, and max-width set twice — 450px then 500px. Folded down
+   to one clean block; 500px kept since that was the value that was
+   actually winning before.) */
 .aesthetic-playlist {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 25px;
     padding: 20px;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    display: flex;
-    flex-direction: column;
     align-items: center; /* Centers everything */
-    width: 100%;
-    max-width: 500px;
+    gap: 15px;
     margin: 0 auto;
 }
 
-/* FORCE TRASPARENT BUTTONS */
+/* FORCE TRANSPARENT BUTTONS */
 .back-to-map-btn {
     background: transparent !important;
-    border: 1px solid #d4af37 !important;
-    color: #d4af37 !important;
+    border: 1px solid var(--gold) !important;
+    color: var(--gold) !important;
     padding: 10px 20px;
     cursor: pointer;
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-display);
 }
 
-
-.track-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-}
-
-/* Individual Song Rows */
+/* Individual Song Rows.
+   (Was previously defined twice as two separate blocks — merged
+   into one, keeping every property from both.) */
 .track-row {
     display: flex;
     border-radius: 15px;
@@ -538,7 +560,7 @@ body {
 
 /* When a song is actively playing */
 .track-row.playing-now {
-    border-color: #d4af37;
+    border-color: var(--gold);
     background: rgba(212, 175, 55, 0.15);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
 }
@@ -550,9 +572,9 @@ body {
 }
 
 .song-name {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    color: #d4af37;
+    color: var(--gold);
     font-weight: bold;
     letter-spacing: 1px;
 }
@@ -569,7 +591,7 @@ body {
 /* The small play/pause icon on the right of each row */
 .row-play-btn {
     background: transparent;
-    color: #d4af37;
+    color: var(--gold);
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
@@ -586,8 +608,8 @@ body {
     position: fixed;
     width: 6px;
     height: 6px;
-    background: radial-gradient(circle, #d4af37 0%, rgba(255,255,255,0) 70%);
-    box-shadow: 0 0 10px #d4af37, 0 0 20px #fff;
+    background: radial-gradient(circle, var(--gold) 0%, rgba(255,255,255,0) 70%);
+    box-shadow: 0 0 10px var(--gold), 0 0 20px #fff;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
@@ -631,8 +653,8 @@ body {
 }
 
 .trivia-question {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
+    font-family: var(--font-display);
+    color: var(--gold);
     font-size: 1.3rem;
     margin-bottom: 20px;
 }
@@ -656,7 +678,7 @@ body {
 
 .trivia-btn:hover {
     background: rgba(212, 175, 55, 0.2);
-    border-color: #d4af37;
+    border-color: var(--gold);
     transform: scale(1.02);
 }
 
@@ -673,15 +695,15 @@ body {
 
 .map-location {
     background: rgba(212, 175, 55, 0.1);
-    border: 2px solid #d4af37;
-    color: #e0e0e0;
-    font-family: 'Cinzel', serif;
+    border: 2px solid var(--gold);
+    color: var(--cream);
+    font-family: var(--font-display);
     font-size: 1.5rem;
     padding: 15px 40px;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.4s ease;
-    width: 350px;
+    width: min(350px, 90vw);
     box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
@@ -709,17 +731,17 @@ body {
     position: relative;
     width: 100%;
     max-width: 600px;
-    height: 600px; /* Perfect square container */
+    aspect-ratio: 1 / 1; /* was a fixed height:600px — squished on phones when width shrank */
     margin: 40px auto;
 }
 
 .heart-pic {
     position: absolute;
-    width: 80px; 
+    width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 50%; /* Makes them aesthetic bubbles */
-    border: 2px solid #d4af37;
+    border: 2px solid var(--gold);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0);
@@ -757,8 +779,8 @@ body {
    TRIVIA NONCHALANT POPUP
 ========================================= */
 .nonchalant-feedback {
-    font-family: 'Cinzel', serif;
-    color: #d4af37;
+    font-family: var(--font-display);
+    color: var(--gold);
     font-size: 1.2rem;
     margin-top: 20px;
     min-height: 30px;
@@ -787,13 +809,11 @@ body {
     /* No solid border here, just the soft aura */
     border: none !important;
     /* Soft, wide glow that pulses slightly */
-    box-shadow: 0 0 40px 15px rgba(212, 175, 55, 0.6), 
+    box-shadow: 0 0 40px 15px rgba(212, 175, 55, 0.6),
                 0 0 80px 25px rgba(212, 175, 55, 0.3) !important;
     transition: all 0.8s ease-in-out;
     animation: glow-pulse 2s infinite alternate;
     position: relative; /* Essential for shadows to render correctly */
-    border: none !important;
-    animation: glow-pulse 2s infinite alternate;
 }
 @keyframes glow-pulse {
     from {
@@ -804,18 +824,9 @@ body {
     }
 }
 
-
-#special-text {
-    color: #fce8a6 !important; /* A softer, creamier gold */
-    font-family: 'HarryPotter', serif;
-    font-size: 1.8rem;
-    text-align: center;
-    margin-top: 25px;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out;
-    /* Add a soft glow to the text itself */
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.9);
-}
+/* #special-text was consolidated into a single rule above, near
+   .pensieve-left — this is where the conflicting duplicate used
+   to live. See the comment there for which values were kept. */
 
 /* =========================================
    ROOM TRANSITION STYLES
@@ -832,15 +843,15 @@ body {
 }
 
 .magical-transition-text {
-    color: #d4af37 !important; /* Gold */
-    font-family: 'Cinzel', serif; /* Keeps it matching your HP theme */
+    color: var(--gold) !important;
+    font-family: var(--font-display); /* Keeps it matching your HP theme */
     font-size: 1.4rem;
     margin-bottom: 15px;
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 /* FORCE THE MAP TO FIT THE SCREEN PERFECTLY */
-#magic-world { 
+#magic-world {
     min-height: 100vh; /* 100% of the screen height */
     width: 100vw;
     display: flex;
@@ -853,7 +864,7 @@ body {
 
 /* If you have a container specifically for your map buttons, ensure it has space */
 .map-buttons-container {
-    margin-bottom: 40px; 
+    margin-bottom: 40px;
 }
 
 /* SLYTHERIN ROOM LAYOUT */
@@ -866,7 +877,7 @@ body {
 }
 
 /* ADD SPACE BETWEEN HEADING AND MUSIC PLAYER */
-#slytherin-common-room h1, 
+#slytherin-common-room h1,
 #slytherin-common-room h2 {
     margin-bottom: 60px !important; /* Forces a large gap under the heading */
     text-align: center;
@@ -876,4 +887,3 @@ body {
     margin-top: 10px; /* Slight adjustment for perfect centering */
     margin-bottom: 40px; /* Space before the 'All set?' transition text */
 }
-

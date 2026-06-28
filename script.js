@@ -96,7 +96,7 @@ const sortingImages = [
 ];
 
 // Your custom timestamps locked in!
-const textTiming = [3500, 3500, 3700, 2800, 2500];
+const textTiming = [3300, 3300, 3500, 2500, 2300];
 
 let hatIndex = 0;
 // Make sure sortingStarted is declared at the top of your observer code!
