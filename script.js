@@ -1,3 +1,36 @@
+// --- MAGIC PRELOADER ---
+function preloadAssets() {
+    // 1. List every single image and audio file you use in your project here
+    const imagesToPreload = [
+        "sorting-hat.png", "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg",
+        "sort5.jpg", "sort6.jpg", "child1.jpg", "child2.jpg", "child3.jpg", 
+        "child4.jpg", "child5.jpg", "teen1.jpg", "teen2.jpg", "teen3.jpg", 
+        "teen4.jpg", "teen5.jpg", "now1.jpg", "now2.jpg", "now3.jpg", 
+        "now4.jpg", "now5.jpg", "collage1.jpg", "collage2.jpg", "collage3.jpg",
+        "collage4.jpg", "collage5.jpg", "collage6.jpg", "collage7.jpg",
+        "collage8.jpg", "collage9.jpg", "collage10.jpg", "collage11.jpg",
+        "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg"
+    ];
+
+    const audioToPreload = [
+        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3"
+    ];
+
+    // 2. This part forces the browser to download the files now
+    imagesToPreload.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+    });
+
+    audioToPreload.forEach((src) => {
+        const audio = new Audio(src);
+        audio.load();
+    });
+    
+    console.log("Magic assets preloaded successfully!");
+}
+
+
 // --- FORCE PAGE TO TOP ON REFRESH ---
 window.onbeforeunload = function () {
     window.scrollTo(0, 0);
@@ -7,6 +40,7 @@ window.scrollTo(0, 0);
 // --- SECTION 1: BOOK OPENING ---
 // Remove any old 'DOMContentLoaded' blocks and use this directly
 window.onload = function() {
+    preloadAssets();
     const bookCover = document.getElementById('book-cover');
     const magicWorld = document.getElementById('magic-world');
 
