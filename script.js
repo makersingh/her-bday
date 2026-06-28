@@ -395,7 +395,7 @@ function verifyTriviaAnswer(selectedOption) {
                 loadTriviaQuestion();
             } else {
                 // QUIZ COMPLETE!
-                document.getElementById('quiz-question').innerText = "Voila! You indeed are a potter head. You may continue to The World of Magic.";
+                document.getElementById('quiz-question').innerText = "Mischief managed! You may continue to The World of Magic!";
                 optsContainer.innerHTML = "";
                 
                 // Wait 3.5 seconds, hide the ENTIRE section, fade in Map

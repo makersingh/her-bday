@@ -752,17 +752,26 @@ body {
     border-radius: 20px;
     padding: 40px;
     text-align: center;
-    max-width: 500px;
     margin: 50px auto;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 40px rgba(0,0,0,0.8);
     transition: all 0.5s ease;
+    width: 100%;
+    max-width: 500px;
+    height: 480px !important; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
 }
 
 .trivia-question {
     font-family: var(--font-display);
     color: var(--gold);
     font-size: 1.3rem;
+    min-height: 80px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
@@ -770,6 +779,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-height: 220px;
 }
 
 .trivia-btn {
@@ -832,27 +842,29 @@ body {
 }
 
 /* =========================================
-   THE GREAT HALL (15-PHOTO HEART)
+   THE GREAT HALL (TIGHT DENSE HEART)
 ========================================= */
 .heart-collage-container {
     position: relative;
     width: 100%;
-    max-width: 600px;
-    aspect-ratio: 1 / 1; /* was a fixed height:600px — squished on phones when width shrank */
+    max-width: 800px; /* Made the container wider so photos can be huge! */
+    aspect-ratio: 1 / 1; 
     margin: 40px auto;
 }
 
 .heart-pic {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    /* MASSIVELY increased size. Uses clamp so they scale perfectly on phones and PCs */
+    width: clamp(110px, 18vw, 170px); 
+    height: clamp(110px, 18vw, 170px);
     object-fit: cover;
-    border-radius: 50%; /* Makes them aesthetic bubbles */
-    border: 2px solid var(--gold);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    border-radius: 50%; 
+    border: 4px solid var(--gold); /* Thicker border so overlaps look clean */
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0);
-    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy pop-in */
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    z-index: 1; /* Base layer */
 }
 
 .heart-pic.revealed {
@@ -860,27 +872,47 @@ body {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* THE MATHEMATICAL HEART COORDINATES */
-/* Row 1 (Top Humps) */
-.pic-1 { top: 20%; left: 25%; }
-.pic-2 { top: 20%; left: 40%; }
-.pic-3 { top: 20%; left: 60%; }
-.pic-4 { top: 20%; left: 75%; }
-/* Row 2 (Widest Part) */
-.pic-5 { top: 40%; left: 15%; }
-.pic-6 { top: 40%; left: 32.5%; }
-.pic-7 { top: 40%; left: 50%; }
-.pic-8 { top: 40%; left: 67.5%; }
-.pic-9 { top: 40%; left: 85%; }
-/* Row 3 (Tapering) */
-.pic-10 { top: 60%; left: 25%; }
-.pic-11 { top: 60%; left: 50%; }
-.pic-12 { top: 60%; left: 75%; }
-/* Row 4 (Lower Point) */
-.pic-13 { top: 75%; left: 35%; }
-.pic-14 { top: 75%; left: 65%; }
-/* Row 5 (The Tip) */
-.pic-15 { top: 90%; left: 50%; }
+/* 🪄 NEW MAGIC: When she hovers over a photo, it pops to the front and enlarges! */
+.heart-pic.revealed:hover {
+    transform: translate(-50%, -50%) scale(1.35);
+    z-index: 99 !important;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 1);
+    cursor: pointer;
+}
+
+/* =========================================
+   THE NEW TIGHTLY PACKED HEART COORDINATES
+   (Z-index ensures they overlap perfectly)
+========================================= */
+/* =========================================
+   THE TRUE HEART COORDINATES
+========================================= */
+/* Top Left Lobe (The arch) */
+.pic-1 { top: 28%; left: 24%; z-index: 2; }
+.pic-2 { top: 20%; left: 38%; z-index: 3; }
+
+/* Top Right Lobe (The arch) */
+.pic-3 { top: 20%; left: 62%; z-index: 3; }
+.pic-4 { top: 28%; left: 76%; z-index: 2; }
+
+/* The Widest Part (The center band) */
+.pic-5 { top: 46%; left: 15%; z-index: 4; }
+.pic-6 { top: 48%; left: 32%; z-index: 5; }
+.pic-7 { top: 42%; left: 50%; z-index: 6; } /* Fills the center dip perfectly */
+.pic-8 { top: 48%; left: 68%; z-index: 5; }
+.pic-9 { top: 46%; left: 85%; z-index: 4; }
+
+/* Tapering Downwards (The V-shape begins) */
+.pic-10 { top: 66%; left: 28%; z-index: 7; }
+.pic-11 { top: 68%; left: 50%; z-index: 8; }
+.pic-12 { top: 66%; left: 72%; z-index: 7; }
+
+/* Approaching the Point */
+.pic-13 { top: 82%; left: 39%; z-index: 9; }
+.pic-14 { top: 82%; left: 61%; z-index: 9; }
+
+/* The Final Bottom Tip */
+.pic-15 { top: 96%; left: 50%; z-index: 10; }
 
 /* =========================================
    TRIVIA NONCHALANT POPUP
@@ -1105,4 +1137,25 @@ html {
 @keyframes twinkle {
     0%, 100% { opacity: 0.1; }
     50% { opacity: 1; transform: scale(1.3); }
+}
+/* =========================================
+   PERFECTLY CENTERED MARAUDER'S MAP
+   ========================================= */
+/* =========================================
+   PERFECTLY CENTERED MARAUDER'S MAP
+   ========================================= */
+#marauders-map {
+    min-height: 100vh !important; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;     
+    padding: 0 20px;         
+}
+
+#marauders-map.hidden-room {
+    display: none !important;
+}
+
+#marauders-map.visible-room {
+    display: flex !important;
 }
