@@ -96,7 +96,7 @@ const sortingImages = [
 ];
 
 // Your custom timestamps locked in!
-const textTiming = [3300, 3300, 3500, 2500, 2300];
+const textTiming = [3300, 3300, 3500, 2500, 2500];
 
 let hatIndex = 0;
 // Make sure sortingStarted is declared at the top of your observer code!
@@ -294,7 +294,7 @@ document.addEventListener('mousemove', (e) => {
 const triviaQuestions = [
     { q: "What is Harry Potter's position on the Gryffindor Quidditch team?", options: ["Keeper", "Chaser", "Seeker", "Beater"], answer: "Seeker" },
     { q: "Which spell is used to conjure a Patronus?", options: ["Expelliarmus", "Expecto Patronum", "Lumos", "Alohomora"], answer: "Expecto Patronum" },
-    { q: "What is the core of the Elder Wand?", options: ["Phoenix Feather", "Dragon Heartstring", "Thestral Tail Hair", "Unicorn Hair"], answer: "Thestral Tail Hair" } // Added a 3rd tough one!
+    { q: "What did Harry call his owl?", options: ["Hedwig", "Errol", "Scabbers", "Fawkes"], answer: "Hedwig" } // Added a 3rd tough one!
 ];
 
 // The Snape-style cheeky remarks
@@ -524,7 +524,7 @@ function travelTo(roomId) {
         // CALL YOUR SPECIFIC TYPEWRITER FUNCTIONS HERE
         // Assuming your functions are named typeWriter() and startSlideshow()
         if (typeof typeWriter === "function") typeWriter();
-        if (typeof startSlideshow === "function") startSlideshow();
+        
     }
 }
 
@@ -549,42 +549,127 @@ function returnToMap() {
 // =========================================================================
 // PENSIEVE SLIDESHOW ENGINE
 // =========================================================================
-function startSlideshow() {
-    const memoryImages = ["child1.jpg", "child2.jpg", "child3.jpg", "child4.jpg", "child5.jpg",
+// --- HYBRID PENSIEVE SLIDER LOGIC ---
+const memoryImages = [
+    "child1.jpg", "child2.jpg", "child3.jpg", "child4.jpg", "child5.jpg",
     "teen1.jpg", "teen2.jpg", "teen3.jpg", "teen4.jpg", "teen5.jpg",
-    "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg"]; 
+    "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg"
+];
+
+let currentMemoryIndex = 0;
+let autoSlideTimer;
+const specialMessage = "and the all time best...";
+
+// FORCES the very first image to be child1.jpg when the page loads
+document.addEventListener("DOMContentLoaded", () => {
     const imgElement = document.getElementById('memory-img');
-    const textElement = document.getElementById('special-text'); // The golden text element
-    
-    let index = 0;
+    if(imgElement) imgElement.src = memoryImages[0];
+});
 
-    if (!imgElement) return;
 
-    if (window.pensieveInterval) clearInterval(window.pensieveInterval);
+// Your upgraded custom typewriter function
+function typeSpecialText(i) {
+    const textElement = document.getElementById('special-text');
+    if (!textElement) return;
 
-    window.pensieveInterval = setInterval(() => {
-        index = (index + 1) % memoryImages.length;
-        
-        imgElement.style.opacity = 0;
-        
-        // ... inside your setInterval ...
-setTimeout(() => {
-    imgElement.src = memoryImages[index];
-    imgElement.style.opacity = 1;
-
-    // 1. HARD CLEANUP: Remove the glow from the container absolutely
-    const container = imgElement.parentElement;
-    container.classList.remove('golden-border');
-
-    // 2. TRIGGER LOGIC
-    if (index === 4) { // Assuming 4 is your "all-time best" index
-        container.classList.add('golden-border');
-        textElement.innerText = "And the all-time best...";
-        textElement.style.opacity = 1;
-    } else {
-        // Explicitly hide the text
-        textElement.style.opacity = 0;
+    // On the very first letter, create a safe container for the text AND the cursor
+    if (i === 0) {
+        textElement.innerHTML = '<span id="type-content"></span><span class="blinking-cursor">|</span>';
     }
-}, 500);
-    }, 4000);
+
+    if (i < specialMessage.length) {
+        // Add letters ONLY to the text container, leaving the cursor completely alone
+        document.getElementById('type-content').innerHTML += specialMessage.charAt(i);
+        setTimeout(() => typeSpecialText(i + 1), 80); 
+    } else {
+        // Once typing finishes, wait 2.5s and cleanly hide the cursor
+        setTimeout(() => {
+            const cursor = document.querySelector('.blinking-cursor');
+            if (cursor) cursor.style.display = 'none';
+        }, 2500);
+    }
+}
+// The main slider logic
+function turnMemory(direction) {
+    const imgElement = document.getElementById('memory-img');
+    const textElement = document.getElementById('special-text');
+    const container = document.getElementById('pensieve-frame');
+
+    if (!imgElement || !container) return;
+
+    // 1. Fade the current image out
+    imgElement.style.opacity = 0;
+
+    setTimeout(() => {
+        // 2. Calculate the new image index
+        currentMemoryIndex += direction;
+        
+        if (currentMemoryIndex < 0) currentMemoryIndex = memoryImages.length - 1;
+        if (currentMemoryIndex >= memoryImages.length) currentMemoryIndex = 0;
+
+        // 3. Swap the image source
+        imgElement.src = memoryImages[currentMemoryIndex];
+
+        // 4. Reset everything (kills the glow and clears the text)
+        container.classList.remove('golden-border');
+        textElement.style.opacity = 0;
+        textElement.innerHTML = ""; // Clears the text completely
+        textElement.classList.remove('typing-active'); // Removes the cursor
+
+        // 5. THE MAGIC TRIGGER: If it's the 5th image (Index 4)
+        if (currentMemoryIndex === 4) { 
+            container.classList.add('golden-border');
+            textElement.style.opacity = 1;
+            textElement.classList.add('typing-active'); // Turns on the cursor
+            typeSpecialText(0); // Starts the typewriter effect!
+        }
+
+        // 6. Fade the new image in
+        imgElement.style.opacity = 1;
+    }, 400); 
+
+    // Reset the auto-timer on manual clicks
+    resetAutoSlide();
+}
+
+function startAutoSlide() {
+    autoSlideTimer = setInterval(() => {
+        turnMemory(1);
+    }, 5000); 
+}
+
+function resetAutoSlide() {
+    clearInterval(autoSlideTimer);
+    startAutoSlide();
+}
+
+// Kick it off
+startAutoSlide();
+
+// --- PENSIEVE RESET FUNCTION ---
+// This forces the slideshow to start at image 1 when entering the room
+function resetPensieve() {
+    currentMemoryIndex = 0;
+    
+    const imgElement = document.getElementById('memory-img');
+    const textElement = document.getElementById('special-text');
+    const container = document.getElementById('pensieve-frame');
+    
+    if(imgElement) {
+        imgElement.style.opacity = 0; // Quick fade out
+        setTimeout(() => {
+            imgElement.src = memoryImages[0];
+            imgElement.style.opacity = 1; // Fade back in on image 1
+        }, 200);
+    }
+    
+    // Clear any golden borders or old text
+    if(container) container.classList.remove('golden-border');
+    if(textElement) {
+        textElement.style.opacity = 0;
+        textElement.innerHTML = "";
+    }
+    
+    // Restart the 5-second timer from scratch
+    resetAutoSlide();
 }

@@ -295,6 +295,7 @@ body {
     width: 100%;
 }
 
+
 /* The New Sorting Heading */
 .sorting-title {
     font-family: var(--font-display); /* Cinematic movie font */
@@ -435,15 +436,19 @@ body {
 }
 
 .slideshow-container {
-    width: 100%;
-    max-width: 380px;
-    aspect-ratio: 4/5;
+    width: 300px; /* Adjust this if you want the box wider */
+    height: 400px; /* Adjust this if you want the box taller */
     position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(26, 71, 42, 0.3);
-    border: 1px solid rgba(192, 192, 192, 0.2);
-    transition: box-shadow 1.5s ease, border-color 1.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* Ensures borders don't shrink the inside */
+}
+#memory-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* The magic property: keeps aspect ratio perfect without shrinking */
+    border-radius: 10px; 
 }
 
 .fade-img {
@@ -477,17 +482,24 @@ body {
    it matches the golden-frame reveal theme used right above it.
    If your JS expects the smaller/creamier version, swap the
    color/font-size back and see the note further down the file. */
+/* =========================================
+   SPECIAL TYPEWRITER TEXT STYLING (BRUTE FORCE)
+   ========================================= */
+#special-text, 
+#type-content {
+    font-family: 'HarryPotter', 'Cinzel', serif !important; 
+    font-size: 3rem !important;
+    color: #d4af37 !important; /* Golden */
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
 #special-text {
-    font-family: var(--font-magic);
-    font-size: clamp(1.8rem, 7vw, 3.5rem);
-    color: var(--gold-bright);
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
-    margin-top: 25px;
-    min-height: 60px;
-    letter-spacing: 4px;
-    text-align: center;
-    opacity: 1;
-    transition: opacity 0.8s ease-in-out;
+    margin-top: 15px;
+    height: 3rem; /* Prevents the page from jumping */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #special-text::after {
@@ -495,6 +507,18 @@ body {
     animation: pulseText 0.8s infinite;
     color: var(--gold-bright);
     opacity: 0;
+}
+
+/* THE BLINKING TYPEWRITER CURSOR */
+.typing-active::after {
+    content: '|';
+    animation: blink 1s step-end infinite;
+    margin-left: 4px;
+    color: #d4af37; /* Golden cursor */
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
 }
 
 #special-text.typing-active::after { opacity: 1; }
@@ -931,4 +955,36 @@ body {
 .aesthetic-playlist {
     margin-top: 10px; /* Slight adjustment for perfect centering */
     margin-bottom: 40px; /* Space before the 'All set?' transition text */
+}
+/* =========================================
+   INTERACTIVE PENSIEVE SLIDER
+   ========================================= */
+.interactive-pensieve {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Space between arrows and image */
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.magic-arrow {
+    background: none;
+    border: none;
+    color: #d4af37; /* Golden */
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    user-select: none; /* Stops text highlighting when clicking fast */
+}
+
+.magic-arrow:hover {
+    transform: scale(1.3);
+    color: #fce8a6;
+    text-shadow: 0 0 25px rgba(212, 175, 55, 1);
+}
+
+.magic-arrow:active {
+    transform: scale(0.9); /* Satisfying click effect */
 }

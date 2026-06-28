@@ -71,7 +71,7 @@
             
             <div class="map-container">
                 <button class="map-location" onclick="travelTo('slytherin-room')">🐍 The Slytherin Common Room</button>
-                <button class="map-location" onclick="travelTo('headmaster-office')">📜 The Headmaster's Office</button>
+                <button class="map-location" onclick="travelTo('headmaster-office'); resetPensieve();">📜 The Headmaster's Office</button>
                 <button class="map-location" onclick="travelTo('great-hall')">✨ The Great Hall</button>
             </div>
         </section>
@@ -111,7 +111,7 @@
             </div>
             <div class="room-transition">
             <p class="magical-transition-text">All set? Let's move on to the headmaster's office for a surprise, shall we?</p>
-            <button class="back-to-map-btn" onclick="travelTo('headmaster-office')">
+            <button class="back-to-map-btn" onclick="travelTo('headmaster-office'); resetPensieve();">
                 Enter The Headmaster's Office
             </button>
         </div>
@@ -124,9 +124,15 @@
             <h2 class="section-title">A Pensieve of Precious Moments</h2>
             <div class="pensieve-layout">
                 <div class="pensieve-left">
-                    <div class="slideshow-container">
-                        <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
-                    </div>
+                    <div class="interactive-pensieve">
+                            <button class="magic-arrow prev-arrow" onclick="turnMemory(-1)">&#10094;</button>
+                            
+                            <div class="slideshow-container" id="pensieve-frame">
+                                <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
+                            </div>
+                            
+                            <button class="magic-arrow next-arrow" onclick="turnMemory(1)">&#10095;</button>
+                        </div>
                     <p id="special-text" class="magic-typewriter-text"></p>
                 </div>
                 <div class="pensieve-right" id="letter-section">
