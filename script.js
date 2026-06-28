@@ -124,9 +124,9 @@ function playSortingHat() {
                 
                 hatTextElement.classList.add('slytherin-shout');
                 
-                // TRIGGER ENVIRONMENTAL SHIFT
-                const magicWorld = document.getElementById('magic-world');
-                if(magicWorld) magicWorld.classList.add('slytherin-theme-active');
+                //THE NEW MAGICAL BACKGROUND TRIGGER
+                document.body.classList.add('slytherin-theme');
+                
                 
                 setTimeout(() => { document.body.style.overflowY = 'auto'; }, 2000);
                 
@@ -137,33 +137,6 @@ function playSortingHat() {
                 setTimeout(playSortingHat, waitTime); 
             }
         }, 600); // 0.6s duration for the cross-fade effect
-    }
-}
-// --- SECTION 3: TIME-TURNER SLIDESHOW & TYPEWRITER ---
-const memoryImages = [
-    "child1.jpg", "child2.jpg", "child3.jpg", "child4.jpg", "child5.jpg",
-    "teen1.jpg", "teen2.jpg", "teen3.jpg", "teen4.jpg", "teen5.jpg",
-    "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg"
-];
-
-const specialImageIndex = 4; // Which photo gets the golden text?
-
-const memoryImgElement = document.getElementById('memory-img');
-const specialTextElement = document.getElementById('special-text');
-const slideshowContainer = document.querySelector('.slideshow-container');
-let currentImgIndex = 0;
-let slideshowStarted = false; 
-
-const specialMessage = "and the all time best...";
-
-function typeSpecialText(i) {
-    if (specialTextElement && i < specialMessage.length) {
-        specialTextElement.innerHTML += specialMessage.charAt(i);
-        setTimeout(() => typeSpecialText(i + 1), 80); 
-    } else if (specialTextElement) {
-        setTimeout(() => {
-            specialTextElement.classList.remove('typing-active');
-        }, 2500);
     }
 }
 
@@ -377,6 +350,7 @@ function verifyTriviaAnswer(selectedOption) {
                 
                 // Wait 3.5 seconds, hide the ENTIRE section, fade in Map
                 setTimeout(() => {
+                    
                     // FIXED: Targeting the whole section now, not just the box
                     const triviaSection = document.getElementById('trivia-section');
                     if(triviaSection) {
@@ -400,7 +374,6 @@ function verifyTriviaAnswer(selectedOption) {
         setTimeout(() => feedback.style.opacity = 0, 2000);
     }
 }
-
 // =========================================================================
 // FEATURE 5: ROOM NAVIGATION & HEART COLLAGE
 // =========================================================================

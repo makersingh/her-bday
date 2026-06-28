@@ -1,3 +1,48 @@
+/* =========================================
+   THE LIVING MAGICAL BACKGROUND
+   ========================================= */
+body {
+    margin: 0;
+    /* Deep magical blue and purple night sky */
+    background: linear-gradient(135deg, #020111, #1a1040, #050b14);
+    background-size: 300% 300%;
+    animation: magical-shift 15s ease infinite; /* Makes the colors slowly breathe/shift */
+    transition: background 3s ease-in-out; /* Smooth 3-second crossfade to green */
+    color: white; /* Base text color */
+}
+
+/* The breathing animation for the background */
+@keyframes magical-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   THE SLYTHERIN OVERRIDE THEME
+   ========================================= */
+body.slytherin-theme {
+    /* Deep, rich Slytherin Greens and Black */
+    background: linear-gradient(135deg, #000000, #012a14, #001105);
+    background-size: 300% 300%;
+    animation: magical-shift 15s ease infinite;
+}
+
+/* =========================================
+   NUKE THE BLOCKY BACKGROUNDS
+   ========================================= */
+/* This forces every section to be transparent so the global background shows through */
+#magic-world,
+.hero,
+.potter-greeting-section,
+.sorting-section,
+#trivia-section,
+#marauders-map,
+.magic-room,
+.room-main-content {
+    background: transparent !important;
+    background-color: transparent !important;
+}
 
 /* --- GLOBAL --- */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
