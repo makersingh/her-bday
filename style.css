@@ -32,7 +32,6 @@ body.slytherin-theme {
    NUKE THE BLOCKY BACKGROUNDS
    ========================================= */
 /* This forces every section to be transparent so the global background shows through */
-#magic-world,
 .hero,
 .potter-greeting-section,
 .sorting-section,
@@ -81,7 +80,7 @@ body {
     animation: darkGradientBG 15s ease infinite;
     color: var(--cream);
     overflow-x: hidden;
-    perspective: 1500px;
+    
 }
 
 @keyframes darkGradientBG {
@@ -99,14 +98,7 @@ body {
 
 /* --- THE BOOK COVER --- */
 
-/*--- 3D ANIMATION ---*/
-/* =========================================
-   3D BOOK COVER TRANSITION
-   ========================================= */
-body {
-    perspective: 1200px; /* Creates the 3D depth for the camera */
-    overflow-x: hidden;
-}
+
 
 /* =========================================
    CENTER-EXPAND REVEAL ANIMATION
@@ -136,12 +128,6 @@ body {
     transform: scale(1.5); /* Expands outward */
     filter: blur(20px);    /* Blurs into the magic world */
     pointer-events: none;
-}
-
-/* Ensure the magic world has a smooth fade-in ready */
-#magic-world {
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
 }
 
 #magic-world.visible-world {
@@ -725,14 +711,15 @@ body {
    FEATURE 4: INTERACTIVE WAND SPARKLES
 ========================================= */
 .wand-sparkle {
-    position: fixed;
+    position: absolute;
     width: 6px;
+    z-index: 999999 !important; 
+    pointer-events: none !important;
     height: 6px;
     background: radial-gradient(circle, var(--gold) 0%, rgba(255,255,255,0) 70%);
     box-shadow: 0 0 10px var(--gold), 0 0 20px #fff;
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9999;
     animation: fadeSparkle 0.8s ease-out forwards;
 }
 
@@ -971,15 +958,31 @@ body {
 }
 
 /* FORCE THE MAP TO FIT THE SCREEN PERFECTLY */
+/* =========================================
+   THE MAGIC WORLD (MAIN CONTENT)
+   ========================================= */
 #magic-world {
-    min-height: 100vh; /* 100% of the screen height */
+    position: relative; /* Crucial: z-index won't work without a position! */
+    z-index: 10;        /* Forces it to sit above the stars */
+    background: transparent !important; /* Lets the stars shine through */
+    width: 100%;
+    min-height: 100vh;
+    
+    /* Smooth fade-in setup */
+    display: none; 
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+}
+
+#magic-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centers the map and buttons vertically */
-    align-items: center;     /* Centers everything horizontally */
-    box-sizing: border-box;
-    padding-bottom: 50px;    /* Adds that missing space at the very bottom */
+    height: 100vh;
+    pointer-events: none; /* Lets you click through the glass */
+    z-index: 9999999; /* The absolute highest layer */
+    overflow: hidden;
 }
 
 /* If you have a container specifically for your map buttons, ensure it has space */
@@ -1038,4 +1041,68 @@ body {
 
 .magic-arrow:active {
     transform: scale(0.9); /* Satisfying click effect */
+}
+
+/* =========================================
+   CUSTOM MAGICAL SCROLLBAR
+   ========================================= */
+
+/* 1. Set the overall width of the scrollbar */
+::-webkit-scrollbar {
+    width: 14px;
+}
+
+/* 2. The Background Track (the path the scrollbar slides on) */
+::-webkit-scrollbar-track {
+    background: #010a05; /* Matches your deep dark background */
+    border-left: 1px solid #111; /* Adds a subtle edge */
+}
+
+/* 3. The Draggable Thumb (The actual scroll piece) */
+::-webkit-scrollbar-thumb {
+    background: #d4af37; /* Your signature golden color */
+    border-radius: 10px; /* Smooth, rounded edges */
+    border: 3px solid #010a05; /* Creates a nice padding effect */
+}
+
+/* 4. The Hover Effect (When the mouse touches the scrollbar) */
+::-webkit-scrollbar-thumb:hover {
+    background: #fce8a6; /* Shifts to a brighter, glowing gold */
+    cursor: pointer;
+}
+
+/* =========================================
+   FIREFOX FALLBACK
+   ========================================= */
+/* Firefox doesn't use the -webkit rules, so we give it a simple fallback */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #010a05; /* Thumb color, Track color */
+}
+
+/* =========================================
+   DYNAMIC STARFIELD
+   ========================================= */
+#starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Forces it into the deep background */
+    pointer-events: none; /* Stops it from blocking your clicks */
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background-color: #ffffff; /* White stars */
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Adds a subtle glow */
+    animation: twinkle linear infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 1; transform: scale(1.3); }
 }

@@ -41,6 +41,8 @@ window.scrollTo(0, 0);
 // Remove any old 'DOMContentLoaded' blocks and use this directly
 window.onload = function() {
     preloadAssets();
+    createStarfield();
+    
     const bookCover = document.getElementById('book-cover');
     const magicWorld = document.getElementById('magic-world');
 
@@ -48,14 +50,22 @@ window.onload = function() {
         bookCover.onclick = function() {
             console.log("Magical reveal triggered!");
             
-            // 1. Add the blur/expand class
+            // 1. Add the blur/expand class to the cover
             bookCover.classList.add('fade-out-magic');
             
-            // 2. Show the magic world immediately
+            // 2. Bring the magic world into the document (but it's still invisible)
             if (magicWorld) {
                 magicWorld.style.display = "block";
-                magicWorld.style.opacity = "1";
+                // NOTICE: We do NOT set opacity to 1 here!
             }
+
+            // The micro-delay allows the browser to register the display change,
+            // which forces the CSS transition to actually fade it in smoothly.
+            setTimeout(function() {
+                if (magicWorld) {
+                    magicWorld.style.opacity = "1"; 
+                }
+            }, 50);
 
             // 3. Cleanup the book cover after 1.2 seconds
             setTimeout(function() {
@@ -66,7 +76,6 @@ window.onload = function() {
         console.error("Could not find book-cover element!");
     }
 };
-
 // --- NEW AESTHETIC PLAYLIST LOGIC ---
 const globalAudio = document.getElementById('global-audio');
 const trackRows = document.querySelectorAll('.track-row');
@@ -287,16 +296,24 @@ function startMagicObservers() {
 document.addEventListener('mousemove', (e) => {
     const sparkle = document.createElement('div');
     sparkle.className = 'wand-sparkle';
+    
+    // Tracking the camera glass, not the page scroll!
     sparkle.style.left = `${e.clientX}px`;
     sparkle.style.top = `${e.clientY}px`;
     
-    // Slight random deviation so particles spread out beautifully
     const randomX = (Math.random() - 0.5) * 15;
     const randomY = (Math.random() - 0.5) * 15;
     sparkle.style.setProperty('--dx', `${randomX}px`);
     sparkle.style.setProperty('--dy', `${randomY}px`);
 
-    document.body.appendChild(sparkle);
+    // Putting the sparks on the glass layer
+    const overlay = document.getElementById('magic-overlay');
+    if (overlay) {
+        overlay.appendChild(sparkle);
+    } else {
+        document.body.appendChild(sparkle); // Fallback
+    }
+    
     setTimeout(() => sparkle.remove(), 800);
 });
 
@@ -705,4 +722,32 @@ function resetPensieve() {
     
     // Restart the 5-second timer from scratch
     resetAutoSlide();
+}
+
+// --- STARFIELD GENERATOR ---
+function createStarfield() {
+    const starContainer = document.getElementById('starfield');
+    if (!starContainer) return;
+
+    const numberOfStars = 150; // Tweak this number if you want more/fewer stars
+
+    for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // Randomize the size (between 1px and 3px)
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        
+        // Randomize the position across the screen
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`;
+        
+        // Randomize the twinkle speed and delay so they don't blink in unison
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        star.style.animationDelay = `${Math.random() * 5}s`;
+        
+        starContainer.appendChild(star);
+    }
 }
