@@ -99,6 +99,57 @@ body {
 
 /* --- THE BOOK COVER --- */
 
+/*--- 3D ANIMATION ---*/
+/* =========================================
+   3D BOOK COVER TRANSITION
+   ========================================= */
+body {
+    perspective: 1200px; /* Creates the 3D depth for the camera */
+    overflow-x: hidden;
+}
+
+/* =========================================
+   CENTER-EXPAND REVEAL ANIMATION
+   ========================================= */
+#book-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to right, #040b17, #0a1930);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Smooth transition settings */
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+}
+
+/* The animation triggered by JS */
+#book-cover.fade-out-magic {
+    opacity: 0;
+    transform: scale(1.5); /* Expands outward */
+    filter: blur(20px);    /* Blurs into the magic world */
+    pointer-events: none;
+}
+
+/* Ensure the magic world has a smooth fade-in ready */
+#magic-world {
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+#magic-world.visible-world {
+    opacity: 1;
+}
+
+/*---OLD ANIMATION---*/
+
 .book-cover {
     position: fixed;
     top: 0;

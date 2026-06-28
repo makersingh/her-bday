@@ -12,22 +12,21 @@ window.onload = function() {
 
     if (bookCover) {
         bookCover.onclick = function() {
-            console.log("Click detected!"); // If you see this in the console but nothing happens, we have a CSS conflict
+            console.log("Magical reveal triggered!");
             
-            // Fades out the cover
-            bookCover.style.transition = "opacity 1s ease";
-            bookCover.style.opacity = "0";
+            // 1. Add the blur/expand class
+            bookCover.classList.add('fade-out-magic');
             
-            // Removes it from the DOM after fading
+            // 2. Show the magic world immediately
+            if (magicWorld) {
+                magicWorld.style.display = "block";
+                magicWorld.style.opacity = "1";
+            }
+
+            // 3. Cleanup the book cover after 1.2 seconds
             setTimeout(function() {
                 bookCover.style.display = "none";
-                
-                // Forces the magic world to appear
-                if (magicWorld) {
-                    magicWorld.style.display = "block";
-                    magicWorld.style.opacity = "1";
-                }
-            }, 1000);
+            }, 1200); 
         };
     } else {
         console.error("Could not find book-cover element!");
