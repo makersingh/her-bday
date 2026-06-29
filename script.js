@@ -422,7 +422,7 @@ function verifyTriviaAnswer(selectedOption) {
 function qSetComplete() {
     const qText = document.getElementById('quiz-question');
     const optsContainer = document.getElementById('quiz-options');
-    qText.innerText = "I solemnly swear that I'm upto no good " ;
+    qText.innerText = `"I solemnly swear that I'm upto no good"`  ;
     optsContainer.innerHTML = "";
 
     setTimeout(() => {
