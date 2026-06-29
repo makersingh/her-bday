@@ -504,8 +504,8 @@ body {
 .player-title {
     font-family: var(--font-display);
     font-size: 1.6rem;
-    color: var(--silver);
-    margin-bottom: 30px;
+    color: var(--gold);
+    margin-bottom: 70px;
     text-align: center;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
@@ -862,6 +862,7 @@ body.slytherin-theme-active .sorting-title {
     font-family: var(--font-display); /* Keeps it matching your HP theme */
     font-size: 1.4rem;
     margin-bottom: 15px;
+    margin-top: 20px;
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
