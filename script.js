@@ -720,7 +720,7 @@ function showFinaleText() {
     }
     setTimeout(() => {
         if (t2) {
-            t2.textContent = "I'll always be there for you. Happy Birthday, Chikki!";
+            t2.textContent = "I'll always be there for you... Happy Birthday, Chikki!";
             t2.classList.add('visible');
         }
     }, 2200);

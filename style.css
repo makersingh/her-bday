@@ -739,13 +739,13 @@ body.slytherin-theme-active .sorting-title {
     width: 100%;
     max-width: 600px;
     aspect-ratio: 1 / 1; /* was a fixed height:600px — squished on phones when width shrank */
-    margin: 40px auto;
+    margin: -30px auto 40px auto;
 }
 
 .heart-pic {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%; /* Makes them aesthetic bubbles */
     border: 2px solid var(--gold);
@@ -761,7 +761,7 @@ body.slytherin-theme-active .sorting-title {
 }
 
 .heart-pic.revealed:hover {
-    transform: translate(-50%, -50%) scale(1.6) !important; 
+    transform: translate(-50%, -50%) scale(2.2) !important; 
     z-index: 99 !important; 
     box-shadow: 0 0 30px var(--gold-bright) !important;
     cursor: pointer;
@@ -769,25 +769,25 @@ body.slytherin-theme-active .sorting-title {
 
 /* THE MATHEMATICAL HEART COORDINATES */
 /* Row 1 (Top Humps) */
-.pic-1 { top: 20%; left: 25%; }
-.pic-2 { top: 20%; left: 40%; }
-.pic-3 { top: 20%; left: 60%; }
-.pic-4 { top: 20%; left: 75%; }
+.pic-1 { top: 23%; left: 18%; }
+.pic-2 { top: 22%; left: 37%; }
+.pic-3 { top: 22%; left: 63%; }
+.pic-4 { top: 23%; left: 82%; }
 /* Row 2 (Widest Part) */
-.pic-5 { top: 40%; left: 15%; }
+.pic-5 { top: 42%; left: 14%; }
 .pic-6 { top: 40%; left: 32.5%; }
 .pic-7 { top: 40%; left: 50%; }
 .pic-8 { top: 40%; left: 67.5%; }
-.pic-9 { top: 40%; left: 85%; }
+.pic-9 { top: 42%; left: 85%; }
 /* Row 3 (Tapering) */
-.pic-10 { top: 60%; left: 25%; }
+.pic-10 { top: 59%; left: 23%; }
 .pic-11 { top: 60%; left: 50%; }
-.pic-12 { top: 60%; left: 75%; }
+.pic-12 { top: 59%; left: 77%; }
 /* Row 4 (Lower Point) */
-.pic-13 { top: 75%; left: 35%; }
-.pic-14 { top: 75%; left: 65%; }
+.pic-13 { top: 73%; left: 35%; }
+.pic-14 { top: 73%; left: 65%; }
 /* Row 5 (The Tip) */
-.pic-15 { top: 90%; left: 50%; }
+.pic-15 { top: 85%; left: 50%; }
 
 /* =========================================
    TRIVIA NONCHALANT POPUP
@@ -1062,6 +1062,7 @@ body.slytherin-theme-active .sorting-title {
     justify-content: center;
     margin-bottom: 10px;
     flex-wrap: wrap;
+    margin-top: -20px;
 }
 
 .candle {
@@ -1241,12 +1242,16 @@ body.slytherin-theme-active .sorting-title {
 .fade-img.pan-b { transform: scale(1.08) translate(-1%, 1%); }
 
 /* ---------- GREAT HALL FINALE (Chapter 7) ---------- */
+#great-hall .section-title {
+    margin-bottom: -10px !important; 
+}
+
 .finale-text {
     font-family: var(--font-display);
     font-size: clamp(1.2rem, 3vw, 1.6rem);
     color: var(--cream);
     text-align: center;
-    margin-top: 30px;
+    margin-top: 10px;
     opacity: 0;
     transition: opacity 1.6s ease;
     letter-spacing: 1px;
