@@ -1,35 +1,3 @@
-/* =========================================================
-   HARRY POTTER SITE — STYLESHEET (reviewed & fixed)
-   ---------------------------------------------------------
-   Changes made vs. the version you pasted:
-   1. Added the missing @keyframes pulseText (this is what
-      animates .click-to-open and the #special-text cursor blink —
-      neither was actually animating before).
-   2. Un-nested .sorting-title and @keyframes pulseDeciding from
-      inside .sorting-container. A @keyframes rule can't legally
-      live inside a normal style rule, so it was being silently
-      dropped — which broke the pulse on BOTH .scroll-indicator
-      and .sorting-title.
-   3. Merged the two conflicting #special-text rules into one
-      (see the comment at its definition for the choice made).
-   4. .heart-collage-container and .sorting-img now use
-      aspect-ratio instead of a fixed height, so they scale
-      proportionally instead of distorting on small screens.
-   5. Made 5 large/fixed sizes responsive with clamp()/min():
-      .hp-title, .slytherin-shout, .map-location, .sorting-img,
-      .floating-hat.
-   6. Merged duplicate rule blocks: .sorting-image-wrapper,
-      .track-row, .golden-border, .aesthetic-playlist.
-   7. Pulled the repeated colors + fonts into :root custom
-      properties (purely structural — same visual result).
-
-   Left untouched on purpose: the !important usage and the
-   inconsistent comment-banner style above the "POTTERHEAD
-   GREETING" section. Both are cosmetic/architectural calls
-   I didn't want to make without seeing your HTML/JS — happy
-   to take a pass at either if you want.
-   ========================================================= */
-
 /* --- GLOBAL --- */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
 
@@ -70,11 +38,20 @@ body {
     perspective: 1500px;
 }
 
+/* =========================================
+   CUSTOM EMOJI WAND CURSOR (FLIPPED LEFT)
+   ========================================= */
+* {
+    /* Uses a tiny, math-flipped SVG graphic directly in the code */
+    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='-30' y='24' font-size='26' transform='scale(-1, 1)'>🪄</text></svg>") 0 2, auto !important;
+}
+
 @keyframes darkGradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
+
 
 /* Drives the "click to open" pulse and the typed-letter cursor blink.
    Both referenced this animation before, but it was never defined. */
@@ -783,6 +760,13 @@ body.slytherin-theme-active .sorting-title {
     transform: translate(-50%, -50%) scale(1);
 }
 
+.heart-pic.revealed:hover {
+    transform: translate(-50%, -50%) scale(1.6) !important; 
+    z-index: 99 !important; 
+    box-shadow: 0 0 30px var(--gold-bright) !important;
+    cursor: pointer;
+}
+
 /* THE MATHEMATICAL HEART COORDINATES */
 /* Row 1 (Top Humps) */
 .pic-1 { top: 20%; left: 25%; }
@@ -1276,39 +1260,36 @@ body.slytherin-theme-active .sorting-title {
     text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
     margin-top: 14px;
 }
-/* =========================================
-   CUSTOM MAGICAL SCROLLBAR
-   ========================================= */
 
-/* 1. Set the overall width of the scrollbar */
+/* =========================================
+   THE QUILL'S ANCHOR SCROLLBAR
+   ========================================= */
+/* 1. The total width of the scrollbar */
 ::-webkit-scrollbar {
-    width: 14px;
+    width: 14px; /* Slightly wider to show the detail */
+    background: transparent;
 }
 
-/* 2. The Background Track (the path the scrollbar slides on) */
+/* 2. The track (The 'Leather' Channel) */
 ::-webkit-scrollbar-track {
-    background: #010a05; /* Matches your deep dark background */
-    border-left: 1px solid #111; /* Adds a subtle edge */
+    background: #3a2618; /* Dark, aged leather brown */
+    border-left: 2px solid #1a110b; /* Deep shadow to separate it from the page */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8); /* Makes it look indented */
 }
 
-/* 3. The Draggable Thumb (The actual scroll piece) */
+/* 3. The thumb (The 'Brass' Slider) */
 ::-webkit-scrollbar-thumb {
-    background: #d4af37; /* Your signature golden color */
-    border-radius: 10px; /* Smooth, rounded edges */
-    border: 3px solid #010a05; /* Creates a nice padding effect */
+    /* Aged brass metallic gradient */
+    background: linear-gradient(180deg, #8a733f 0%, #b89c56 20%, #7d6531 80%, #4a3a18 100%); 
+    border: 2px solid #2e230f; /* Dark tarnished metal edging */
+    border-radius: 10px; /* Smooth, rounded edges like a crafted handle */
+    box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.2), /* Subtle top highlight */
+                0 0 5px rgba(0, 0, 0, 0.8); /* Drop shadow into the leather track */
 }
 
-/* 4. The Hover Effect (When the mouse touches the scrollbar) */
+/* 4. Hover effect (When she grabs it) */
 ::-webkit-scrollbar-thumb:hover {
-    background: #fce8a6; /* Shifts to a brighter, glowing gold */
+    /* Brighter brass glow when hovered */
+    background: linear-gradient(180deg, #a3894a 0%, #d4b563 20%, #91763a 80%, #5c471c 100%); 
     cursor: pointer;
-}
-
-/* =========================================
-   FIREFOX FALLBACK
-   ========================================= */
-/* Firefox doesn't use the -webkit rules, so we give it a simple fallback */
-html {
-    scrollbar-width: thin;
-    scrollbar-color: #d4af37 #010a05; /* Thumb color, Track color */
 }

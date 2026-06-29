@@ -1,25 +1,33 @@
-/* =========================================================
-   "GAWAR KA BDAY" — MAIN SCRIPT (rewritten)
-   ---------------------------------------------------------
-   Organized by chapter, matching the structure in index.html.
-   A few notes on what changed vs. your original script.js:
+// --- MAGIC PRELOADER ---
+function preloadAssets() {
+    // 1. List every single image and audio file you use in your project here
+    const imagesToPreload = [
+        "sorting-hat.png", "sort1.jpg", "child1.jpg", "child2.jpg", "child3.jpg", 
+        "child4.jpg", "child5.jpg", "teen1.jpg", "teen2.jpg", "teen3.jpg", 
+        "teen4.jpg", "teen5.jpg", "now1.jpg", "now2.jpg", "now3.jpg", 
+        "now4.jpg", "now5.jpg", "collage1.jpg", "collage2.jpg", "collage3.jpg",
+        "collage4.jpg", "collage5.jpg", "collage6.jpg", "collage7.jpg",
+        "collage8.jpg", "collage9.jpg", "collage10.jpg", "collage11.jpg",
+        "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg"
+    ];
 
-   - Removed duplicate function declarations (there were two
-     versions each of travelTo/returnToMap/startMagicObservers,
-     and two competing slideshow systems — only one of each
-     ever actually ran; this keeps just the working version).
-   - The Sorting Hat dialogue now uses the lines you wrote in
-     your brief ("Bravery... Loyalty... Ambition...") instead
-     of the old lines.
-   - The Pensieve slideshow and the letter-typing are now one
-     synced sequence instead of two independent loops.
-   - The love-letter text and the "After all this time? /
-     Always" finale have been replaced with warmer, non-romantic
-     lines — see the note in CHAPTER 7 below for why.
-   - I don't have your actual sorting-hat.mp3, so I kept your
-     hand-tuned `textTiming` values as-is rather than guessing
-     new ones.
-   ========================================================= */
+    const audioToPreload = [
+        "music.mp3", "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3"
+    ];
+
+    // 2. This part forces the browser to download the files now
+    imagesToPreload.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+    });
+
+    audioToPreload.forEach((src) => {
+        const audio = new Audio(src);
+        audio.load();
+    });
+    
+    console.log("Magic assets preloaded successfully!");
+}
 
 // --- FORCE PAGE TO TOP ON REFRESH ---
 window.onbeforeunload = function () {
@@ -76,6 +84,7 @@ function spawnParticles(container, className, count, options = {}) {
 // CHAPTER 1 — THE BOOK (3D page-turn + dust/spark particles)
 // =========================================================================
 function openBook() {
+    preloadAssets();
     const bookCover = document.getElementById('book-cover');
     const magicWorld = document.getElementById('magic-world');
     const particleLayer = document.getElementById('book-particles');
@@ -137,7 +146,7 @@ function startHeroSequence() {
             wandEl.classList.add('visible');
             setTimeout(() => {
                 wandEl.classList.remove('visible');
-                setTimeout(() => { i++; showLine(); }, 500);
+                setTimeout(() => { i++; showLine(); }, 700);
             }, 1400);
         } else {
             wandEl.textContent = '';
@@ -227,7 +236,7 @@ const sortingImages = ["sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "sort
 // Your hand-tuned timestamps, kept as-is — I don't have the actual
 // sorting-hat.mp3 to re-sync these against, so these are still the
 // most reliable numbers to use.
-const textTiming = [3500, 3500, 3700, 2800, 2500];
+const textTiming = [3500, 3300, 3500, 2600, 2300];
 
 let hatIndex = 0;
 
@@ -295,7 +304,7 @@ function revealSlytherin() {
 const triviaQuestions = [
     { q: "What is Harry Potter's position on the Gryffindor Quidditch team?", options: ["Keeper", "Chaser", "Seeker", "Beater"], answer: "Seeker" },
     { q: "Which spell is used to conjure a Patronus?", options: ["Expelliarmus", "Expecto Patronum", "Lumos", "Alohomora"], answer: "Expecto Patronum" },
-    { q: "What is the core of the Elder Wand?", options: ["Phoenix Feather", "Dragon Heartstring", "Thestral Tail Hair", "Unicorn Hair"], answer: "Thestral Tail Hair" }
+    { q: "What did Harry Potter call his owl?", options: ["Hedwig", "Scabbers", "Fang", "Buckbeak"], answer: "Hedwig" }
 ];
 
 // Snape-style remarks for correct answers
@@ -309,7 +318,7 @@ const cheekyRemarks = [
 // Snape-style remarks for wrong answers
 const wrongRemarks = [
     "Severus Snape looks disappointed.",
-    "Five points from whichever house you think you belong to.",
+    "Five points from whichever Slytherin.",
     "The Sorting Hat sighs heavily.",
     "Even Neville knew that one."
 ];
@@ -412,7 +421,7 @@ function verifyTriviaAnswer(selectedOption) {
 function qSetComplete() {
     const qText = document.getElementById('quiz-question');
     const optsContainer = document.getElementById('quiz-options');
-    qText.innerText = "Voila! You indeed are a potter head. You may continue to The World of Magic.";
+    qText.innerText = "I solemnly swear that I'm upto no good " ;
     optsContainer.innerHTML = "";
 
     setTimeout(() => {
@@ -529,13 +538,7 @@ const memoryImages = [
 const specialImageIndex = 4; // the photo that gets the golden-frame treatment
 const goldenCaption = "the favourite, hands down...";
 
-// The letter is told in three short fragments instead of one long
-// message, revealed in step with the childhood -> school -> recent
-// "acts" of the slideshow. (This replaces the original full letter,
-// which read as a romantic love note — see the chat for why that's
-// not something I can write here. These lines keep the same idea —
-// memories that still matter — without the romantic framing.)
-const letterFragments = [
+const fullLetter = [
     "However it began, it feels like it's been forever.",
     "So many memories piled up before either of us noticed.",
     "Some people just end up mattering, year after year."
@@ -543,7 +546,6 @@ const letterFragments = [
 
 let pensieveIndex = 0;
 let pensieveStarted = false;
-const shownActs = new Set([0]);
 
 function vintageClassFor(index) {
     const act = Math.floor(index / 5);
@@ -552,17 +554,27 @@ function vintageClassFor(index) {
     return 'memory-vintage-0';
 }
 
-function typeIntoLetter(text) {
+
+function typeFullLetter(paragraphs) {
     const el = document.getElementById('typing-text');
     if (!el) return;
-    if (el.textContent.length > 0) el.innerHTML += '<br><br>';
+    el.innerHTML = '';
 
-    let i = 0;
+    let pIndex = 0;
+    let charIndex = 0;
+
     function step() {
-        if (i < text.length) {
-            el.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(step, 40);
+        if (pIndex < paragraphs.length) {
+            if (charIndex < paragraphs[pIndex].length) {
+                el.innerHTML += paragraphs[pIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(step, 40); // Speed of typing letters
+            } else {
+                el.innerHTML += '<br><br>'; // Adds the line break
+                pIndex++;
+                charIndex = 0;
+                setTimeout(step, 1000); // 1s pause before starting next paragraph
+            }
         }
     }
     step();
@@ -594,8 +606,6 @@ function advancePensieve() {
     const special = document.getElementById('special-text');
     if (!img) return;
 
-    const prevAct = Math.floor(pensieveIndex / 5);
-
     if (fog) fog.classList.add('active');
     img.classList.add('hidden');
     if (container) container.classList.remove('golden-frame');
@@ -611,7 +621,6 @@ function advancePensieve() {
         img.classList.remove('hidden');
 
         let slideDuration = 4500;
-        const newAct = Math.floor(pensieveIndex / 5);
 
         if (pensieveIndex === specialImageIndex) {
             img.classList.add('special-pop');
@@ -622,11 +631,6 @@ function advancePensieve() {
 
         setTimeout(() => { if (fog) fog.classList.remove('active'); }, 900);
 
-        if (newAct !== prevAct && letterFragments[newAct] !== undefined && !shownActs.has(newAct)) {
-            shownActs.add(newAct);
-            typeIntoLetter(letterFragments[newAct]);
-        }
-
         setTimeout(advancePensieve, slideDuration);
     }, 700);
 }
@@ -634,7 +638,10 @@ function advancePensieve() {
 function startPensieve() {
     if (pensieveStarted) return;
     pensieveStarted = true;
-    typeIntoLetter(letterFragments[0]);
+    
+    // 👇 THE FIX: Triggers the continuous typing immediately
+    typeFullLetter(fullLetter);
+    
     setTimeout(advancePensieve, 4000);
 }
 
@@ -708,12 +715,12 @@ function showFinaleText() {
     const t2 = document.getElementById('finale-text-2');
 
     if (t1) {
-        t1.textContent = "However things have changed,";
+        t1.textContent = "No matter where we are";
         t1.classList.add('visible');
     }
     setTimeout(() => {
         if (t2) {
-            t2.textContent = "this still matters. Happy Birthday, Munmun.";
+            t2.textContent = "I'll always be there for you. Happy Birthday, Chikki!";
             t2.classList.add('visible');
         }
     }, 2200);
