@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="starfield"></div>
-    <div id="magic-overlay"></div>
-    
-        </div>
 
+    <!-- Persistent starfield layer, populated by script.js -->
+    <div id="starfield" class="starfield"></div>
+
+    <!-- ============ CHAPTER 1 — THE BOOK ============ -->
     <div id="book-cover" class="book-cover">
         <div class="book-content">
             <p class="author">Some crazy guy Presents</p>
@@ -20,12 +20,17 @@
             <div class="magic-wand-line"></div>
             <p class="click-to-open">Tap to open...</p>
         </div>
+        <!-- dust / spark particles get spawned into here on click -->
+        <div class="book-particles" id="book-particles"></div>
     </div>
 
     <div id="magic-world" class="hidden-world" style="display: none;">
-        <header class="hero" style="padding-top: 60px; text-align: center;">
-            <h1 class="glow-text">Happy Birthday, Munmun</h1>
-            <p class="subtitle">The magic is just beginning...</p>
+
+        <!-- ============ CHAPTER 2 — THE HERO ============ -->
+        <header class="hero" id="hero-section">
+            <p class="wand-text" id="wand-text"></p>
+            <h1 class="glow-text materializing" id="hero-title"></h1>
+            <p class="subtitle" id="hero-subtitle" style="opacity:0;">The magic is just beginning...</p>
         </header>
 
         <section class="potter-greeting-section" id="greeting-section">
@@ -37,7 +42,10 @@
             </div>
         </section>
 
+        <!-- ============ CHAPTER 3 — THE SORTING HAT ============ -->
         <section class="sorting-section" id="sorting-section">
+            <div class="dim-overlay" id="sorting-dim"></div>
+
             <div class="music-container">
                 <audio id="bg-music" src="music.mp3" loop></audio>
             </div>
@@ -45,7 +53,7 @@
             <div class="sorting-container">
                 <h3 class="sorting-title">The Sorting Hat is deciding your house...</h3>
                 <audio id="hat-audio" src="sorting-hat.mp3"></audio>
-                
+
                 <div class="sorting-image-wrapper">
                     <img src="sorting-hat.png" alt="Sorting Hat" class="floating-hat">
                     <img id="sorting-photo" src="sort1.jpg" alt="Munmun Sorting" class="sorting-img">
@@ -57,34 +65,53 @@
             </div>
         </section>
 
+        <!-- ============ CHAPTER 4 — THE EXAMINATION CHAMBER ============ -->
         <section id="trivia-section" class="magic-room" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
-            
-            <h3 class="potter-callout trivia-heading" style="text-align: center; margin-bottom: 30px;">Prove your worth before entering the world of magic</h3>
-            
+
+            <h3 class="potter-callout trivia-heading" style="text-align: center; margin-bottom: 30px;">Welcome to the Hogwarts Examination Chamber...</h3>
+
+            <div class="exam-candles" id="exam-candles"></div>
+
             <div id="trivia-gate" class="trivia-lock-overlay">
                 <p class="trivia-question" id="quiz-question">Loading magical security verification...</p>
                 <div class="trivia-options" id="quiz-options"></div>
                 <p id="trivia-feedback" class="nonchalant-feedback"></p>
+                <div class="seal-row" id="seal-row"></div>
             </div>
         </section>
 
+        <!-- ============ CHAPTER 5 — THE MARAUDER'S MAP ============ -->
         <section id="marauders-map" class="map-section hidden-room">
             <h2 class="potter-callout map-heading" style="text-align: center;">The Marauder's Map</h2>
             <p class="greeting-text" style="text-align: center;">Tap a location to explore your magic...</p>
-            
-            <div class="map-container">
-                <button class="map-location" onclick="travelTo('slytherin-room')">🐍 The Slytherin Common Room</button>
-                <button class="map-location" onclick="travelTo('headmaster-office'); resetPensieve();">📜 The Headmaster's Office</button>
-                <button class="map-location" onclick="travelTo('great-hall')">✨ The Great Hall</button>
+
+            <div class="parchment-map" id="parchment-map">
+                <div class="footprint-layer" id="footprint-layer"></div>
+
+                <div class="map-pin" style="top:62%; left:18%;" data-room="slytherin-room">
+                    <span class="map-pin-icon">🐍</span>
+                    <span class="map-pin-label">The Common Room</span>
+                </div>
+                <div class="map-pin" style="top:20%; left:50%;" data-room="great-hall">
+                    <span class="map-pin-icon">✨</span>
+                    <span class="map-pin-label">The Great Hall</span>
+                </div>
+                <div class="map-pin" style="top:62%; left:80%;" data-room="headmaster-office">
+                    <span class="map-pin-icon">📜</span>
+                    <span class="map-pin-label">The Headmaster's Office</span>
+                </div>
+
+                <div class="map-you-are-here" id="map-anchor">🦶</div>
             </div>
         </section>
 
+        <!-- ============ THE SLYTHERIN COMMON ROOM ============ -->
         <section id="slytherin-room" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
-            
+
             <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
             <div class="aesthetic-playlist">
-                
+
                 <div class="track-row" onclick="playTrack('music1.mp3', this)">
                     <div class="track-info">
                         <span class="song-name">I Like Me Better</span>
@@ -92,7 +119,7 @@
                     </div>
                     <button class="row-play-btn">▶</button>
                 </div>
-                
+
                 <div class="track-row" onclick="playTrack('music2.mp3', this)">
                     <div class="track-info">
                         <span class="song-name">Othaiyadi Pathayila</span>
@@ -100,7 +127,7 @@
                     </div>
                     <button class="row-play-btn">▶</button>
                 </div>
-                
+
                 <div class="track-row" onclick="playTrack('music3.mp3', this)">
                     <div class="track-info">
                         <span class="song-name">Safarnama</span>
@@ -108,34 +135,30 @@
                     </div>
                     <button class="row-play-btn">▶</button>
                 </div>
-                
-                <audio id="global-audio" src="music1.mp3" loop></audio> 
-        
+
+                <audio id="global-audio" src="music1.mp3" loop></audio>
+
             </div>
             <div class="room-transition">
-            <p class="magical-transition-text">All set? Let's move on to the headmaster's office for a surprise, shall we?</p>
-            <button class="back-to-map-btn" onclick="travelTo('headmaster-office'); resetPensieve();">
-                Enter The Headmaster's Office
-            </button>
-        </div>
+                <p class="magical-transition-text">All set? Let's move on to the headmaster's office for a surprise, shall we?</p>
+                <button class="back-to-map-btn" onclick="travelTo('headmaster-office')">
+                    Enter The Headmaster's Office
+                </button>
+            </div>
         </section>
 
+        <!-- ============ CHAPTER 6 — THE PENSIEVE ============ -->
         <section id="headmaster-office" class="magic-room hidden-room">
-            
+
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
-            
+
             <h2 class="section-title">A Pensieve of Precious Moments</h2>
             <div class="pensieve-layout">
                 <div class="pensieve-left">
-                    <div class="interactive-pensieve">
-                            <button class="magic-arrow prev-arrow" onclick="turnMemory(-1)">&#10094;</button>
-                            
-                            <div class="slideshow-container" id="pensieve-frame">
-                                <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
-                            </div>
-                            
-                            <button class="magic-arrow next-arrow" onclick="turnMemory(1)">&#10095;</button>
-                        </div>
+                    <div class="slideshow-container">
+                        <div class="fog-overlay" id="fog-overlay"></div>
+                        <img id="memory-img" src="child1.jpg" alt="Memory" class="fade-img">
+                    </div>
                     <p id="special-text" class="magic-typewriter-text"></p>
                 </div>
                 <div class="pensieve-right" id="letter-section">
@@ -145,15 +168,16 @@
                 </div>
             </div>
             <div class="room-transition">
-            <button class="back-to-map-btn" onclick="travelTo('great-hall')">
-                Go to the Great Hall
-            </button>
-        </div>
+                <button class="back-to-map-btn" onclick="travelTo('great-hall')">
+                    Go to the Great Hall
+                </button>
+            </div>
         </section>
 
+        <!-- ============ CHAPTER 7 — THE GREAT HALL FINALE ============ -->
         <section id="great-hall" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
-            
+
             <h2 class="section-title">A Heart Full of Magic</h2>
             <div class="heart-collage-container" id="heart-grid">
                 <img src="collage1.jpg" class="heart-pic pic-1">
@@ -172,8 +196,16 @@
                 <img src="collage14.jpg" class="heart-pic pic-14">
                 <img src="collage15.jpg" class="heart-pic pic-15">
             </div>
+
+            <div class="hall-candles" id="hall-candles"></div>
+            <div class="finale-stars" id="finale-stars"></div>
+
+            <p class="finale-text" id="finale-text-1"></p>
+            <p class="finale-text finale-text-final" id="finale-text-2"></p>
         </section>
 
-    </div> <script src="script.js"></script>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

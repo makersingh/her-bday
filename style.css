@@ -1,47 +1,34 @@
-/* =========================================
-   THE LIVING MAGICAL BACKGROUND
-   ========================================= */
-body {
-    margin: 0;
-    /* Deep magical blue and purple night sky */
-    background: linear-gradient(135deg, #020111, #1a1040, #050b14);
-    background-size: 300% 300%;
-    animation: magical-shift 15s ease infinite; /* Makes the colors slowly breathe/shift */
-    transition: background 3s ease-in-out; /* Smooth 3-second crossfade to green */
-    color: white; /* Base text color */
-}
+/* =========================================================
+   HARRY POTTER SITE — STYLESHEET (reviewed & fixed)
+   ---------------------------------------------------------
+   Changes made vs. the version you pasted:
+   1. Added the missing @keyframes pulseText (this is what
+      animates .click-to-open and the #special-text cursor blink —
+      neither was actually animating before).
+   2. Un-nested .sorting-title and @keyframes pulseDeciding from
+      inside .sorting-container. A @keyframes rule can't legally
+      live inside a normal style rule, so it was being silently
+      dropped — which broke the pulse on BOTH .scroll-indicator
+      and .sorting-title.
+   3. Merged the two conflicting #special-text rules into one
+      (see the comment at its definition for the choice made).
+   4. .heart-collage-container and .sorting-img now use
+      aspect-ratio instead of a fixed height, so they scale
+      proportionally instead of distorting on small screens.
+   5. Made 5 large/fixed sizes responsive with clamp()/min():
+      .hp-title, .slytherin-shout, .map-location, .sorting-img,
+      .floating-hat.
+   6. Merged duplicate rule blocks: .sorting-image-wrapper,
+      .track-row, .golden-border, .aesthetic-playlist.
+   7. Pulled the repeated colors + fonts into :root custom
+      properties (purely structural — same visual result).
 
-/* The breathing animation for the background */
-@keyframes magical-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* =========================================
-   THE SLYTHERIN OVERRIDE THEME
-   ========================================= */
-body.slytherin-theme {
-    /* Deep, rich Slytherin Greens and Black */
-    background: linear-gradient(135deg, #000000, #012a14, #001105);
-    background-size: 300% 300%;
-    animation: magical-shift 15s ease infinite;
-}
-
-/* =========================================
-   NUKE THE BLOCKY BACKGROUNDS
-   ========================================= */
-/* This forces every section to be transparent so the global background shows through */
-.hero,
-.potter-greeting-section,
-.sorting-section,
-#trivia-section,
-#marauders-map,
-.magic-room,
-.room-main-content {
-    background: transparent !important;
-    background-color: transparent !important;
-}
+   Left untouched on purpose: the !important usage and the
+   inconsistent comment-banner style above the "POTTERHEAD
+   GREETING" section. Both are cosmetic/architectural calls
+   I didn't want to make without seeing your HTML/JS — happy
+   to take a pass at either if you want.
+   ========================================================= */
 
 /* --- GLOBAL --- */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
@@ -80,7 +67,7 @@ body {
     animation: darkGradientBG 15s ease infinite;
     color: var(--cream);
     overflow-x: hidden;
-    
+    perspective: 1500px;
 }
 
 @keyframes darkGradientBG {
@@ -97,44 +84,6 @@ body {
 }
 
 /* --- THE BOOK COVER --- */
-
-
-
-/* =========================================
-   CENTER-EXPAND REVEAL ANIMATION
-   ========================================= */
-#book-cover {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(to right, #040b17, #0a1930);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* Smooth transition settings */
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0px);
-}
-
-/* The animation triggered by JS */
-#book-cover.fade-out-magic {
-    opacity: 0;
-    transform: scale(1.5); /* Expands outward */
-    filter: blur(20px);    /* Blurs into the magic world */
-    pointer-events: none;
-}
-
-#magic-world.visible-world {
-    opacity: 1;
-}
-
-/*---OLD ANIMATION---*/
 
 .book-cover {
     position: fixed;
@@ -253,7 +202,6 @@ body {
     justify-content: center;
     text-align: center;
     padding: 40px 20px;
-    background: radial-gradient(circle at center, #1a1c23 0%, #0b0d10 80%);
     position: relative;
 }
 
@@ -331,7 +279,6 @@ body {
     max-width: 800px;
     width: 100%;
 }
-
 
 /* The New Sorting Heading */
 .sorting-title {
@@ -473,19 +420,15 @@ body {
 }
 
 .slideshow-container {
-    width: 300px; /* Adjust this if you want the box wider */
-    height: 400px; /* Adjust this if you want the box taller */
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box; /* Ensures borders don't shrink the inside */
-}
-#memory-img {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* The magic property: keeps aspect ratio perfect without shrinking */
-    border-radius: 10px; 
+    max-width: 380px;
+    aspect-ratio: 4/5;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(26, 71, 42, 0.3);
+    border: 1px solid rgba(192, 192, 192, 0.2);
+    transition: box-shadow 1.5s ease, border-color 1.5s ease;
 }
 
 .fade-img {
@@ -519,24 +462,17 @@ body {
    it matches the golden-frame reveal theme used right above it.
    If your JS expects the smaller/creamier version, swap the
    color/font-size back and see the note further down the file. */
-/* =========================================
-   SPECIAL TYPEWRITER TEXT STYLING (BRUTE FORCE)
-   ========================================= */
-#special-text, 
-#type-content {
-    font-family: 'HarryPotter', 'Cinzel', serif !important; 
-    font-size: 3rem !important;
-    color: #d4af37 !important; /* Golden */
-    text-align: center !important;
-    line-height: 1.2 !important;
-}
-
 #special-text {
-    margin-top: 15px;
-    height: 3rem; /* Prevents the page from jumping */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: var(--font-magic);
+    font-size: clamp(1.8rem, 7vw, 3.5rem);
+    color: var(--gold-bright);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
+    margin-top: 25px;
+    min-height: 60px;
+    letter-spacing: 4px;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
 }
 
 #special-text::after {
@@ -544,18 +480,6 @@ body {
     animation: pulseText 0.8s infinite;
     color: var(--gold-bright);
     opacity: 0;
-}
-
-/* THE BLINKING TYPEWRITER CURSOR */
-.typing-active::after {
-    content: '|';
-    animation: blink 1s step-end infinite;
-    margin-left: 4px;
-    color: #d4af37; /* Golden cursor */
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
 }
 
 #special-text.typing-active::after { opacity: 1; }
@@ -711,15 +635,14 @@ body {
    FEATURE 4: INTERACTIVE WAND SPARKLES
 ========================================= */
 .wand-sparkle {
-    position: absolute;
+    position: absolute; /* 👇 THE FIX: Changed from fixed to absolute */
     width: 6px;
-    z-index: 999999 !important; 
-    pointer-events: none !important;
     height: 6px;
     background: radial-gradient(circle, var(--gold) 0%, rgba(255,255,255,0) 70%);
     box-shadow: 0 0 10px var(--gold), 0 0 20px #fff;
     border-radius: 50%;
     pointer-events: none;
+    z-index: 9999;
     animation: fadeSparkle 0.8s ease-out forwards;
 }
 
@@ -731,18 +654,18 @@ body {
 /* =========================================
    FEATURE 3: DYNAMIC SLYTHERIN THEME SHIFT
 ========================================= */
-/* When this class is applied by JS, the entire world transforms */
-.slytherin-theme-active {
-    transition: background 3s ease-in-out;
-    background: radial-gradient(circle at center, #061c0e 0%, #020a05 90%) !important;
+body.slytherin-theme-active {
+    transition: background-color 3s ease-in-out, background-image 3s ease-in-out !important;
+    /* Shifts the entire waving background to deep emerald greens */
+    background: linear-gradient(135deg, #010a05 0%, #0a2113 50%, #031409 100%) !important;
+    background-size: 400% 400% !important;
 }
 
-.slytherin-theme-active .glow-text,
-.slytherin-theme-active .sorting-title {
+body.slytherin-theme-active .glow-text,
+body.slytherin-theme-active .sorting-title {
     color: #2f8f53 !important;
     text-shadow: 0 0 20px rgba(47, 143, 83, 0.8) !important;
 }
-
 /* =========================================
    FEATURE 2: THE TRIVIA GATEWAY LOCK
 ========================================= */
@@ -752,26 +675,17 @@ body {
     border-radius: 20px;
     padding: 40px;
     text-align: center;
+    max-width: 500px;
     margin: 50px auto;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 40px rgba(0,0,0,0.8);
     transition: all 0.5s ease;
-    width: 100%;
-    max-width: 500px;
-    height: 480px !important; 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
 }
 
 .trivia-question {
     font-family: var(--font-display);
     color: var(--gold);
     font-size: 1.3rem;
-    min-height: 80px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
@@ -779,7 +693,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    min-height: 220px;
 }
 
 .trivia-btn {
@@ -842,29 +755,27 @@ body {
 }
 
 /* =========================================
-   THE GREAT HALL (TIGHT DENSE HEART)
+   THE GREAT HALL (15-PHOTO HEART)
 ========================================= */
 .heart-collage-container {
     position: relative;
     width: 100%;
-    max-width: 800px; /* Made the container wider so photos can be huge! */
-    aspect-ratio: 1 / 1; 
+    max-width: 600px;
+    aspect-ratio: 1 / 1; /* was a fixed height:600px — squished on phones when width shrank */
     margin: 40px auto;
 }
 
 .heart-pic {
     position: absolute;
-    /* MASSIVELY increased size. Uses clamp so they scale perfectly on phones and PCs */
-    width: clamp(110px, 18vw, 170px); 
-    height: clamp(110px, 18vw, 170px);
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 50%; 
-    border: 4px solid var(--gold); /* Thicker border so overlaps look clean */
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    border-radius: 50%; /* Makes them aesthetic bubbles */
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0);
-    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    z-index: 1; /* Base layer */
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy pop-in */
 }
 
 .heart-pic.revealed {
@@ -872,47 +783,27 @@ body {
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* 🪄 NEW MAGIC: When she hovers over a photo, it pops to the front and enlarges! */
-.heart-pic.revealed:hover {
-    transform: translate(-50%, -50%) scale(1.35);
-    z-index: 99 !important;
-    box-shadow: 0 0 40px rgba(212, 175, 55, 1);
-    cursor: pointer;
-}
-
-/* =========================================
-   THE NEW TIGHTLY PACKED HEART COORDINATES
-   (Z-index ensures they overlap perfectly)
-========================================= */
-/* =========================================
-   THE TRUE HEART COORDINATES
-========================================= */
-/* Top Left Lobe (The arch) */
-.pic-1 { top: 28%; left: 24%; z-index: 2; }
-.pic-2 { top: 20%; left: 38%; z-index: 3; }
-
-/* Top Right Lobe (The arch) */
-.pic-3 { top: 20%; left: 62%; z-index: 3; }
-.pic-4 { top: 28%; left: 76%; z-index: 2; }
-
-/* The Widest Part (The center band) */
-.pic-5 { top: 46%; left: 15%; z-index: 4; }
-.pic-6 { top: 48%; left: 32%; z-index: 5; }
-.pic-7 { top: 42%; left: 50%; z-index: 6; } /* Fills the center dip perfectly */
-.pic-8 { top: 48%; left: 68%; z-index: 5; }
-.pic-9 { top: 46%; left: 85%; z-index: 4; }
-
-/* Tapering Downwards (The V-shape begins) */
-.pic-10 { top: 66%; left: 28%; z-index: 7; }
-.pic-11 { top: 68%; left: 50%; z-index: 8; }
-.pic-12 { top: 66%; left: 72%; z-index: 7; }
-
-/* Approaching the Point */
-.pic-13 { top: 82%; left: 39%; z-index: 9; }
-.pic-14 { top: 82%; left: 61%; z-index: 9; }
-
-/* The Final Bottom Tip */
-.pic-15 { top: 96%; left: 50%; z-index: 10; }
+/* THE MATHEMATICAL HEART COORDINATES */
+/* Row 1 (Top Humps) */
+.pic-1 { top: 20%; left: 25%; }
+.pic-2 { top: 20%; left: 40%; }
+.pic-3 { top: 20%; left: 60%; }
+.pic-4 { top: 20%; left: 75%; }
+/* Row 2 (Widest Part) */
+.pic-5 { top: 40%; left: 15%; }
+.pic-6 { top: 40%; left: 32.5%; }
+.pic-7 { top: 40%; left: 50%; }
+.pic-8 { top: 40%; left: 67.5%; }
+.pic-9 { top: 40%; left: 85%; }
+/* Row 3 (Tapering) */
+.pic-10 { top: 60%; left: 25%; }
+.pic-11 { top: 60%; left: 50%; }
+.pic-12 { top: 60%; left: 75%; }
+/* Row 4 (Lower Point) */
+.pic-13 { top: 75%; left: 35%; }
+.pic-14 { top: 75%; left: 65%; }
+/* Row 5 (The Tip) */
+.pic-15 { top: 90%; left: 50%; }
 
 /* =========================================
    TRIVIA NONCHALANT POPUP
@@ -990,31 +881,15 @@ body {
 }
 
 /* FORCE THE MAP TO FIT THE SCREEN PERFECTLY */
-/* =========================================
-   THE MAGIC WORLD (MAIN CONTENT)
-   ========================================= */
 #magic-world {
-    position: relative; /* Crucial: z-index won't work without a position! */
-    z-index: 10;        /* Forces it to sit above the stars */
-    background: transparent !important; /* Lets the stars shine through */
-    width: 100%;
-    min-height: 100vh;
-    
-    /* Smooth fade-in setup */
-    display: none; 
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-}
-
-#magic-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+    min-height: 100vh; /* 100% of the screen height */
     width: 100vw;
-    height: 100vh;
-    pointer-events: none; /* Lets you click through the glass */
-    z-index: 9999999; /* The absolute highest layer */
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the map and buttons vertically */
+    align-items: center;     /* Centers everything horizontally */
+    box-sizing: border-box;
+    padding-bottom: 50px;    /* Adds that missing space at the very bottom */
 }
 
 /* If you have a container specifically for your map buttons, ensure it has space */
@@ -1042,39 +917,365 @@ body {
     margin-top: 10px; /* Slight adjustment for perfect centering */
     margin-bottom: 40px; /* Space before the 'All set?' transition text */
 }
-/* =========================================
-   INTERACTIVE PENSIEVE SLIDER
-   ========================================= */
-.interactive-pensieve {
+
+/* =========================================================
+   CHAPTER REDESIGN — NEW COMPONENTS
+   ---------------------------------------------------------
+   Everything below this point is new: starfield, book-opening
+   particles, the hero "wand writing" sequence, the darkened/
+   shaking Sorting reveal, the Examination Chamber (candles +
+   seals), the parchment Marauder's Map, the Pensieve fog/sepia/
+   pan effects, and the Great Hall finale (candles + stars).
+   Nothing above this line was touched.
+   ========================================================= */
+
+/* Anchors for absolutely-positioned overlays added below */
+.sorting-section { position: relative; }
+#great-hall { position: relative; }
+
+/* ---------- STARFIELD (reused for hero + finale) ---------- */
+.starfield {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+}
+
+.finale-stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 2.5s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+.finale-stars.active { opacity: 1; }
+
+/* ---------- BOOK-OPENING PARTICLES (Chapter 1) ---------- */
+.book-particles {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.dust-particle, .spark-particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.dust-particle {
+    width: 4px;
+    height: 4px;
+    background: rgba(192, 192, 192, 0.55);
+    animation: dustFloat 1.8s ease-out forwards;
+}
+
+.spark-particle {
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, var(--gold-bright) 0%, transparent 70%);
+    box-shadow: 0 0 10px var(--gold-bright);
+    animation: sparkFly 1.3s ease-out forwards;
+}
+
+@keyframes dustFloat {
+    0% { opacity: 0.8; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, -60px)) scale(0.4); }
+}
+
+@keyframes sparkFly {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.2); }
+}
+
+/* ---------- HERO: WAND WRITING + MATERIALIZING TITLE (Chapter 2) ---------- */
+.wand-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--silver);
+    letter-spacing: 2px;
+    min-height: 2.4rem;
+    margin-bottom: 20px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    text-align: center;
+}
+.wand-text.visible { opacity: 1; }
+
+.materializing .letter {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(10px) scale(0.85);
+    animation: materializeLetter 0.6s ease forwards;
+}
+
+@keyframes materializeLetter {
+    to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+}
+
+/* ---------- SORTING CEREMONY: DARKENING + SHAKE + GREEN PARTICLES (Chapter 3) ---------- */
+.dim-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 2.5s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+.dim-overlay.active { background: rgba(0, 0, 0, 0.55); }
+
+@keyframes cameraShake {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-6px, 3px); }
+    40% { transform: translate(5px, -4px); }
+    60% { transform: translate(-4px, 4px); }
+    80% { transform: translate(6px, -2px); }
+}
+.camera-shake { animation: cameraShake 0.45s ease; }
+
+.green-particle {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #4fdc7d 0%, transparent 70%);
+    box-shadow: 0 0 8px #2f8f53;
+    pointer-events: none;
+    z-index: 1500;
+    animation: floatUpGreen 2.5s ease-out forwards;
+}
+
+@keyframes floatUpGreen {
+    0% { opacity: 0.9; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-160px) scale(0.3); }
+}
+
+/* ---------- CANDLES (reused: Examination Chamber + Great Hall) ---------- */
+.exam-candles, .hall-candles {
     display: flex;
-    align-items: center;
+    gap: 40px;
     justify-content: center;
-    gap: 20px; /* Space between arrows and image */
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.candle {
+    width: 14px;
+    height: 50px;
+    background: linear-gradient(#fdf6e3, #e8dcb8);
+    border-radius: 3px;
     position: relative;
-    margin-bottom: 15px;
 }
 
-.magic-arrow {
-    background: none;
-    border: none;
-    color: #d4af37; /* Golden */
-    font-size: 2.5rem;
+.candle::before {
+    content: "";
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 20px;
+    background: radial-gradient(circle, #ffd76a 0%, #ff8c00 60%, transparent 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.2;
+    filter: blur(0.5px);
+    transition: opacity 0.8s ease;
+    animation: flameFlicker 2.2s ease-in-out infinite;
+}
+
+.candle.lit::before { opacity: 1; }
+.candle.flicker-hard::before { animation: flameFlickerHard 0.5s ease-in-out 2; }
+
+@keyframes flameFlicker {
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+    50% { transform: translateX(-50%) scale(1.08) rotate(2deg); }
+}
+
+@keyframes flameFlickerHard {
+    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+    25% { opacity: 0.25; transform: translateX(-50%) scale(0.7) rotate(-6deg); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.15) rotate(5deg); }
+    75% { opacity: 0.3; transform: translateX(-50%) scale(0.8) rotate(-4deg); }
+}
+
+/* ---------- TRIVIA: WRONG-ANSWER RED FLASH + SEALS (Chapter 4) ---------- */
+.flash-red { animation: redFlash 0.6s ease; }
+
+@keyframes redFlash {
+    0%, 100% { color: inherit; text-shadow: none; }
+    30% { color: #ff5c6c; text-shadow: 0 0 15px rgba(255, 60, 60, 0.8); }
+}
+
+.seal-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 22px;
+}
+
+.seal {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(212, 175, 55, 0.25);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.5s ease;
+}
+
+.seal.unlocked {
+    border-color: var(--gold);
+    background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold) 70%);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+    animation: sealPop 0.5s ease;
+}
+
+@keyframes sealPop {
+    0% { transform: scale(0.3); }
+    60% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+/* ---------- THE PARCHMENT MARAUDER'S MAP (Chapter 5) ---------- */
+.parchment-map {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 4 / 3;
+    margin: 40px auto 0;
+    border-radius: 8px;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(120, 90, 50, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(120, 90, 50, 0.25), transparent 45%),
+        linear-gradient(135deg, #d9c79e 0%, #c9b285 50%, #b89a68 100%);
+    box-shadow: 0 0 0 6px #4a3a22, 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 60px rgba(80, 55, 20, 0.4);
+    overflow: hidden;
+}
+
+.parchment-map::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 3px);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+.map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
     cursor: pointer;
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-    user-select: none; /* Stops text highlighting when clicking fast */
+    text-align: center;
+    z-index: 2;
 }
 
-.magic-arrow:hover {
-    transform: scale(1.3);
-    color: #fce8a6;
-    text-shadow: 0 0 25px rgba(212, 175, 55, 1);
+.map-pin-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
 }
 
-.magic-arrow:active {
-    transform: scale(0.9); /* Satisfying click effect */
+.map-pin-label {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: #2b1d0e;
+    background: rgba(255, 250, 235, 0.8);
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
 }
 
+.map-pin:hover .map-pin-icon { transform: scale(1.25) rotate(-4deg); }
+
+.map-you-are-here {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3rem;
+    opacity: 0.85;
+}
+
+.footprint-layer { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+.footprint {
+    position: absolute;
+    font-size: 0.85rem;
+    opacity: 0;
+    animation: footstepAppear 0.6s ease forwards;
+}
+
+@keyframes footstepAppear {
+    0% { opacity: 0; transform: scale(0.5); }
+    40% { opacity: 0.85; transform: scale(1); }
+    100% { opacity: 0.45; transform: scale(1); }
+}
+
+/* ---------- PENSIEVE: FOG + SEPIA TIERS + PAN (Chapter 6) ---------- */
+.fog-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    z-index: 3;
+    pointer-events: none;
+    filter: blur(8px);
+    transition: opacity 0.5s ease;
+}
+.fog-overlay.active { opacity: 0.85; }
+
+.memory-vintage-2 { filter: sepia(70%) contrast(95%) brightness(95%) saturate(70%); }
+.memory-vintage-1 { filter: sepia(35%) contrast(100%) saturate(85%); }
+.memory-vintage-0 { filter: none; }
+
+.fade-img.pan-a { transform: scale(1.08) translate(1%, -1%); }
+.fade-img.pan-b { transform: scale(1.08) translate(-1%, 1%); }
+
+/* ---------- GREAT HALL FINALE (Chapter 7) ---------- */
+.finale-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: var(--cream);
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    letter-spacing: 1px;
+}
+.finale-text.visible { opacity: 1; }
+
+.finale-text-final {
+    font-family: var(--font-magic);
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    color: var(--gold-bright);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    margin-top: 14px;
+}
 /* =========================================
    CUSTOM MAGICAL SCROLLBAR
    ========================================= */
@@ -1110,52 +1311,4 @@ body {
 html {
     scrollbar-width: thin;
     scrollbar-color: #d4af37 #010a05; /* Thumb color, Track color */
-}
-
-/* =========================================
-   DYNAMIC STARFIELD
-   ========================================= */
-#starfield {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* Forces it into the deep background */
-    pointer-events: none; /* Stops it from blocking your clicks */
-    overflow: hidden;
-}
-
-.star {
-    position: absolute;
-    background-color: #ffffff; /* White stars */
-    border-radius: 50%;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Adds a subtle glow */
-    animation: twinkle linear infinite;
-}
-
-@keyframes twinkle {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 1; transform: scale(1.3); }
-}
-/* =========================================
-   PERFECTLY CENTERED MARAUDER'S MAP
-   ========================================= */
-/* =========================================
-   PERFECTLY CENTERED MARAUDER'S MAP
-   ========================================= */
-#marauders-map {
-    min-height: 100vh !important; 
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;     
-    padding: 0 20px;         
-}
-
-#marauders-map.hidden-room {
-    display: none !important;
-}
-
-#marauders-map.visible-room {
-    display: flex !important;
 }
