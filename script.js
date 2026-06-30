@@ -538,6 +538,7 @@ const memoryImages = [
 ];
 const specialImageIndex = 4; // the photo that gets the golden-frame treatment
 const goldenCaption = "the favourite, hands down...";
+const pensieveSlider = document.getElementById("pensieve-slider");
 
 const fullLetter = [
     "However it began, it feels like it's been forever.",
@@ -611,9 +612,11 @@ function advancePensieve() {
     img.classList.add('hidden');
     if (container) container.classList.remove('golden-frame');
     if (special) { special.innerHTML = ''; special.classList.remove('typing-active'); }
+    
 
     setTimeout(() => {
         pensieveIndex = (pensieveIndex + 1) % memoryImages.length;
+        if (pensieveSlider) {pensieveSlider.value = pensieveIndex;}
         img.src = memoryImages[pensieveIndex];
 
         img.classList.remove('memory-vintage-0', 'memory-vintage-1', 'memory-vintage-2', 'pan-a', 'pan-b', 'special-pop');
@@ -645,6 +648,31 @@ function startPensieve() {
     
     setTimeout(advancePensieve, 4000);
 }
+
+if (pensieveSlider) {
+    pensieveSlider.addEventListener("input", function () {
+        pensieveIndex = parseInt(this.value);
+
+        const img = document.getElementById("memory-img");
+
+        img.src = memoryImages[pensieveIndex];
+
+        img.classList.remove(
+            'memory-vintage-0',
+            'memory-vintage-1',
+            'memory-vintage-2',
+            'pan-a',
+            'pan-b',
+            'special-pop'
+        );
+
+        img.classList.add(vintageClassFor(pensieveIndex));
+        img.classList.add(
+            pensieveIndex % 2 === 0 ? 'pan-a' : 'pan-b'
+        );
+    });
+}
+
 
 // =========================================================================
 // CHAPTER 7 — THE GREAT HALL FINALE (heart collage, candles, stars)
