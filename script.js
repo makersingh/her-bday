@@ -89,6 +89,12 @@ function openBook() {
     const bookCover = document.getElementById('book-cover');
     const magicWorld = document.getElementById('magic-world');
     const particleLayer = document.getElementById('book-particles');
+    const bgMusic = document.getElementById('bg-music');
+    
+    if (bgMusic) {
+        bgMusic.volume = 0.6; // Optional: keeps it from blasting too loud
+        bgMusic.play().catch(e => console.log(e));
+    }
 
     if (!bookCover) {
         console.error('Could not find book-cover element!');
@@ -191,24 +197,32 @@ const trackRows = document.querySelectorAll('.track-row');
 
 function playTrack(fileName, clickedRow) {
     const playBtnIcon = clickedRow.querySelector('.row-play-btn');
+    const bgMusic = document.getElementById('bg-music'); // Grabs the main theme
 
+    // 1. If they click pause on the currently playing track
     if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
         globalAudio.pause();
         playBtnIcon.innerHTML = "▶";
+        if (bgMusic) bgMusic.play(); // Bring main theme back!
         return;
     }
 
+    // 2. If they click play to resume the paused track
     if (clickedRow.classList.contains('playing-now') && globalAudio.paused) {
+        if (bgMusic) bgMusic.pause(); // Kill main theme
         globalAudio.play();
         playBtnIcon.innerHTML = "⏸";
         return;
     }
 
+    // 3. If they click a brand new track
     trackRows.forEach(row => {
         row.classList.remove('playing-now');
         row.querySelector('.row-play-btn').innerHTML = "▶";
     });
 
+    if (bgMusic) bgMusic.pause(); // Kill main theme
+    
     globalAudio.src = fileName;
     globalAudio.play();
 
@@ -776,7 +790,6 @@ function startMagicObservers() {
                     const dimOverlay = document.getElementById('sorting-dim');
                     if (dimOverlay) dimOverlay.classList.add('active');
 
-                    if (bgMusic) bgMusic.play().catch(() => {});
 
                     setTimeout(() => {
                         if (hatAudio) hatAudio.play().catch(() => {});

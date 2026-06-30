@@ -703,6 +703,46 @@ body.slytherin-theme-active .sorting-title {
     color: #2f8f53 !important;
     text-shadow: 0 0 20px rgba(47, 143, 83, 0.8) !important;
 }
+
+/* =========================================
+   THE SLYTHERIN BANNERS
+========================================= */
+
+.slytherin-banner {
+    position: absolute;
+    top: -120vh; 
+    width: 12vw; 
+    min-width: 100px;
+    max-width: 160px;
+    height: 70vh; 
+    background: linear-gradient(180deg, var(--slytherin-green) 0%, #0a2113 100%);
+    border-left: 3px solid var(--silver);
+    border-right: 3px solid var(--silver);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding-top: 32vh; 
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 88%, 0% 100%);
+    pointer-events: none; 
+    visibility: hidden; 
+    transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 1.2s;
+}
+
+.banner-left { left: 4%; }
+.banner-right { right: 4%; }
+
+.slytherin-banner img {
+    width: 75%;
+    height: fit-content;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+}
+
+body.slytherin-theme-active .slytherin-banner {
+    top: -10vh;
+    visibility: visible; 
+    transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0s;
+}
+
 /* =========================================
    FEATURE 2: THE TRIVIA GATEWAY LOCK
 ========================================= */
@@ -1143,7 +1183,7 @@ body.slytherin-theme-active .sorting-title {
     transform: translateX(-50%);
     width: 12px;
     height: 20px;
-    background: radial-gradient(circle, #ffd76a 0%, #ff8c00 60%, transparent 100%);
+    background: radial-gradient(circle, #a8ffc8 0%, #2f8f53 60%, transparent 100%);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     opacity: 0.2;
     filter: blur(0.5px);
