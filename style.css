@@ -38,12 +38,36 @@ body {
     perspective: 1500px;
 }
 
-/* =========================================
-   CUSTOM EMOJI WAND CURSOR (FLIPPED LEFT)
-   ========================================= */
-* {
-    /* Uses a tiny, math-flipped SVG graphic directly in the code */
-    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='-30' y='24' font-size='26' transform='scale(-1, 1)'>🪄</text></svg>") 0 2, auto !important;
+/* Default wand cursor everywhere */
+html,
+body {
+    cursor: url("wand.png") 0 0, auto;
+}
+
+/* Force inheritance for every element */
+*,
+*::before,
+*::after {
+    cursor: inherit;
+}
+
+/* Interactive elements get glowing wand */
+a,
+button,
+input,
+textarea,
+select,
+label,
+[onclick],
+.book-cover,
+.track-row,
+.row-play-btn,
+.trivia-btn,
+.map-location,
+.back-to-map-btn,
+.map-pin,
+.heart-pic:hover {
+    cursor: url("wand-glow.png") 0 0, pointer !important;
 }
 
 @keyframes darkGradientBG {
@@ -441,7 +465,7 @@ body {
    color/font-size back and see the note further down the file. */
 #special-text {
     font-family: var(--font-magic);
-    font-size: clamp(1.8rem, 7vw, 3.5rem);
+    font-size: clamp(1.8rem, 7vw, 3rem);
     color: var(--gold-bright);
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
     margin-top: 25px;
