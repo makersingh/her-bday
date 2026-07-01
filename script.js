@@ -221,6 +221,58 @@ const globalAudio = document.getElementById('global-audio');
 const trackRows = document.querySelectorAll('.track-row');
 
 function playTrack(fileName, clickedRow) {
+let isDragging = false; 
+
+// 1. Update the slider automatically as the song plays
+globalAudio.addEventListener('timeupdate', () => {
+    if (!globalAudio.duration) return;
+    
+    // Find whichever row is currently playing
+    const activeRow = document.querySelector('.track-row.playing-now');
+    if (!activeRow) return;
+
+    const slider = activeRow.querySelector('.track-slider');
+    const timeCurrent = activeRow.querySelector('.time-current');
+    const timeTotal = activeRow.querySelector('.time-total');
+
+    if (slider && !isDragging) {
+        const progressPercent = (globalAudio.currentTime / globalAudio.duration) * 100;
+        slider.value = progressPercent;
+    }
+
+    // Always update the text timestamps
+    if (timeCurrent) timeCurrent.innerText = formatTime(globalAudio.currentTime);
+    if (timeTotal) timeTotal.innerText = formatTime(globalAudio.duration);
+});
+
+// Helper function to turn raw seconds into clean 0:00 format
+function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+// 2. Allow skipping/seeking when the slider is dragged
+document.querySelectorAll('.track-slider').forEach(slider => {
+    
+    // When you GRAB the dot (Mouse or Touch)
+    slider.addEventListener('mousedown', () => isDragging = true);
+    slider.addEventListener('touchstart', () => isDragging = true, {passive: true});
+
+    // When you DRAG the dot (Instantly skips the audio)
+    slider.addEventListener('input', (e) => {
+        if (globalAudio.duration) {
+            const seekTime = (e.target.value / 100) * globalAudio.duration;
+            globalAudio.currentTime = seekTime;
+        }
+    });
+
+    // When you LET GO of the dot
+    slider.addEventListener('mouseup', () => isDragging = false);
+    slider.addEventListener('touchend', () => isDragging = false);
+});
+    
     const playBtnIcon = clickedRow.querySelector('.row-play-btn');
     const bgMusic = document.getElementById('bg-music'); // Grabs the main theme
 
