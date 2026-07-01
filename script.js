@@ -81,6 +81,31 @@ function spawnParticles(container, className, count, options = {}) {
     }
 }
 
+function fadeAudio(audio, targetVolume, duration) {
+    if (!audio) return;
+    
+    // Clear any existing fade so they don't fight each other
+    if (audio.fadeInterval) clearInterval(audio.fadeInterval);
+    
+    const step = 50; // Update the volume every 50 milliseconds
+    const volumeStep = (targetVolume - audio.volume) / (duration / step);
+    
+    audio.fadeInterval = setInterval(() => {
+        let newVolume = audio.volume + volumeStep;
+        
+        // Clamp the volume strictly between 0.0 and 1.0 to prevent browser crash errors
+        newVolume = Math.max(0, Math.min(1, newVolume));
+        audio.volume = newVolume;
+        
+        // Stop the interval once we hit the target volume
+        if ((volumeStep > 0 && audio.volume >= targetVolume) || 
+            (volumeStep < 0 && audio.volume <= targetVolume)) {
+            audio.volume = targetVolume;
+            clearInterval(audio.fadeInterval);
+        }
+    }, step);
+}
+
 // =========================================================================
 // CHAPTER 1 — THE BOOK (3D page-turn + dust/spark particles)
 // =========================================================================
@@ -200,10 +225,13 @@ function playTrack(fileName, clickedRow) {
     const bgMusic = document.getElementById('bg-music'); // Grabs the main theme
 
     // 1. If they click pause on the currently playing track
-    if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
+  if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
         globalAudio.pause();
         playBtnIcon.innerHTML = "▶";
-        if (bgMusic) bgMusic.play(); // Bring main theme back!
+        if (bgMusic) {
+            bgMusic.play().catch(e => console.log(e));
+            fadeAudio(bgMusic, 0.6, 1500); // 👈 Fades it back up smoothly!
+        }
         return;
     }
 
@@ -475,6 +503,20 @@ function travelTo(roomId) {
         targetRoom.scrollIntoView({ behavior: 'smooth' });
     }
 
+    const bgMusic = document.getElementById('bg-music');
+
+    // 👇 THE FIX: Handle the ambient room fading 👇
+    if (roomId === 'slytherin-room') {
+        // Fade out to 0 (completely silent) when entering Slytherin
+        if (bgMusic) fadeAudio(bgMusic, 0, 1200); 
+    } else {
+        // If traveling to ANY other room, and no playlist track is actively playing, bring music back
+        if (bgMusic && globalAudio.paused) {
+            bgMusic.play().catch(e => console.log(e));
+            fadeAudio(bgMusic, 0.6, 1800);
+        }
+    }
+
     if (roomId === 'great-hall') {
         setTimeout(revealHeartCollage, 500);
     }
@@ -499,6 +541,11 @@ function returnToMap() {
         map.classList.remove('hidden-room');
         map.classList.add('visible-room');
         map.scrollIntoView({ behavior: 'smooth' });
+        const bgMusic = document.getElementById('bg-music');
+    if (bgMusic && globalAudio.paused) {
+        bgMusic.play().catch(e => console.log(e));
+        fadeAudio(bgMusic, 0.6, 2000);
+    }
     }
 }
 
@@ -785,14 +832,23 @@ function startMagicObservers() {
                 sortingStarted = true;
                 sortingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                setTimeout(() => {
+              setTimeout(() => {
                     document.body.style.overflowY = 'hidden';
                     const dimOverlay = document.getElementById('sorting-dim');
                     if (dimOverlay) dimOverlay.classList.add('active');
 
-
                     setTimeout(() => {
-                        if (hatAudio) hatAudio.play().catch(() => {});
+                        if (hatAudio) {
+                            hatAudio.play().catch(() => {});
+                            
+                            // 👇 THE FIX: Fade bg-music down to 10% volume over 1.5 seconds
+                            fadeAudio(bgMusic, 0.1, 1200);
+                            
+                            // 👇 THE FIX: Listen for the exact moment the hat audio ends, then fade back up to 60%
+                            hatAudio.onended = () => {
+                                fadeAudio(bgMusic, 0.6, 1500); 
+                            };
+                        }
                         playSortingHat();
                     }, 1000);
                 }, 600);
