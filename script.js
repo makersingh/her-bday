@@ -404,7 +404,7 @@ const triviaQuestions = [
 
 // Snape-style remarks for correct answers
 const cheekyRemarks = [
-    "Hmph. Not entirely hopeless, I see.",
+    "Five points to Slytherin.",
     "Acceptable. Barely.",
     "A lucky guess, no doubt.",
     "Perhaps you do have a brain after all."
@@ -413,7 +413,7 @@ const cheekyRemarks = [
 // Snape-style remarks for wrong answers
 const wrongRemarks = [
     "Severus Snape looks disappointed.",
-    "Five points from whichever Slytherin.",
+    "Five points from Slytherin.",
     "The Sorting Hat sighs heavily.",
     "Even Neville knew that one."
 ];
