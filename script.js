@@ -969,22 +969,14 @@ window.addEventListener('scroll', () => {
 });
 
 function spawnFloatingLetter() {
-    // 1. Create the letter element
     const letter = document.createElement('div');
     letter.classList.add('floating-letter');
-    
-    // 2. Pick a random message
     const randomMsg = letterMessages[Math.floor(Math.random() * letterMessages.length)];
     letter.innerText = randomMsg;
-    
-    // 👇 THE FIX: Calculate exactly where her screen is looking right now
-    const currentScrollY = window.scrollY; // How far down the page she is
-    const screenHeight = window.innerHeight; // How tall her screen is
-    
-    // Pick a random vertical spot within her CURRENT screen view (between 10% and 80%)
+    const currentScrollY = window.scrollY;
+    const screenHeight = window.innerHeight;
     const randomViewportOffset = Math.floor(Math.random() * (screenHeight * 0.7)) + (screenHeight * 0.1);
     
-    // Combine the two to drop the letter exactly where she is looking
     letter.style.top = `${currentScrollY + randomViewportOffset}px`;
     
     // 4. Decide if it flies from Left to Right, or Right to Left
@@ -997,10 +989,8 @@ function spawnFloatingLetter() {
         letter.style.animation = 'letterFlyLeft 6s linear forwards';
     }
     
-    // 5. Add it to the page
     document.body.appendChild(letter);
     
-    // 6. Delete the letter after it finishes flying
     setTimeout(() => {
         letter.remove();
     }, 6000);
