@@ -855,17 +855,24 @@ function showFinaleStars() {
 function showFinaleText() {
     const t1 = document.getElementById('finale-text-1');
     const t2 = document.getElementById('finale-text-2');
+    const t3 = document.getElementById('finale-text-3');
 
     if (t1) {
-        t1.textContent = "No matter where we are";
+        t1.textContent = "After all this time?";
         t1.classList.add('visible');
     }
     setTimeout(() => {
         if (t2) {
-            t2.textContent = "I'll always be there for you... Happy Birthday, Chikki!";
+            t2.textContent = "Always...";
             t2.classList.add('visible');
         }
     }, 2200);
+    setTimeout(() => {
+        if (t3) {
+            t3.textContent = "Happy birthday, Chikki!";
+            t3.classList.add('visible');
+        }
+    }, 5000);
 }
 
 // =========================================================================
@@ -933,3 +940,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startMagicObservers();
 });
+
+// =========================================================================
+// FLOATING HOGWARTS LETTERS (Scroll Event)
+// =========================================================================
+
+const letterMessages = [
+    "Awarded for surviving another year of chaos.",
+    "Recognized for exceptional stubbornness.",
+    "Certified Potterhead since birth.",
+    "Outstanding achievement in looking cute while annoyed.",
+    "Your Hogwarts Acceptance Letter (Finally)."
+];
+
+let isLetterOnCooldown = false;
+
+window.addEventListener('scroll', () => {
+    // Only spawn a letter if we aren't on cooldown, and add a 10% random chance per scroll tick
+    if (!isLetterOnCooldown && Math.random() < 0.10) {
+        spawnFloatingLetter();
+        
+        // Put the owl on cooldown so we don't spam the screen (wait 3.5 seconds)
+        isLetterOnCooldown = true;
+        setTimeout(() => {
+            isLetterOnCooldown = false;
+        }, 5000);
+    }
+});
+
+function spawnFloatingLetter() {
+    // 1. Create the letter element
+    const letter = document.createElement('div');
+    letter.classList.add('floating-letter');
+    
+    // 2. Pick a random message
+    const randomMsg = letterMessages[Math.floor(Math.random() * letterMessages.length)];
+    letter.innerText = randomMsg;
+    
+    // 👇 THE FIX: Calculate exactly where her screen is looking right now
+    const currentScrollY = window.scrollY; // How far down the page she is
+    const screenHeight = window.innerHeight; // How tall her screen is
+    
+    // Pick a random vertical spot within her CURRENT screen view (between 10% and 80%)
+    const randomViewportOffset = Math.floor(Math.random() * (screenHeight * 0.7)) + (screenHeight * 0.1);
+    
+    // Combine the two to drop the letter exactly where she is looking
+    letter.style.top = `${currentScrollY + randomViewportOffset}px`;
+    
+    // 4. Decide if it flies from Left to Right, or Right to Left
+    const flyFromLeft = Math.random() > 0.5;
+    if (flyFromLeft) {
+        letter.style.left = '-250px';
+        letter.style.animation = 'letterFlyRight 6s linear forwards';
+    } else {
+        letter.style.right = '-250px';
+        letter.style.animation = 'letterFlyLeft 6s linear forwards';
+    }
+    
+    // 5. Add it to the page
+    document.body.appendChild(letter);
+    
+    // 6. Delete the letter after it finishes flying
+    setTimeout(() => {
+        letter.remove();
+    }, 6000);
+}

@@ -1500,6 +1500,24 @@ body.slytherin-theme-active .slytherin-banner {
     .slytherin-banner { min-width: 70px; padding-top: 28vh; }
 
     .floating-hat { top: -70px; }
+
+    /* 7. Shrink Floating Hogwarts Letters for small screens */
+    .floating-letter {
+        width: 150px !important; /* Smaller parchment */
+        padding: 10px 12px !important;
+        font-size: 0.7rem !important; /* Smaller font */
+    }
+    
+    /* Shrink the Red Wax Seal to match */
+    .floating-letter::after {
+        width: 22px !important;
+        height: 22px !important;
+        line-height: 22px !important;
+        font-size: 12px !important;
+        bottom: -8px !important;
+        right: -8px !important;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -1514,4 +1532,58 @@ body.slytherin-theme-active .slytherin-banner {
 
     .track-info { min-width: 0; }
     .song-name { font-size: 1rem; }
+}
+
+/* =========================================
+   FLOATING HOGWARTS LETTERS
+========================================= */
+
+.floating-letter {
+    position: absolute;
+    z-index: 1500; /* Keeps it above the background but below overlays */
+    background: #eaddc5; /* Old parchment color */
+    border: 1px solid #c4a47c;
+    color: #3a2618; /* Dark brown ink */
+    font-family: var(--font-magic); 
+    font-size: 1.5rem;
+    padding: 15px 20px;
+    width: 220px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.6);
+    pointer-events: none; /* Prevents the letter from blocking her clicks */
+    opacity: 0;
+}
+
+/* The Red Wax Seal */
+.floating-letter::after {
+    content: "H";
+    position: absolute;
+    bottom: -12px;
+    right: -10px;
+    background: #8b0000;
+    color: #ffcccc;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    line-height: 28px;
+    font-family: serif;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* The Flight Paths */
+@keyframes letterFlyRight {
+    0% { opacity: 0; transform: translateX(0) translateY(50px) rotate(-15deg) scale(0.8); }
+    15% { opacity: 0.95; }
+    85% { opacity: 0.95; }
+    100% { opacity: 0; transform: translateX(110vw) translateY(-50px) rotate(15deg) scale(1.1); }
+}
+
+@keyframes letterFlyLeft {
+    0% { opacity: 0; transform: translateX(0) translateY(50px) rotate(15deg) scale(0.8); }
+    15% { opacity: 0.95; }
+    85% { opacity: 0.95; }
+    100% { opacity: 0; transform: translateX(-110vw) translateY(-50px) rotate(-15deg) scale(1.1); }
 }
