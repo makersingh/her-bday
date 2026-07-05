@@ -1,6 +1,5 @@
 // --- MAGIC PRELOADER ---
 function preloadAssets() {
-    // 1. List every single image and audio file you use in your project here
     const imagesToPreload = [
         "sorting-hat.png", "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "map-bg.jpg",
         "sort5.jpg", "sort6.jpg", "child1.jpg", "child2.jpg", "child3.jpg",
@@ -16,7 +15,7 @@ function preloadAssets() {
         "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3"
     ];
 
-    // 2. This part forces the browser to download the files now
+
     imagesToPreload.forEach((src) => {
         const img = new Image();
         img.src = src;
@@ -36,9 +35,8 @@ window.onbeforeunload = function () {
 };
 window.scrollTo(0, 0);
 
-// =========================================================================
+
 // UTILITIES — stars + particle bursts, reused across chapters
-// =========================================================================
 function generateStars(container, count) {
     if (!container) return;
     const frag = document.createDocumentFragment();
@@ -83,21 +81,17 @@ function spawnParticles(container, className, count, options = {}) {
 
 function fadeAudio(audio, targetVolume, duration) {
     if (!audio) return;
-    
-    // Clear any existing fade so they don't fight each other
     if (audio.fadeInterval) clearInterval(audio.fadeInterval);
     
-    const step = 50; // Update the volume every 50 milliseconds
+    const step = 50;
     const volumeStep = (targetVolume - audio.volume) / (duration / step);
     
     audio.fadeInterval = setInterval(() => {
         let newVolume = audio.volume + volumeStep;
         
-        // Clamp the volume strictly between 0.0 and 1.0 to prevent browser crash errors
         newVolume = Math.max(0, Math.min(1, newVolume));
         audio.volume = newVolume;
         
-        // Stop the interval once we hit the target volume
         if ((volumeStep > 0 && audio.volume >= targetVolume) || 
             (volumeStep < 0 && audio.volume <= targetVolume)) {
             audio.volume = targetVolume;
@@ -106,9 +100,7 @@ function fadeAudio(audio, targetVolume, duration) {
     }, step);
 }
 
-// =========================================================================
 // CHAPTER 1 — THE BOOK (3D page-turn + dust/spark particles)
-// =========================================================================
 function openBook() {
     preloadAssets();
     const bookCover = document.getElementById('book-cover');
@@ -117,7 +109,7 @@ function openBook() {
     const bgMusic = document.getElementById('bg-music');
     
     if (bgMusic) {
-        bgMusic.volume = 0.6; // Optional: keeps it from blasting too loud
+        bgMusic.volume = 0.6; 
         bgMusic.play().catch(e => console.log(e));
     }
 
@@ -131,7 +123,7 @@ function openBook() {
         spawnParticles(particleLayer, 'spark-particle', 10, { spreadX: 200, spreadY: 160, life: 1300 });
     }
 
-    // Triggers the 3D page-turn defined in style.css (.book-open-anim)
+
     bookCover.classList.add('book-open-anim');
 
     setTimeout(() => {
@@ -139,18 +131,17 @@ function openBook() {
 
         if (magicWorld) {
             magicWorld.style.display = 'block';
-            // double rAF so the browser paints display:block before the opacity transition starts
+            
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => magicWorld.classList.add('show-world'));
             });
             startHeroSequence();
         }
-    }, 1500); // matches .book-cover's 1.5s transform/opacity transition
+    }, 1500); 
 }
 
-// =========================================================================
-// CHAPTER 2 — THE HERO (wand writes, then the title materializes)
-// =========================================================================
+
+// CHAPTER 2 — THE HERO 
 const wandLines = ["Mischief Managed...", "No wait..."];
 const heroTitleText = "Happy Birthday, Munmun";
 
@@ -194,14 +185,12 @@ function startHeroSequence() {
     showLine();
 }
 
-// =========================================================================
-// AMBIENT WAND SPARKLES — follows the cursor everywhere
-// =========================================================================
+// AMBIENT WAND SPARKLES 
 document.addEventListener('mousemove', (e) => {
     const sparkle = document.createElement('div');
     sparkle.className = 'wand-sparkle';
     
-    /* 👇 THE FIX: Use pageX and pageY instead of clientX and clientY 👇 */
+    
     sparkle.style.left = `${e.pageX}px`;
     sparkle.style.top = `${e.pageY}px`;
 
@@ -214,20 +203,17 @@ document.addEventListener('mousemove', (e) => {
     setTimeout(() => sparkle.remove(), 800);
 });
 
-// =========================================================================
-// THE AESTHETIC PLAYLIST (Slytherin Common Room)
-// =========================================================================
+// THE AESTHETIC PLAYLIST 
 const globalAudio = document.getElementById('global-audio');
 const trackRows = document.querySelectorAll('.track-row');
 
 function playTrack(fileName, clickedRow) {
 let isDragging = false; 
 
-// 1. Update the slider automatically as the song plays
 globalAudio.addEventListener('timeupdate', () => {
     if (!globalAudio.duration) return;
     
-    // Find whichever row is currently playing
+
     const activeRow = document.querySelector('.track-row.playing-now');
     if (!activeRow) return;
 
@@ -240,12 +226,12 @@ globalAudio.addEventListener('timeupdate', () => {
         slider.value = progressPercent;
     }
 
-    // Always update the text timestamps
+
     if (timeCurrent) timeCurrent.innerText = formatTime(globalAudio.currentTime);
     if (timeTotal) timeTotal.innerText = formatTime(globalAudio.duration);
 });
 
-// Helper function to turn raw seconds into clean 0:00 format
+
 function formatTime(seconds) {
     if (isNaN(seconds)) return "0:00";
     const min = Math.floor(seconds / 60);
@@ -253,14 +239,11 @@ function formatTime(seconds) {
     return `${min}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
-// 2. Allow skipping/seeking when the slider is dragged
 document.querySelectorAll('.track-slider').forEach(slider => {
     
-    // When you GRAB the dot (Mouse or Touch)
     slider.addEventListener('mousedown', () => isDragging = true);
     slider.addEventListener('touchstart', () => isDragging = true, {passive: true});
 
-    // When you DRAG the dot (Instantly skips the audio)
     slider.addEventListener('input', (e) => {
         if (globalAudio.duration) {
             const seekTime = (e.target.value / 100) * globalAudio.duration;
@@ -268,40 +251,38 @@ document.querySelectorAll('.track-slider').forEach(slider => {
         }
     });
 
-    // When you LET GO of the dot
+
     slider.addEventListener('mouseup', () => isDragging = false);
     slider.addEventListener('touchend', () => isDragging = false);
 });
     
     const playBtnIcon = clickedRow.querySelector('.row-play-btn');
-    const bgMusic = document.getElementById('bg-music'); // Grabs the main theme
+    const bgMusic = document.getElementById('bg-music'); 
 
-    // 1. If they click pause on the currently playing track
   if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
         globalAudio.pause();
         playBtnIcon.innerHTML = "▶";
         if (bgMusic) {
             bgMusic.play().catch(e => console.log(e));
-            fadeAudio(bgMusic, 0.6, 1500); // 👈 Fades it back up smoothly!
+            fadeAudio(bgMusic, 0.6, 1500); 
         }
         return;
     }
 
-    // 2. If they click play to resume the paused track
+
     if (clickedRow.classList.contains('playing-now') && globalAudio.paused) {
-        if (bgMusic) bgMusic.pause(); // Kill main theme
+        if (bgMusic) bgMusic.pause(); 
         globalAudio.play();
         playBtnIcon.innerHTML = "⏸";
         return;
     }
 
-    // 3. If they click a brand new track
     trackRows.forEach(row => {
         row.classList.remove('playing-now');
         row.querySelector('.row-play-btn').innerHTML = "▶";
     });
 
-    if (bgMusic) bgMusic.pause(); // Kill main theme
+    if (bgMusic) bgMusic.pause(); 
     
     globalAudio.src = fileName;
     globalAudio.play();
@@ -310,9 +291,7 @@ document.querySelectorAll('.track-slider').forEach(slider => {
     playBtnIcon.innerHTML = "⏸";
 }
 
-// =========================================================================
-// CHAPTER 3 — THE SORTING HAT (darkened room, shake, green particles)
-// =========================================================================
+// CHAPTER 3 — THE SORTING HAT 
 const hatTextElement = document.getElementById('hat-text');
 const hatAudio = document.getElementById('hat-audio');
 const sortingPhoto = document.getElementById('sorting-photo');
@@ -328,9 +307,6 @@ const hatLines = [
 
 const sortingImages = ["sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "sort5.jpg", "sort6.jpg"];
 
-// Your hand-tuned timestamps, kept as-is — I don't have the actual
-// sorting-hat.mp3 to re-sync these against, so these are still the
-// most reliable numbers to use.
 const textTiming = [3500, 3300, 3500, 2600, 2300];
 
 let hatIndex = 0;
@@ -368,14 +344,14 @@ function revealSlytherin() {
     const dimOverlay = document.getElementById('sorting-dim');
 
     document.body.classList.add('slytherin-theme-active');
-    if (dimOverlay) dimOverlay.classList.remove('active'); // the green theme takes over the darkening from here
+    if (dimOverlay) dimOverlay.classList.remove('active'); 
 
     if (sortingContainer) {
         sortingContainer.classList.add('camera-shake');
         setTimeout(() => sortingContainer.classList.remove('camera-shake'), 500);
     }
 
-    // green particles drifting upward from around the revealed photo
+    
     if (sortingPhoto) {
         const rect = sortingPhoto.getBoundingClientRect();
         let bursts = 0;
@@ -393,9 +369,7 @@ function revealSlytherin() {
     setTimeout(() => { document.body.style.overflowY = 'auto'; }, 2000);
 }
 
-// =========================================================================
-// CHAPTER 4 — THE EXAMINATION CHAMBER (trivia, candles, seals)
-// =========================================================================
+// CHAPTER 4 — THE EXAMINATION CHAMBER 
 const triviaQuestions = [
     { q: "What is Harry Potter's position on the Gryffindor Quidditch team?", options: ["Keeper", "Chaser", "Seeker", "Beater"], answer: "Seeker" },
     { q: "Which spell is used to conjure a Patronus?", options: ["Expelliarmus", "Expecto Patronum", "Lumos", "Alohomora"], answer: "Expecto Patronum" },
@@ -534,9 +508,7 @@ function qSetComplete() {
     }, 3500);
 }
 
-// =========================================================================
-// CHAPTER 5 — THE MARAUDER'S MAP (parchment, pins, footprints)
-// =========================================================================
+// CHAPTER 5 — THE MARAUDER'S MAP 
 const allRooms = ['marauders-map', 'slytherin-room', 'headmaster-office', 'great-hall'];
 
 function travelTo(roomId) {
@@ -557,7 +529,7 @@ function travelTo(roomId) {
 
     const bgMusic = document.getElementById('bg-music');
 
-    // 👇 THE FIX: Handle the ambient room fading 👇
+    
     if (roomId === 'slytherin-room') {
 
         if (bgMusic) fadeAudio(bgMusic, 0, 1200); 
@@ -883,10 +855,8 @@ function startMagicObservers() {
                         if (hatAudio) {
                             hatAudio.play().catch(() => {});
                             
-                            // 👇 THE FIX: Fade bg-music down to 10% volume over 1.5 seconds
                             fadeAudio(bgMusic, 0.1, 1200);
                             
-                            // 👇 THE FIX: Listen for the exact moment the hat audio ends, then fade back up to 60%
                             hatAudio.onended = () => {
                                 fadeAudio(bgMusic, 0.6, 1500); 
                             };
@@ -922,10 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startMagicObservers();
 });
 
-// =========================================================================
-// FLOATING HOGWARTS LETTERS (Scroll Event)
-// =========================================================================
-
+// FLOATING HOGWARTS LETTERS 
 const letterMessages = [
     "Awarded for surviving another year of chaos.",
     "Recognized for exceptional stubbornness.",
@@ -937,11 +904,9 @@ const letterMessages = [
 let isLetterOnCooldown = false;
 
 window.addEventListener('scroll', () => {
-    // Only spawn a letter if we aren't on cooldown, and add a 10% random chance per scroll tick
     if (!isLetterOnCooldown && Math.random() < 0.10) {
         spawnFloatingLetter();
-        
-        // Put the owl on cooldown so we don't spam the screen (wait 3.5 seconds)
+
         isLetterOnCooldown = true;
         setTimeout(() => {
             isLetterOnCooldown = false;

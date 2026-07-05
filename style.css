@@ -1462,17 +1462,8 @@ body.slytherin-theme-active .slytherin-banner {
 
 /* =========================================================================
    MOBILE RESPONSIVENESS
-   ---------------------------------------------------------
-   Everything above this line already scales reasonably well thanks to the
-   clamp()/min() sizing used in places — this section catches the parts
-   that were still fixed-px or fixed-rem and could overflow, crowd, or
-   misalign on phone-width screens. No new features here, purely sizing
-   and spacing so the existing site fits a phone window.
    ========================================================================= */
 @media (max-width: 820px) {
-    /* The pensieve's negative offset assumes the two-column desktop
-       layout — once it wraps to a single column this would pull the
-       letter up into the photo above it. */
     .letter-content { margin-top: 0; }
 }
 
@@ -1534,16 +1525,14 @@ body.slytherin-theme-active .slytherin-banner {
     .song-name { font-size: 1rem; }
 }
 
-/* =========================================
-   FLOATING HOGWARTS LETTERS
-========================================= */
+/* FLOATING HOGWARTS LETTERS */
 
 .floating-letter {
     position: absolute;
-    z-index: 1500; /* Keeps it above the background but below overlays */
-    background: #eaddc5; /* Old parchment color */
+    z-index: 1500; 
+    background: #eaddc5; 
     border: 1px solid #c4a47c;
-    color: #3a2618; /* Dark brown ink */
+    color: #3a2618; 
     font-family: var(--font-magic); 
     font-size: 1.5rem;
     padding: 15px 20px;
@@ -1551,7 +1540,7 @@ body.slytherin-theme-active .slytherin-banner {
     text-align: center;
     border-radius: 4px;
     box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.6);
-    pointer-events: none; /* Prevents the letter from blocking her clicks */
+    pointer-events: none; 
     opacity: 0;
 }
 
