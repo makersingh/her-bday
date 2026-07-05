@@ -559,10 +559,9 @@ function travelTo(roomId) {
 
     // 👇 THE FIX: Handle the ambient room fading 👇
     if (roomId === 'slytherin-room') {
-        // Fade out to 0 (completely silent) when entering Slytherin
+
         if (bgMusic) fadeAudio(bgMusic, 0, 1200); 
     } else {
-        // If traveling to ANY other room, and no playlist track is actively playing, bring music back
         if (bgMusic && globalAudio.paused) {
             bgMusic.play().catch(e => console.log(e));
             fadeAudio(bgMusic, 0.6, 1800);
@@ -641,9 +640,7 @@ function initMapPins() {
     });
 }
 
-// =========================================================================
-// CHAPTER 6 — THE PENSIEVE (fog, sepia tiers, pan, synced letter)
-// =========================================================================
+//Pensieve
 const memoryImages = [
     "child1.jpg", "child2.jpg", "child3.jpg", "child4.jpg", "child5.jpg",
     "teen1.jpg", "teen2.jpg", "teen3.jpg", "teen4.jpg", "teen5.jpg",
@@ -683,12 +680,12 @@ function typeFullLetter(paragraphs) {
             if (charIndex < paragraphs[pIndex].length) {
                 el.innerHTML += paragraphs[pIndex].charAt(charIndex);
                 charIndex++;
-                setTimeout(step, 40); // Speed of typing letters
+                setTimeout(step, 40); 
             } else {
-                el.innerHTML += '<br><br>'; // Adds the line break
+                el.innerHTML += '<br><br>'; 
                 pIndex++;
                 charIndex = 0;
-                setTimeout(step, 1000); // 1s pause before starting next paragraph
+                setTimeout(step, 1000); 
             }
         }
     }
@@ -755,8 +752,6 @@ function advancePensieve() {
 function startPensieve() {
     if (pensieveStarted) return;
     pensieveStarted = true;
-    
-    // 👇 THE FIX: Triggers the continuous typing immediately
     typeFullLetter(fullLetter);
     
     setTimeout(advancePensieve, 4000);
@@ -786,17 +781,7 @@ if (pensieveSlider) {
     });
 }
 
-
-// =========================================================================
-// CHAPTER 7 — THE GREAT HALL FINALE (heart collage, candles, stars)
-// ---------------------------------------------------------
-// NOTE: the finale line here ("However things have changed, / this
-// still matters") replaces the "After all this time? / Always" line
-// from the brief. That line is a romantic-devotion line in the books,
-// and given the birthday age mentioned earlier in this page, I kept
-// the two-beat reveal you wanted but with non-romantic wording. Swap
-// the text in showFinaleText() below if you want to adjust it further.
-// =========================================================================
+//heart collage
 function revealHeartCollage() {
     const pics = document.querySelectorAll('.heart-pic');
     let delay = 0;
@@ -875,11 +860,9 @@ function showFinaleText() {
     }, 5000);
 }
 
-// =========================================================================
-// SORTING HAT TRIGGER — fires once when you scroll into the Sorting section
-// =========================================================================
 let sortingStarted = false;
 
+//sorting hat 
 function startMagicObservers() {
     const sortingSection = document.getElementById('sorting-section');
     const bgMusic = document.getElementById('bg-music');
@@ -918,9 +901,7 @@ function startMagicObservers() {
     observer.observe(sortingSection);
 }
 
-// =========================================================================
-// INIT
-// =========================================================================
+
 document.addEventListener('DOMContentLoaded', () => {
     generateStars(document.getElementById('starfield'), 140);
 
