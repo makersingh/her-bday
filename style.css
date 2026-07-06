@@ -1576,3 +1576,104 @@ body.slytherin-theme-active .slytherin-banner {
     85% { opacity: 0.95; }
     100% { opacity: 0; transform: translateX(-110vw) translateY(-50px) rotate(-15deg) scale(1.1); }
 }
+
+/* =========================================
+   EASTER EGG: ALOHOMORA SHATTER
+========================================= */
+
+.alohomora-shatter {
+    /* Locks the element so she can't click it while it explodes */
+    pointer-events: none !important; 
+    animation: unlockShatter 1.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards !important;
+}
+
+@keyframes unlockShatter {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0); }
+    /* The violent magical shaking */
+    10%, 30%, 50% { transform: scale(1.05) translate(-8px, 4px) rotate(-2deg); box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); background: rgba(212, 175, 55, 0.2); }
+    20%, 40%, 60% { transform: scale(1.05) translate(8px, -4px) rotate(2deg); box-shadow: 0 0 60px rgba(212, 175, 55, 0.8); background: rgba(212, 175, 55, 0.4); }
+    /* The golden flash and shatter */
+    80% { transform: scale(1.1); opacity: 1; filter: brightness(2); }
+    100% { transform: scale(0.3) translateY(100px); opacity: 0; filter: blur(10px); }
+}
+
+
+/* =========================================
+   EASTER EGG: LUMOS & NOX (CLEAN VERSION)
+========================================= */
+
+.lumos-light-overlay {
+    position: fixed;
+    inset: 0;
+    
+    /* A very soft, barely-there warm tint */
+    background: rgba(255, 250, 230, 0.05); 
+    
+    /* THE MAGIC: Physically turns up the brightness and contrast of the whole page */
+    backdrop-filter: brightness(1.6) contrast(1.1);
+    -webkit-backdrop-filter: brightness(1.6) contrast(1.1); /* Safari support */
+    
+    pointer-events: none; 
+    z-index: 9998; 
+    
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out; 
+}
+
+.lumos-light-overlay.active {
+    opacity: 1;
+}
+
+/* Gives the light a subtle, natural wand-flicker */
+@keyframes lumosFlicker {
+    0% { opacity: 0.85; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.03); }
+}
+
+/* Swaps the cursor for the whole page and all clickable items when Lumos is active */
+body.lumos-cursor-active,
+body.lumos-cursor-active * {
+    cursor: url('wand-glow.png'), auto !important; 
+}
+
+/* =========================================
+   EASTER EGG: MISCHIEF MANAGED
+========================================= */
+
+.mischief-managed-overlay {
+    position: fixed;
+    inset: 0;
+    background: #020202; /* Deep cinematic black */
+    z-index: 99999; /* Absolute top, covers everything including popups */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    opacity: 0;
+    pointer-events: none; 
+    transition: opacity 3s ease-in-out; /* The slow 3-second fade to black */
+}
+
+/* When the spell is cast, this locks the page so she can't click anything else */
+.mischief-managed-overlay.active {
+    opacity: 1;
+    pointer-events: all; 
+}
+
+.mischief-managed-text {
+    font-family: var(--font-magic);
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    color: var(--silver);
+    text-shadow: 0 0 20px rgba(192, 192, 192, 0.4);
+    letter-spacing: 2px;
+    
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 3s ease, transform 5s ease-out; /* Slow zoom and fade */
+}
+
+.mischief-managed-text.visible {
+    opacity: 1;
+    transform: scale(1);
+}

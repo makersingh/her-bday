@@ -373,7 +373,7 @@ function revealSlytherin() {
 const triviaQuestions = [
     { q: "What is Harry Potter's position on the Gryffindor Quidditch team?", options: ["Keeper", "Chaser", "Seeker", "Beater"], answer: "Seeker" },
     { q: "Which spell is used to conjure a Patronus?", options: ["Expelliarmus", "Expecto Patronum", "Lumos", "Alohomora"], answer: "Expecto Patronum" },
-    { q: "What did Harry Potter call his owl?", options: ["Hedwig", "Scabbers", "Fang", "Buckbeak"], answer: "Hedwig" }
+    { q: "What is the core of the Elder Wand made of?", options: ["Thestral Tail Hair", "Dragon Heartstring", "Phoenix Feather", "Unicorn Hair"], answer: "Thestral Tail Hair" }
 ];
 
 // Snape-style remarks for correct answers
@@ -940,4 +940,142 @@ function spawnFloatingLetter() {
     setTimeout(() => {
         letter.remove();
     }, 6000);
+}
+
+// =========================================================================
+// EASTER EGG: ALOHOMORA TRIVIA BYPASS
+// =========================================================================
+
+let cheatCode = "";
+
+window.addEventListener('keydown', (e) => {
+    // Only listen if the trivia box is currently on the screen
+    const triviaBox = document.querySelector('.trivia-lock-overlay');
+    if (!triviaBox || triviaBox.offsetParent === null) return;
+
+    // Build the secret word as she types
+    cheatCode += e.key.toLowerCase();
+    
+    // Keep only the last 9 characters (the length of "alohomora")
+    if (cheatCode.length > 9) {
+        cheatCode = cheatCode.slice(-9);
+    }
+    
+    // If she types the exact word, trigger the magic
+    if (cheatCode === "alohomora") {
+        triggerAlohomoraBypass(triviaBox);
+        cheatCode = ""; // Reset the code
+    }
+});
+
+function triggerAlohomoraBypass(triviaBox) {
+    // 1. Add the CSS class to make the box shake and explode
+    triviaBox.classList.add('alohomora-shatter');
+
+    // 2. Wait for the CSS animation to finish (1.2 seconds), then show the popup
+    setTimeout(() => {
+        // The cheeky Slytherin message
+        alert("Cheating? Five points from Slytherin. \n\nBut since it's your birthday... go ahead, Chikki. ✨");
+        
+        // Hide the shattered trivia box permanently
+        triviaBox.style.display = 'none';
+        
+        // 3. MOVE TO THE NEXT ROOM
+        returnToMap();
+        
+    }, 1200); 
+}
+
+// =========================================================================
+// EASTER EGG: LUMOS & NOX
+// =========================================================================
+
+let spellCode = "";
+
+// 1. Create the invisible light overlay when the page loads
+const lumosLight = document.createElement('div');
+lumosLight.className = 'lumos-light-overlay';
+document.body.appendChild(lumosLight);
+
+// 2. Listen for her typing the spells
+window.addEventListener('keydown', (e) => {
+    spellCode += e.key.toLowerCase();
+    
+    // Keep only the last 5 characters (the length of "lumos")
+    if (spellCode.length > 5) {
+        spellCode = spellCode.slice(-5);
+    }
+    
+    // Turn the light ON
+    if (spellCode === "lumos") {
+        lumosLight.classList.add('active');
+        document.body.classList.add('lumos-cursor-active'); // 👇 Turns on the glowing wand
+        spellCode = ""; 
+    }
+    
+    // Turn the light OFF
+    if (spellCode.endsWith("nox")) {
+        lumosLight.classList.remove('active');
+        document.body.classList.remove('lumos-cursor-active'); // 👇 Reverts to the normal wand
+        spellCode = ""; 
+    }
+});
+
+// =========================================================================
+// EASTER EGG: MISCHIEF MANAGED (THE GRAND FINALE)
+// =========================================================================
+
+let mischiefCode = "";
+
+window.addEventListener('keydown', (e) => {
+    // Ignore spaces to make it easier for her to type
+    if (e.key === " ") return;
+
+    mischiefCode += e.key.toLowerCase();
+    
+    // "mischiefmanaged" is 15 characters long without the space
+    if (mischiefCode.length > 15) {
+        mischiefCode = mischiefCode.slice(-15);
+    }
+    
+    if (mischiefCode === "mischiefmanaged") {
+        triggerMischiefManaged();
+        mischiefCode = ""; // Reset code
+    }
+});
+
+function triggerMischiefManaged() {
+    // 1. Fade out the music
+    const bgMusic = document.getElementById('bg-music');
+    const globalAudio = document.getElementById('global-audio');
+    if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 3000);
+    if (globalAudio && !globalAudio.paused) fadeAudio(globalAudio, 0, 3000);
+
+    // 2. Create the cinematic black screen
+    const finaleOverlay = document.createElement('div');
+    finaleOverlay.className = 'mischief-managed-overlay';
+    
+    // 3. Create the final text
+    const finaleText = document.createElement('div');
+    finaleText.className = 'mischief-managed-text';
+    finaleText.innerHTML = "Mischief Managed.<br><span style='font-size: 0.4em; color: var(--teal-silver); font-family: var(--font-display);'>Always in your corner. Happy Birthday, Chikki.</span>";
+
+    // 4. Attach everything to the page
+    finaleOverlay.appendChild(finaleText);
+    document.body.appendChild(finaleOverlay);
+
+    // 👇 THE FIX: Scroll the camera directly to the overlay we just created!
+    finaleOverlay.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+
+    // 5. Trigger the slow fade animations
+    setTimeout(() => {
+        finaleOverlay.classList.add('active');
+    }, 100);
+    
+    setTimeout(() => {
+        finaleText.classList.add('visible');
+    }, 2500); 
 }
