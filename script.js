@@ -1079,3 +1079,61 @@ function triggerMischiefManaged() {
         finaleText.classList.add('visible');
     }, 2500); 
 }
+
+// EASTER EGG: EXPECTO PATRONUM 
+let patronusCode = "";
+window.addEventListener('keydown', (e) => {
+    if (e.key === " ") return;
+    patronusCode += e.key.toLowerCase();
+    
+    if (patronusCode.length > 15) {
+        patronusCode = patronusCode.slice(-15);
+    }
+    
+    if (patronusCode === "expectopatronum") {
+        triggerPatronus();
+        patronusCode = ""; 
+    }
+});
+
+function triggerPatronus() {
+    if (document.querySelector('.patronus-overlay')) return;
+
+   // 1.
+    const overlay = document.createElement('div');
+    overlay.className = 'patronus-overlay';
+    overlay.style.top = `${window.scrollY}px`;
+
+    // 2. 
+    const container = document.createElement('div');
+    container.className = 'patronus-container';
+
+    // 3. 
+    const img = document.createElement('img');
+    img.src = 'patronus.jpg';
+    img.className = 'patronus-img';
+
+    // 4. 
+    const text = document.createElement('div');
+    text.className = 'patronus-text';
+    text.innerHTML = "To cast this spell, you need a memory that shines brighter than the rest.<br><span class='patronus-highlight'>Thank you for giving me this one.</span>";
+
+    // 5.
+    container.appendChild(img);
+    container.appendChild(text);
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+
+    // 6.
+    setTimeout(() => {
+        overlay.classList.add('active');
+    }, 100);
+
+    // 7.
+    setTimeout(() => {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.remove();
+        }, 2500);
+    }, 8000); 
+}

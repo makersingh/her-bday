@@ -1695,3 +1695,96 @@ body.lumos-cursor-active * {
     
     filter: drop-shadow(0 0 15px rgba(131, 173, 194, 0.4));
 }
+
+/* =========================================
+   EASTER EGG: EXPECTO PATRONUM
+========================================= */
+
+.patronus-overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(4, 15, 30, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 99995; 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2.5s ease-in-out; 
+}
+
+.patronus-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.patronus-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    /* Starts slightly small and grows into place */
+    transform: scale(0.9);
+    transition: transform 3s ease-out;
+}
+
+.patronus-overlay.active .patronus-container {
+    transform: scale(1);
+}
+
+.patronus-img {
+    max-width: 85vw;
+    max-height: 55vh;
+    border-radius: 12px;
+    
+    /* The magical silvery-blue Patronus glow */
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 40px rgba(154, 214, 240, 0.7), 0 0 80px rgba(255, 255, 255, 0.3);
+    
+    /* Makes the light pulse softly */
+    animation: patronusPulse 3s infinite alternate ease-in-out;
+}
+
+.patronus-text {
+    margin-top: 40px;
+    font-family: var(--font-magic);
+    /* Fluid sizing: 1.8rem on phones, scales up to 2.8rem on laptops */
+    font-size: clamp(1.8rem, 4vw, 3.2rem); 
+    color: #b0d4eb;
+    text-shadow: 0 0 15px rgba(154, 214, 240, 0.8);
+    line-height: 1.4; /* Gives the text room to breathe */
+    
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 2s ease, transform 2s ease;
+    transition-delay: 1.5s; 
+}
+
+.patronus-overlay.active .patronus-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.patronus-highlight {
+    font-size: 0.6em; /* Makes the bottom line purposefully larger */
+    color: #ffffff;
+    display: block;
+    margin-top: 15px;
+    letter-spacing: 3px; /* Cinematic movie-poster spacing */
+    
+    /* Adds a slightly brighter, pure white core to the highlight text */
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 0 10px rgba(154, 214, 240, 0.6);
+}
+
+/* The breathing light effect on the photo */
+@keyframes patronusPulse {
+    0% { box-shadow: 0 0 30px rgba(154, 214, 240, 0.5), 0 0 60px rgba(255, 255, 255, 0.2); }
+    100% { box-shadow: 0 0 50px rgba(154, 214, 240, 0.9), 0 0 100px rgba(255, 255, 255, 0.5); }
+}
