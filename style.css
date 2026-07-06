@@ -1533,17 +1533,18 @@ body.slytherin-theme-active .slytherin-banner {
     background: #eaddc5; 
     border: 1px solid #c4a47c;
     color: #3a2618; 
-    font-family: var(--font-magic); 
-    font-size: 1.5rem;
+    font-family: var(--font-magic), sans-serif; 
+    font-size: 1.8rem; 
+    font-weight: bold;
+    animation-duration: 8s !important; 
     padding: 15px 20px;
-    width: 220px;
+    width: 260px;
     text-align: center;
     border-radius: 4px;
     box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.6);
     pointer-events: none; 
     opacity: 0;
 }
-
 /* The Red Wax Seal */
 .floating-letter::after {
     content: "H";
