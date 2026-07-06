@@ -1665,7 +1665,6 @@ body.lumos-cursor-active * {
     font-family: var(--font-magic);
     font-size: clamp(3.5rem, 12vw, 7rem);
     color: var(--silver);
-    text-shadow: 0 0 20px rgba(192, 192, 192, 0.4);
     letter-spacing: 2px;
     
     opacity: 0;
@@ -1676,4 +1675,23 @@ body.lumos-cursor-active * {
 .mischief-managed-text.visible {
     opacity: 1;
     transform: scale(1);
+}
+
+/* =========================================
+   HARRY POTTER METALLIC TEXT EFFECT
+========================================= */
+
+.hp-metallic-text {
+    /* The shiny metal gradient */
+    background: linear-gradient(to bottom, #e1effa 0%, #83adc2 45%, #2a475e 50%, #688fa6 60%, #d1e4f2 100%);
+    font-family: var(--font-magic);
+    
+    /* Forces the background to only show inside the text characters */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    
+    display: inline-block;
+    
+    filter: drop-shadow(0 0 15px rgba(131, 173, 194, 0.4));
 }

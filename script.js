@@ -1058,7 +1058,7 @@ function triggerMischiefManaged() {
     // 3. Create the final text
     const finaleText = document.createElement('div');
     finaleText.className = 'mischief-managed-text';
-    finaleText.innerHTML = "Mischief Managed.<br><span style='font-size: 0.4em; color: var(--teal-silver); font-family: var(--font-display);'>Always in your corner. Happy Birthday, Chikki.</span>";
+    finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.2em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. Happy Birthday, Munmun.<br>I Love You</span>";
 
     // 4. Attach everything to the page
     finaleOverlay.appendChild(finaleText);
