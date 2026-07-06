@@ -2,7 +2,7 @@
 function preloadAssets() {
     const imagesToPreload = [
         "sorting-hat.png", "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "map-bg.jpg",
-        "sort5.jpg", "sort6.jpg", "child1.jpg", "child2.jpg", "child3.jpg",
+        "sort5.jpg", "sort6.jpg", "child1.jpg", "child2.jpg", "child3.jpg", "patronus.jpg",
         "child4.jpg", "child5.jpg", "teen1.jpg", "teen2.jpg", "teen3.jpg", 
         "teen4.jpg", "teen5.jpg", "now1.jpg", "now2.jpg", "now3.jpg", 
         "now4.jpg", "now5.jpg", "collage1.jpg", "collage2.jpg", "collage3.jpg",
@@ -12,7 +12,7 @@ function preloadAssets() {
     ];
 
     const audioToPreload = [
-        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3"
+        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3"
     ];
 
 
