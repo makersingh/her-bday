@@ -1045,6 +1045,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 function triggerMischiefManaged() {
+    document.body.classList.add('override-blue-scrollbar');
     // 1. Fade out the music
     const bgMusic = document.getElementById('bg-music');
     const globalAudio = document.getElementById('global-audio');
@@ -1099,6 +1100,8 @@ window.addEventListener('keydown', (e) => {
 function triggerPatronus() {
     if (document.querySelector('.patronus-overlay')) return;
 
+    document.body.classList.add('override-blue-scrollbar');
+
    // 1.
     const overlay = document.createElement('div');
     overlay.className = 'patronus-overlay';
@@ -1132,6 +1135,7 @@ function triggerPatronus() {
     // 7.
     setTimeout(() => {
         overlay.classList.remove('active');
+        document.body.classList.remove('override-blue-scrollbar');
         setTimeout(() => {
             overlay.remove();
         }, 2500);
