@@ -123,7 +123,7 @@ label,
 
 .hp-title {
     font-family: var(--font-magic); /* The Lightning Bolt Font! */
-    font-size: clamp(2.75rem, 14vw, 7.5rem); /* scales down on small screens */
+    font-size: clamp(2.75rem, 14vw, 10rem); /* scales down on small screens */
     color: var(--silver);
     text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000;
     letter-spacing: 3px;
@@ -133,13 +133,13 @@ label,
 }
 
 .hp-subtitle {
-    font-family: var(--font-display); /* Sharp, elegant movie poster font */
+    text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000;
+    font-family: var(--font-magic);
     font-weight: 700;
-    font-size: 1.4rem;
-    color: var(--teal-silver);
+    font-size: 2.8rem;
+    color: var(--silver);
     letter-spacing: 6px;
-    margin-top: 15px;
-    text-shadow: 1px 1px 5px #000;
+    margin-top: 15px;   
 }
 
 .magic-wand-line {
