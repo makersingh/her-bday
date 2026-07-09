@@ -1611,6 +1611,29 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
    EASTER EGG: ALOHOMORA SHATTER
 ========================================= */
 
+/* The sequential text for the Alohomora Easter Egg */
+.alohomora-secret-text {
+    font-family: var(--font-magic);
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    color: var(--silver);
+    text-shadow: 0 0 15px rgba(26, 71, 42, 0.8); /* Faint Slytherin glow */
+    letter-spacing: 2px;
+    text-align: center;
+    
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.alohomora-secret-text.visible {
+    opacity: 1;
+}
+
 .alohomora-shatter {
     /* Locks the element so she can't click it while it explodes */
     pointer-events: none !important; 
@@ -1670,6 +1693,24 @@ body.lumos-cursor-active * {
    EASTER EGG: MISCHIEF MANAGED
 ========================================= */
 
+/* The delayed fade-in for the final word */
+.delayed-always {
+    display: block; 
+    margin-top: 15px;
+    font-size: 1.5em; 
+    color: var(--teal-silver); 
+    font-family: var(--font-display);
+    letter-spacing: 4px;
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+    transition-delay: 3.5s; 
+}
+
+/* When the main text triggers, this tells "Always..." to begin its delayed timer */
+.mischief-managed-text.visible .delayed-always {
+    opacity: 1;
+}
+
 .mischief-managed-overlay {
     position: fixed;
     inset: 0;
@@ -1706,10 +1747,6 @@ body.lumos-cursor-active * {
     opacity: 1;
     transform: scale(1);
 }
-
-/* =========================================
-   HARRY POTTER METALLIC TEXT EFFECT
-========================================= */
 
 .hp-metallic-text {
     /* The shiny metal gradient */

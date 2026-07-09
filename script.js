@@ -972,18 +972,73 @@ function triggerAlohomoraBypass(triviaBox) {
     // 1. Add the CSS class to make the box shake and explode
     triviaBox.classList.add('alohomora-shatter');
 
-    // 2. Wait for the CSS animation to finish (1.2 seconds), then show the popup
+    const heading = document.querySelector('.trivia-heading');
+    const candles = document.getElementById('exam-candles');
+    
+    if (heading) {
+        heading.style.transition = 'opacity 1s ease';
+        heading.style.opacity = '0';
+    }
+    if (candles) {
+        candles.style.transition = 'opacity 1s ease';
+        candles.style.opacity = '0';
+    }
+
+    // 2. Wait for the CSS animation to finish (1.2s)
     setTimeout(() => {
-        // The cheeky Slytherin message
-        alert("Cheating? Five points from Slytherin. \n\nBut since it's your birthday... go ahead, Chikki. ✨");
-        
         // Hide the shattered trivia box permanently
         triviaBox.style.display = 'none';
         
-        // 3. MOVE TO THE NEXT ROOM
-        returnToMap();
+        // 3. Start the cinematic text sequence
+        playAlohomoraSequence();
         
     }, 1200); 
+}
+
+function playAlohomoraSequence() {
+    const triviaSection = document.getElementById('trivia-section');
+    if (!triviaSection) return;
+
+    // Create the invisible text container
+    const textEl = document.createElement('div');
+    textEl.className = 'alohomora-secret-text';
+    triviaSection.appendChild(textEl);
+
+    // The lines of text you want to display sequentially
+    const lines = [
+        "Cheating?",
+        "Five points from Slytherin.",
+        "But since it's your birthday...",
+        "Go ahead Chikki :)"
+    ];
+
+    let index = 0;
+
+    // The loop that fades each line in and out
+    function showNextLine() {
+        if (index < lines.length) {
+            textEl.innerText = lines[index];
+            textEl.classList.add('visible');
+            
+            // Keep the text on screen for 2.2 seconds, then fade it out
+            setTimeout(() => {
+                textEl.classList.remove('visible');
+                
+                // Wait 800ms in darkness before showing the next line
+                setTimeout(() => {
+                    index++;
+                    showNextLine();
+                }, 800);
+            }, 2200);
+        } else {
+            // Sequence finished! Clean up the text and travel to the map
+            textEl.remove();
+            returnToMap();
+        }
+    }
+
+    // Start the magic
+    showNextLine();
 }
 
 // =========================================================================
@@ -1057,10 +1112,10 @@ function triggerMischiefManaged() {
     finaleOverlay.className = 'mischief-managed-overlay';
     
     // 3. Create the final text
+    // 3. Create the final text
     const finaleText = document.createElement('div');
     finaleText.className = 'mischief-managed-text';
-    finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.2em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. Happy Birthday Chikki.<br>I Love You</span>";
-
+    finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.25em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. Happy Birthday Chikki.<br>I Love You<span class='delayed-always'>Always...</span></span>";
     // 4. Attach everything to the page
     finaleOverlay.appendChild(finaleText);
     document.body.appendChild(finaleOverlay);
