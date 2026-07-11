@@ -1840,3 +1840,34 @@ body.lumos-cursor-active * {
         padding: 12px 20px;
     }
 }
+
+/* Container for the player buttons */
+.float-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto; /* Pushes the buttons to the right side */
+}
+
+/* Styling for the next track button */
+.float-track-btn {
+    background: transparent;
+    color: var(--silver);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+    outline: none;
+}
+
+.float-track-btn:hover {
+    transform: scale(1.15);
+    color: var(--gold);
+    text-shadow: 0 0 10px var(--gold);
+}
+
+/* Mobile tweak to keep it perfectly spaced */
+@media (max-width: 768px) {
+    .float-controls { gap: 12px; }
+    .float-track-btn { font-size: 1.1rem; }
+}

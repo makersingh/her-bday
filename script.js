@@ -951,7 +951,28 @@ document.addEventListener('DOMContentLoaded', () => {
     buildHallCandles();
 
     startMagicObservers();
+    // 👇 NEW: NEXT TRACK & LOOPING LOGIC 👇
+    const floatNextBtn = document.getElementById('float-next-btn');
+
+    if (floatNextBtn) {
+        floatNextBtn.addEventListener('click', () => {
+            // Grab all the songs from the Common Room
+            const trackRows = Array.from(document.querySelectorAll('.track-row'));
+            if (trackRows.length === 0) return;
+
+            // Find out which one is currently playing
+            const activeRow = document.querySelector('.track-row.playing-now');
+            let currentIndex = activeRow ? trackRows.indexOf(activeRow) : 0;
+
+            // Calculate the next song (The '%' perfectly loops it back to 0 if at the end!)
+            currentIndex = (currentIndex + 1) % trackRows.length; 
+
+            // Virtually click the next song in the list to trigger your existing playTrack magic
+            trackRows[currentIndex].click();
+        });
+    }
 });
+
 
 // FLOATING HOGWARTS LETTERS 
 const letterMessages = [
