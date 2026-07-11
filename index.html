@@ -11,7 +11,7 @@
     <!-- Persistent starfield layer, populated by script.js -->
     <div id="starfield" class="starfield"></div>
 
-    <!-- ============ CHAPTER 1 — THE BOOK ============ -->
+    <!-- CHAPTER 1 — THE BOOK  -->
     <div id="book-cover" class="book-cover">
         <div class="book-content">
             <p class="author">Pralay Presents</p>
@@ -26,7 +26,7 @@
 
     <div id="magic-world" class="hidden-world" style="display: none;">
         
-        <!-- ============ CHAPTER 2 — THE HERO ============ -->
+        <!--  CHAPTER 2 — THE HERO -->
         <header class="hero" id="hero-section">
             <p class="wand-text" id="wand-text"></p>
             <h1 class="glow-text materializing" id="hero-title"></h1>
@@ -42,7 +42,7 @@
             </div>
         </section>
 
-        <!-- ============ CHAPTER 3 — THE SORTING HAT ============ -->
+        <!--  CHAPTER 3 — THE SORTING HAT  -->
         <section class="sorting-section" id="sorting-section">
             <div class="slytherin-banner banner-left">
                 <img src="slytherin-logo.png" alt="Slytherin Crest">
@@ -71,7 +71,7 @@
             </div>
         </section>
 
-        <!-- ============ CHAPTER 4 — THE EXAMINATION CHAMBER ============ -->
+        <!-- CHAPTER 4 — THE EXAMINATION CHAMBER  -->
         <section id="trivia-section" class="magic-room" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
 
             <h3 class="potter-callout trivia-heading" style="text-align: center; margin-bottom: 30px;">Welcome to the Hogwarts Examination Chamber...</h3>
@@ -86,7 +86,7 @@
             </div>
         </section>
 
-        <!-- ============ CHAPTER 5 — THE MARAUDER'S MAP ============ -->
+        <!-- CHAPTER 5 — THE MARAUDER'S MAP -->
         <section id="marauders-map" class="map-section hidden-room">
             <h2 class="potter-callout map-heading" style="text-align: center; margin-top: 30px;">The Marauder's Map</h2>
             <p class="greeting-text" style="text-align: center;">Tap a location to explore your magic...</p>
@@ -111,7 +111,7 @@
             </div>
         </section>
 
-        <!-- ============ THE SLYTHERIN COMMON ROOM ============ -->
+        <!-- THE SLYTHERIN COMMON ROOM  -->
         <section id="slytherin-room" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
 
@@ -171,7 +171,7 @@
             </div>
         </section>
 
-        <!-- ============ CHAPTER 6 — THE PENSIEVE ============ -->
+        <!-- CHAPTER 6 — THE PENSIEVE  -->
         <section id="headmaster-office" class="magic-room hidden-room">
 
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
@@ -201,7 +201,7 @@
             </div>
         </section>
 
-        <!-- ============ CHAPTER 7 — THE GREAT HALL FINALE ============ -->
+        <!--  CHAPTER 7 — THE GREAT HALL FINALE  -->
         <section id="great-hall" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
 
@@ -232,8 +232,16 @@
             <p id="finale-text-3" class="finale-text finale-text-final"></p>
         </section>
 
+    </div>  
+    <div id="floating-player" class="floating-music-player">
+        <div class="floating-info">
+            <span id="float-song-name" class="float-song">Song Name</span>
+            <span id="float-artist-name" class="float-artist">Artist</span>
+        </div>
+        <button id="float-play-btn" class="float-play-btn">⏸</button>
     </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>

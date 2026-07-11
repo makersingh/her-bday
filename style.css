@@ -1,14 +1,14 @@
-/* --- GLOBAL --- */
+/* GLOBAL */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'); /* Cinematic Movie Font */
 
-/* Loading the Lightning Bolt Font */
+/* Font Preload */
 @font-face {
     font-family: 'HarryPotter';
     src: url('harryp.TTF') format('truetype');
 }
 
 :root {
-    /* Brand palette — pulled from the repeated literals in the file */
+    /* Brand palette  */
     --gold: #d4af37;
     --gold-bright: #ffd700;
     --slytherin-green: #1a472a;
@@ -38,7 +38,7 @@ body {
     perspective: 1500px;
 }
 
-/* Default wand cursor everywhere */
+/* Default wand cursor  */
 html,
 body {
     cursor: url("wand.png") 0 0, auto;
@@ -84,7 +84,7 @@ label,
     50%      { opacity: 0.4; }
 }
 
-/* --- THE BOOK COVER --- */
+/* THE BOOK COVER */
 
 .book-cover {
     position: fixed;
@@ -92,7 +92,7 @@ label,
     left: 0;
     width: 100%;
     height: 100vh;
-    height: 100dvh; /* accounts for mobile browser address-bar chrome */
+    height: 100dvh; 
     background: linear-gradient(to right, #040b17, #0a1930);
     border-left: 20px solid #010408;
     z-index: 2000;
@@ -114,7 +114,7 @@ label,
 
 .author {
     color: var(--teal-silver);
-    font-family: var(--font-display); /* Cinematic movie font */
+    font-family: var(--font-display); 
     font-size: 1rem;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -122,8 +122,8 @@ label,
 }
 
 .hp-title {
-    font-family: var(--font-magic); /* The Lightning Bolt Font! */
-    font-size: clamp(2.75rem, 14vw, 10rem); /* scales down on small screens */
+    font-family: var(--font-magic); 
+    font-size: clamp(2.75rem, 14vw, 10rem); 
     color: var(--silver);
     text-shadow: 0 0 20px rgba(26, 71, 42, 0.8), 2px 2px 4px #000;
     letter-spacing: 3px;
@@ -157,12 +157,12 @@ label,
 }
 
 .book-open-anim {
-    transform: rotateY(-110deg);
+   transform: perspective(1500px) rotateY(-110deg); 
     opacity: 0;
     pointer-events: none;
 }
 
-/* --- THE MAGICAL WORLD --- */
+/* THE MAGICAL WORLD */
 .hidden-world {
     opacity: 0;
     transition: opacity 2s ease;
@@ -192,12 +192,10 @@ label,
     color: var(--teal-silver);
     font-style: italic;
 }
-/* =========================================
-   POTTERHEAD GREETING SECTION
-========================================= */
+/* POTTERHEAD GREETING SECTION */
 
 .potter-greeting-section {
-    min-height: 100vh; /* Takes up the whole screen initially */
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -259,13 +257,13 @@ label,
     opacity: 0.7;
 }
 
-/* Makes the text gently pulse to build suspense */
+/* pulse effect*/
 @keyframes pulseDeciding {
     0%, 100% { opacity: 0.7; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 25px rgba(26, 71, 42, 0.9); }
 }
 
-/* --- THE SORTING CEREMONY --- */
+/* THE SORTING CEREMONY */
 .sorting-section {
     min-height: 80vh;
     display: flex;
@@ -282,30 +280,26 @@ label,
     width: 100%;
 }
 
-/* The New Sorting Heading */
+/* New Sorting Heading */
 .sorting-title {
-    font-family: var(--font-display); /* Cinematic movie font */
+    font-family: var(--font-display);
     font-size: 1.8rem;
     color: var(--silver);
     text-align: center;
     margin-bottom: 30px;
     letter-spacing: 3px;
-    text-shadow: 0 0 15px rgba(26, 71, 42, 0.5); /* Faint Slytherin glow */
+    text-shadow: 0 0 15px rgba(26, 71, 42, 0.5); 
     animation: pulseDeciding 2s infinite ease-in-out;
 }
 
-/* Wrapper to keep hat and photo together.
-   (Was previously defined twice — merged into one, keeping the
-   larger top margin so the hat clears the heading above it.) */
+/* Image and Hat wrapper*/
 .sorting-image-wrapper {
     position: relative;
     display: inline-block;
     margin: 80px auto 30px auto;
 }
 
-/* Photo style — slightly scaled for better visibility.
-   width/aspect-ratio now scale together instead of a fixed height,
-   so the photo doesn't stretch out of proportion on small screens. */
+/* Photo style  */
 .sorting-img {
     width: min(320px, 80vw);
     aspect-ratio: 4 / 5;
@@ -319,7 +313,7 @@ label,
     opacity: 1;
 }
 
-/* The Hat - Adjusted for balance */
+/* The Hat */
 .floating-hat {
     position: absolute;
     top: -95px;
@@ -353,19 +347,19 @@ label,
 
 /* THE MAGICAL SILVER SLYTHERIN REVEAL */
 .slytherin-shout {
-    font-family: var(--font-magic) !important; /* Uses the lightning bolt font */
-    font-size: clamp(2.5rem, 13vw, 6.5rem) !important; /* scales down on small screens */
-    color: #e8f0f2 !important; /* Shimmering Silver — distinct shade, kept as-is */
+    font-family: var(--font-magic) !important; 
+    font-size: clamp(2.5rem, 13vw, 6.5rem) !important; 
+    color: #e8f0f2 !important; 
     letter-spacing: 5px;
     font-weight: normal !important;
     font-style: normal !important;
     text-shadow:
-        0 0 20px var(--slytherin-green),   /* Inner green glow */
-        0 0 40px #2a623d,   /* Outer green glow */
-        0 0 60px #000,      /* Dark shadow for contrast */
-        2px 2px 5px rgba(255, 255, 255, 0.8) !important; /* Silver highlight edge */
+        0 0 20px var(--slytherin-green),  
+        0 0 40px #2a623d,
+        0 0 60px #000,
+        2px 2px 5px rgba(255, 255, 255, 0.8) !important; 
 
-    /* Adds the explosive zoom and a continuous magical pulse */
+    /* explosive zoom and a continuous magical pulse */
     animation: slytherinExplode 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards, silverShimmer 3s infinite alternate !important;
 }
 
@@ -382,9 +376,7 @@ label,
 }
 
 
-/* =========================================
-   A PENSIEVE OF PRECIOUS MOMENTS (SIDE-BY-SIDE)
-========================================= */
+/* A PENSIEVE OF PRECIOUS MOMENTS  */
 
 .timeline-section {
     padding: 100px 20px;
@@ -411,14 +403,14 @@ label,
     flex-wrap: wrap;
 }
 
-/* --- LEFT SIDE: Image & Golden Text --- */
+/* Special Text and Effect  */
 .pensieve-left {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
-    min-width: min(380px, 100%); /* was a hard 380px floor — overflowed anything narrower */
+    min-width: min(380px, 100%); 
 }
 
 .slideshow-container {
@@ -492,14 +484,7 @@ label,
     filter: sepia(40%) contrast(120%) brightness(110%) saturate(150%);
 }
 
-/* Golden text centered perfectly below the image.
-   This was previously defined a second time, later in the file
-   (under "Room Visibility Toggles"), with a smaller font-size,
-   a creamier gold, and an unexplained opacity: 0. Consolidated
-   into one rule here — kept the larger size + brighter gold since
-   it matches the golden-frame reveal theme used right above it.
-   If your JS expects the smaller/creamier version, swap the
-   color/font-size back and see the note further down the file. */
+/* Golden text centered */
 #special-text {
     font-family: var(--font-magic);
     font-size: clamp(1.8rem, 7vw, 3rem);
@@ -522,10 +507,10 @@ label,
 
 #special-text.typing-active::after { opacity: 1; }
 
-/* --- RIGHT SIDE: The Final Letter --- */
+/* Letter */
 .pensieve-right {
     flex: 1;
-    min-width: min(380px, 100%); /* was a hard 380px floor — overflowed anything narrower */
+    min-width: min(380px, 100%); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,7 +524,7 @@ label,
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     text-align: left;
-    margin-top: -90px; /* Pulls the letter up to align with the photo beside it */
+    margin-top: -90px; 
 }
 
 #typing-text {
@@ -549,9 +534,7 @@ label,
     line-height: 1.8;
     min-height: 200px;
 }
-/* =========================================
-   THE AESTHETIC MUSIC PLAYER
-========================================= */
+/* THE AESTHETIC MUSIC PLAYER */
 
 .music-player-section {
     padding: 60px 20px;
@@ -572,11 +555,7 @@ label,
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-/* Glassmorphism Playlist Box.
-   (Was previously defined with several properties repeated inside
-   itself, and max-width set twice — 450px then 500px. Folded down
-   to one clean block; 500px kept since that was the value that was
-   actually winning before.) */
+/* Glassmorphism Playlist Box */
 .aesthetic-playlist {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(212, 175, 55, 0.3);
@@ -588,12 +567,12 @@ label,
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centers everything */
+    align-items: center; 
     gap: 15px;
     margin: 0 auto;
 }
 
-/* FORCE TRANSPARENT BUTTONS */
+/* TRANSPARENT BUTTONS */
 .back-to-map-btn {
     background: transparent !important;
     border: 1px solid var(--gold) !important;
@@ -603,9 +582,7 @@ label,
     font-family: var(--font-display);
 }
 
-/* Individual Song Rows.
-   (Was previously defined twice as two separate blocks — merged
-   into one, keeping every property from both.) */
+/* Song Rows */
 .track-row {
     display: flex;
     border-radius: 15px;
@@ -670,9 +647,7 @@ label,
     transform: scale(1.2);
 }
 
-/* =========================================
-   DYNAMIC TRACK PROGRESS BAR
-========================================= */
+/* DYNAMIC TRACK PROGRESS BAR */
 /* Hides the slider by default */
 .track-progress-container {
     display: none; 
@@ -726,11 +701,9 @@ label,
     transform: scale(1.3);
 }
 
-/* =========================================
-   FEATURE 4: INTERACTIVE WAND SPARKLES
-========================================= */
+/* INTERACTIVE WAND SPARKLES */
 .wand-sparkle {
-    position: absolute; /* 👇 THE FIX: Changed from fixed to absolute */
+    position: absolute; 
     width: 6px;
     height: 6px;
     background: radial-gradient(circle, var(--gold) 0%, rgba(255,255,255,0) 70%);
@@ -746,12 +719,9 @@ label,
     100% { transform: scale(0.2) translateY(30px); opacity: 0; }
 }
 
-/* =========================================
-   FEATURE 3: DYNAMIC SLYTHERIN THEME SHIFT
-========================================= */
+/* DYNAMIC SLYTHERIN THEME SHIFT */
 body.slytherin-theme-active {
     transition: background-color 3s ease-in-out, background-image 3s ease-in-out !important;
-    /* Shifts the entire waving background to deep emerald greens */
     background: linear-gradient(135deg, #010a05 0%, #0a2113 50%, #031409 100%) !important;
     background-size: 400% 400% !important;
 }
@@ -762,9 +732,7 @@ body.slytherin-theme-active .sorting-title {
     text-shadow: 0 0 20px rgba(47, 143, 83, 0.8) !important;
 }
 
-/* =========================================
-   THE SLYTHERIN BANNERS
-========================================= */
+/* THE SLYTHERIN BANNERS */
 
 .slytherin-banner {
     position: absolute;
@@ -801,9 +769,7 @@ body.slytherin-theme-active .slytherin-banner {
     transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1), visibility 0s linear 0s;
 }
 
-/* =========================================
-   FEATURE 2: THE TRIVIA GATEWAY LOCK
-========================================= */
+/* THE TRIVIA QUIZ LOCK */
 .trivia-lock-overlay {
     background: rgba(11, 13, 16, 0.95);
     border: 2px solid rgba(212, 175, 55, 0.2);
@@ -848,9 +814,7 @@ body.slytherin-theme-active .slytherin-banner {
     transform: scale(1.02);
 }
 
-/* =========================================
-   MARAUDER'S MAP & ROOMS
-========================================= */
+/* MARAUDER'S MAP & ROOMS */
 .map-container {
     display: flex;
     flex-direction: column;
@@ -890,14 +854,12 @@ body.slytherin-theme-active .slytherin-banner {
     100% { opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================
-   THE GREAT HALL (15-PHOTO HEART)
-========================================= */
+/* THE GREAT HALL */
 .heart-collage-container {
     position: relative;
     width: 100%;
     max-width: 600px;
-    aspect-ratio: 1 / 1; /* was a fixed height:600px — squished on phones when width shrank */
+    aspect-ratio: 1 / 1; 
     margin: -30px auto 40px auto;
 }
 
@@ -906,12 +868,12 @@ body.slytherin-theme-active .slytherin-banner {
     width: clamp(46px, 15vw, 100px);
     height: clamp(46px, 15vw, 100px);
     object-fit: cover;
-    border-radius: 50%; /* Makes them aesthetic bubbles */
+    border-radius: 50%; 
     border: 2px solid var(--gold);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     opacity: 0;
     transform: translate(-50%, -50%) scale(0);
-    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy pop-in */
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 
 .heart-pic.revealed {
@@ -926,31 +888,29 @@ body.slytherin-theme-active .slytherin-banner {
     cursor: pointer;
 }
 
-/* THE MATHEMATICAL HEART COORDINATES */
-/* Row 1 (Top Humps) */
+/* HEART COORDINATES */
+/* Row 1 */
 .pic-1 { top: 23%; left: 18%; }
 .pic-2 { top: 22%; left: 37%; }
 .pic-3 { top: 22%; left: 63%; }
 .pic-4 { top: 23%; left: 82%; }
-/* Row 2 (Widest Part) */
+/* Row 2 */
 .pic-5 { top: 42%; left: 14%; }
 .pic-6 { top: 40%; left: 32.5%; }
 .pic-7 { top: 40%; left: 50%; }
 .pic-8 { top: 40%; left: 67.5%; }
 .pic-9 { top: 42%; left: 85%; }
-/* Row 3 (Tapering) */
+/* Row 3 */
 .pic-10 { top: 59%; left: 23%; }
 .pic-11 { top: 60%; left: 50%; }
 .pic-12 { top: 59%; left: 77%; }
-/* Row 4 (Lower Point) */
+/* Row 4 */
 .pic-13 { top: 73%; left: 35%; }
 .pic-14 { top: 73%; left: 65%; }
-/* Row 5 (The Tip) */
+/* Row 5 */
 .pic-15 { top: 85%; left: 50%; }
 
-/* =========================================
-   TRIVIA NONCHALANT POPUP
-========================================= */
+/* TRIVIA NONCHALANT POPUP */
 .nonchalant-feedback {
     font-family: var(--font-display);
     color: var(--gold);
@@ -961,9 +921,7 @@ body.slytherin-theme-active .slytherin-banner {
     opacity: 0;
     transition: opacity 0.3s;
 }
-/* =========================================
-   ROOM VISIBILITY TOGGLES (Required for JS)
-========================================= */
+/* ROOM VISIBILITY TOGGLES  */
 .hidden-room {
     display: none !important;
 }
@@ -979,14 +937,12 @@ body.slytherin-theme-active .slytherin-banner {
 }
 
 .golden-border {
-    /* No solid border here, just the soft aura */
     border: none !important;
-    /* Soft, wide glow that pulses slightly */
     box-shadow: 0 0 40px 15px rgba(212, 175, 55, 0.6),
                 0 0 80px 25px rgba(212, 175, 55, 0.3) !important;
     transition: all 0.8s ease-in-out;
     animation: glow-pulse 2s infinite alternate;
-    position: relative; /* Essential for shadows to render correctly */
+    position: relative; 
 }
 @keyframes glow-pulse {
     from {
@@ -997,13 +953,8 @@ body.slytherin-theme-active .slytherin-banner {
     }
 }
 
-/* #special-text was consolidated into a single rule above, near
-   .pensieve-left — this is where the conflicting duplicate used
-   to live. See the comment there for which values were kept. */
 
-/* =========================================
-   ROOM TRANSITION STYLES
-   ========================================= */
+/* ROOM TRANSITION STYLES */
 .room-transition {
     width: 100%;
     text-align: center;
@@ -1017,27 +968,25 @@ body.slytherin-theme-active .slytherin-banner {
 
 .magical-transition-text {
     color: var(--gold) !important;
-    font-family: var(--font-display); /* Keeps it matching your HP theme */
+    font-family: var(--font-display); 
     font-size: 1.4rem;
     margin-bottom: 15px;
     margin-top: 20px;
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
-/* FORCE THE MAP TO FIT THE SCREEN PERFECTLY */
 #magic-world {
-    min-height: 100vh; /* 100% of the screen height */
-    min-height: 100dvh; /* accounts for mobile browser address-bar chrome */
+    min-height: 100vh; 
+    min-height: 100dvh; 
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers the map and buttons vertically */
-    align-items: center;     /* Centers everything horizontally */
+    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
-    padding-bottom: 50px;    /* Adds that missing space at the very bottom */
+    padding-bottom: 50px;
 }
 
-/* If you have a container specifically for your map buttons, ensure it has space */
 .map-buttons-container {
     margin-bottom: 40px;
 }
@@ -1047,38 +996,26 @@ body.slytherin-theme-active .slytherin-banner {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers the whole room vertically */
+    justify-content: center; 
     align-items: center;
 }
 
 /* ADD SPACE BETWEEN HEADING AND MUSIC PLAYER */
 #slytherin-common-room h1,
 #slytherin-common-room h2 {
-    margin-bottom: 60px !important; /* Forces a large gap under the heading */
+    margin-bottom: 60px !important; 
     text-align: center;
 }
 
 .aesthetic-playlist {
-    margin-top: 80px; /* Slight adjustment for perfect centering */
-    margin-bottom: 70px; /* Space before the 'All set?' transition text */
+    margin-top: 80px; 
+    margin-bottom: 70px; 
 }
 
-/* =========================================================
-   CHAPTER REDESIGN — NEW COMPONENTS
-   ---------------------------------------------------------
-   Everything below this point is new: starfield, book-opening
-   particles, the hero "wand writing" sequence, the darkened/
-   shaking Sorting reveal, the Examination Chamber (candles +
-   seals), the parchment Marauder's Map, the Pensieve fog/sepia/
-   pan effects, and the Great Hall finale (candles + stars).
-   Nothing above this line was touched.
-   ========================================================= */
-
-/* Anchors for absolutely-positioned overlays added below */
 .sorting-section { position: relative; }
 #great-hall { position: relative; }
 
-/* ---------- STARFIELD (reused for hero + finale) ---------- */
+/* STARFIELD (for hero + finale) */
 .starfield {
     position: fixed;
     inset: 0;
@@ -1113,7 +1050,7 @@ body.slytherin-theme-active .slytherin-banner {
 }
 .finale-stars.active { opacity: 1; }
 
-/* ---------- BOOK-OPENING PARTICLES (Chapter 1) ---------- */
+/* BOOK-OPENING PARTICLES (Chapter 1) */
 .book-particles {
     position: absolute;
     inset: 0;
@@ -1153,7 +1090,7 @@ body.slytherin-theme-active .slytherin-banner {
     100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.2); }
 }
 
-/* ---------- HERO: WAND WRITING + MATERIALIZING TITLE (Chapter 2) ---------- */
+/* HERO: WAND WRITING + MATERIALIZING TITLE (Chapter 2)  */
 .wand-text {
     font-family: var(--font-display);
     font-size: clamp(1.1rem, 3vw, 1.6rem);
@@ -1179,7 +1116,7 @@ body.slytherin-theme-active .slytherin-banner {
     to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
 }
 
-/* ---------- SORTING CEREMONY: DARKENING + SHAKE + GREEN PARTICLES (Chapter 3) ---------- */
+/* SORTING CEREMONY: DARKENING + SHAKE + GREEN PARTICLES (Chapter 3) */
 .dim-overlay {
     position: absolute;
     inset: 0;
@@ -1216,7 +1153,7 @@ body.slytherin-theme-active .slytherin-banner {
     100% { opacity: 0; transform: translateY(-160px) scale(0.3); }
 }
 
-/* ---------- CANDLES (reused: Examination Chamber + Great Hall) ---------- */
+/*  CANDLES (reused: Examination Chamber + Great Hall)  */
 .exam-candles, .hall-candles {
     display: flex;
     gap: 40px;
@@ -1265,7 +1202,7 @@ body.slytherin-theme-active .slytherin-banner {
     75% { opacity: 0.3; transform: translateX(-50%) scale(0.8) rotate(-4deg); }
 }
 
-/* ---------- TRIVIA: WRONG-ANSWER RED FLASH + SEALS (Chapter 4) ---------- */
+/* TRIVIA: WRONG-ANSWER RED FLASH + SEALS (Chapter 4)  */
 .flash-red { animation: redFlash 0.6s ease; }
 
 @keyframes redFlash {
@@ -1302,7 +1239,7 @@ body.slytherin-theme-active .slytherin-banner {
     100% { transform: scale(1); }
 }
 
-/* ---------- THE PARCHMENT MARAUDER'S MAP (Chapter 5) ---------- */
+/* MARAUDER'S MAP (Chapter 5) */
 .parchment-map {
     position: relative;
     width: 100%;
@@ -1382,7 +1319,7 @@ body.slytherin-theme-active .slytherin-banner {
     100% { opacity: 0.45; transform: scale(1); }
 }
 
-/* ---------- PENSIEVE: FOG + SEPIA TIERS + PAN (Chapter 6) ---------- */
+/*  PENSIEVE: FOG + SEPIA TIERS + PAN (Chapter 6) */
 .fog-overlay {
     position: absolute;
     inset: 0;
@@ -1402,7 +1339,7 @@ body.slytherin-theme-active .slytherin-banner {
 .fade-img.pan-a { transform: scale(1.08) translate(1%, -1%); }
 .fade-img.pan-b { transform: scale(1.08) translate(-1%, 1%); }
 
-/* ---------- GREAT HALL FINALE (Chapter 7) ---------- */
+/*  GREAT HALL FINALE (Chapter 7) */
 #great-hall .section-title {
     margin-bottom: -10px !important; 
 }
@@ -1427,24 +1364,21 @@ body.slytherin-theme-active .slytherin-banner {
     margin-top: 14px;
 }
 
-/* =========================================
-   MAGICAL THEME-SHIFTING SCROLLBAR
-   ========================================= */
+/* MAGICAL THEME-SHIFTING SCROLLBAR */
 /* 1. The total width of the scrollbar */
 ::-webkit-scrollbar {
     width: 14px; 
     background: transparent;
 }
 
-/* 2. DEFAULT THEME: Cinematic Blue Track & Thumb */
+/* 2. DEFAULT THEME */
 ::-webkit-scrollbar-track {
-    background: #020202; /* Deep cinematic black */
+    background: #020202; 
     border-left: 2px solid #000;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 ::-webkit-scrollbar-thumb {
-    /* Sleek steel-blue gradient */
     background: linear-gradient(180deg, #2a475e 0%, #1c3243 100%); 
     border: 2px solid #020202; 
     border-radius: 10px; 
@@ -1452,25 +1386,22 @@ body.slytherin-theme-active .slytherin-banner {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    /* Brighter icy blue when hovered */
     background: linear-gradient(180deg, #83adc2 0%, #688fa6 100%); 
     cursor: pointer;
 }
 
 /* 3. SLYTHERIN REVEAL OVERRIDES */
 body.slytherin-theme-active::-webkit-scrollbar-track {
-    background: #010a05; /* Deep emerald shadow */
+    background: #010a05; 
     border-left: 2px solid #000;
 }
 
 body.slytherin-theme-active::-webkit-scrollbar-thumb {
-    /* Slytherin Green gradient pulling your custom variable */
     background: linear-gradient(180deg, var(--slytherin-green) 0%, #0a2113 100%); 
     border: 2px solid #010a05;
 }
 
 body.slytherin-theme-active::-webkit-scrollbar-thumb:hover {
-    /* Brighter toxic green when hovered */
     background: linear-gradient(180deg, #2f8f53 0%, #1a472a 100%); 
 }
 
@@ -1489,9 +1420,7 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
 }
 
 
-/* =========================================================================
-   MOBILE RESPONSIVENESS
-   ========================================================================= */
+/* MOBILE COMAPTIBLE */
 @media (max-width: 820px) {
     .letter-content { margin-top: 0; }
 }
@@ -1515,17 +1444,16 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
 
     .exam-candles, .hall-candles { gap: 22px; }
 
-    /* Keep the crest banners from crowding centered headings once the
-       viewport gets narrow enough that 2×100px min-width eats into it. */
+
     .slytherin-banner { min-width: 70px; padding-top: 28vh; }
 
     .floating-hat { top: -70px; }
 
     /* 7. Shrink Floating Hogwarts Letters for small screens */
     .floating-letter {
-        width: 150px !important; /* Smaller parchment */
+        width: 150px !important; 
         padding: 10px 12px !important;
-        font-size: 0.7rem !important; /* Smaller font */
+        font-size: 0.7rem !important;
     }
     
     /* Shrink the Red Wax Seal to match */
@@ -1607,9 +1535,7 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
     100% { opacity: 0; transform: translateX(-110vw) translateY(-50px) rotate(-15deg) scale(1.1); }
 }
 
-/* =========================================
-   EASTER EGG: ALOHOMORA SHATTER
-========================================= */
+/* EASTER EGG: ALOHOMORA SHATTER */
 
 /* The sequential text for the Alohomora Easter Egg */
 .alohomora-secret-text {
@@ -1651,24 +1577,16 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
 }
 
 
-/* =========================================
-   EASTER EGG: LUMOS & NOX (CLEAN VERSION)
-========================================= */
+/* EASTER EGG: LUMOS & NOX */
 
 .lumos-light-overlay {
     position: fixed;
     inset: 0;
-    
-    /* A very soft, barely-there warm tint */
     background: rgba(255, 250, 230, 0.05); 
-    
-    /* THE MAGIC: Physically turns up the brightness and contrast of the whole page */
     backdrop-filter: brightness(1.6) contrast(1.1);
-    -webkit-backdrop-filter: brightness(1.6) contrast(1.1); /* Safari support */
-    
+    -webkit-backdrop-filter: brightness(1.6) contrast(1.1); 
     pointer-events: none; 
     z-index: 9998; 
-    
     opacity: 0;
     transition: opacity 1.2s ease-in-out; 
 }
@@ -1677,21 +1595,19 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
     opacity: 1;
 }
 
-/* Gives the light a subtle, natural wand-flicker */
+
 @keyframes lumosFlicker {
     0% { opacity: 0.85; transform: scale(1); }
     100% { opacity: 1; transform: scale(1.03); }
 }
 
-/* Swaps the cursor for the whole page and all clickable items when Lumos is active */
+
 body.lumos-cursor-active,
 body.lumos-cursor-active * {
     cursor: url('wand-glow.png'), auto !important; 
 }
 
-/* =========================================
-   EASTER EGG: MISCHIEF MANAGED
-========================================= */
+/* MISCHIEF MANAGED */
 
 /* The delayed fade-in for the final word */
 .delayed-always {
@@ -1706,7 +1622,7 @@ body.lumos-cursor-active * {
     transition-delay: 3.5s; 
 }
 
-/* When the main text triggers, this tells "Always..." to begin its delayed timer */
+/* Always delayed */
 .mischief-managed-text.visible .delayed-always {
     opacity: 1;
 }
@@ -1714,8 +1630,8 @@ body.lumos-cursor-active * {
 .mischief-managed-overlay {
     position: fixed;
     inset: 0;
-    background: #020202; /* Deep cinematic black */
-    z-index: 99999; /* Absolute top, covers everything including popups */
+    background: #020202; 
+    z-index: 99999; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1723,10 +1639,9 @@ body.lumos-cursor-active * {
     
     opacity: 0;
     pointer-events: none; 
-    transition: opacity 3s ease-in-out; /* The slow 3-second fade to black */
+    transition: opacity 3s ease-in-out; 
 }
 
-/* When the spell is cast, this locks the page so she can't click anything else */
 .mischief-managed-overlay.active {
     opacity: 1;
     pointer-events: all; 
@@ -1749,7 +1664,6 @@ body.lumos-cursor-active * {
 }
 
 .hp-metallic-text {
-    /* The shiny metal gradient */
     background: linear-gradient(to bottom, #e1effa 0%, #83adc2 45%, #2a475e 50%, #688fa6 60%, #d1e4f2 100%);
     font-family: var(--font-magic);
     
@@ -1763,9 +1677,7 @@ body.lumos-cursor-active * {
     filter: drop-shadow(0 0 15px rgba(131, 173, 194, 0.4));
 }
 
-/* =========================================
-   EASTER EGG: EXPECTO PATRONUM
-========================================= */
+/* EASTER EGG: EXPECTO PATRONUM */
 
 .patronus-overlay {
     position: absolute;
@@ -1822,7 +1734,6 @@ body.lumos-cursor-active * {
 .patronus-text {
     margin-top: 40px;
     font-family: var(--font-magic);
-    /* Fluid sizing: 1.8rem on phones, scales up to 2.8rem on laptops */
     font-size: clamp(1.8rem, 4vw, 3.2rem); 
     color: #b0d4eb;
     text-shadow: 0 0 15px rgba(154, 214, 240, 0.8);
@@ -1844,9 +1755,7 @@ body.lumos-cursor-active * {
     color: #ffffff;
     display: block;
     margin-top: 15px;
-    letter-spacing: 3px; /* Cinematic movie-poster spacing */
-    
-    /* Adds a slightly brighter, pure white core to the highlight text */
+    letter-spacing: 3px; 
     text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 0 10px rgba(154, 214, 240, 0.6);
 }
 
@@ -1854,4 +1763,80 @@ body.lumos-cursor-active * {
 @keyframes patronusPulse {
     0% { box-shadow: 0 0 30px rgba(154, 214, 240, 0.5), 0 0 60px rgba(255, 255, 255, 0.2); }
     100% { box-shadow: 0 0 50px rgba(154, 214, 240, 0.9), 0 0 100px rgba(255, 255, 255, 0.5); }
+}
+
+/* FLOATING MUSIC PLAYER */
+.floating-music-player {
+    position: fixed !important; 
+    bottom: -150px !important; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(4, 15, 30, 0.85); 
+    border: 1px solid rgba(212, 175, 55, 0.4); 
+    border-radius: 25px;
+    padding: 10px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9), inset 0 0 15px rgba(212, 175, 55, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 2147483647 !important; 
+    
+    transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    pointer-events: none; 
+    opacity: 0;
+}
+
+.floating-music-player.active {
+    bottom: 30px !important; 
+    pointer-events: all;
+    opacity: 1;
+}
+
+.floating-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.float-song {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--gold);
+    font-weight: bold;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.float-artist {
+    font-family: sans-serif;
+    font-size: 0.65rem;
+    color: #a0a0a0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.float-play-btn {
+    background: transparent;
+    color: var(--gold);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, text-shadow 0.2s ease;
+    outline: none;
+}
+
+.float-play-btn:hover {
+    transform: scale(1.15);
+    text-shadow: 0 0 10px var(--gold);
+}
+
+/* Mobile sizing */
+@media (max-width: 768px) {
+    .floating-music-player {
+        width: 90%;
+        justify-content: space-between;
+        padding: 12px 20px;
+    }
 }

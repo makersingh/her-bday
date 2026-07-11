@@ -1,4 +1,4 @@
-// --- MAGIC PRELOADER ---
+// Preloader
 function preloadAssets() {
     const imagesToPreload = [
         "sorting-hat.png", "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "map-bg.jpg",
@@ -29,14 +29,14 @@ function preloadAssets() {
     console.log("Magic assets preloaded successfully!");
 }
 
-// --- FORCE PAGE TO TOP ON REFRESH ---
+// Top on refresh
 window.onbeforeunload = function () {
     window.scrollTo(0, 0);
 };
 window.scrollTo(0, 0);
 
 
-// UTILITIES — stars + particle bursts, reused across chapters
+// UTILITIES 
 function generateStars(container, count) {
     if (!container) return;
     const frag = document.createDocumentFragment();
@@ -100,7 +100,7 @@ function fadeAudio(audio, targetVolume, duration) {
     }, step);
 }
 
-// CHAPTER 1 — THE BOOK (3D page-turn + dust/spark particles)
+// Chapter-1 The Book
 function openBook() {
     preloadAssets();
     const bookCover = document.getElementById('book-cover');
@@ -141,7 +141,7 @@ function openBook() {
 }
 
 
-// CHAPTER 2 — THE HERO 
+// CHAPTER 2 — The first page
 const wandLines = ["Mischief Managed...", "No wait..."];
 const heroTitleText = "Happy Birthday, Munmun";
 
@@ -185,7 +185,7 @@ function startHeroSequence() {
     showLine();
 }
 
-// AMBIENT WAND SPARKLES 
+// Wand Sparkles
 document.addEventListener('mousemove', (e) => {
     const sparkle = document.createElement('div');
     sparkle.className = 'wand-sparkle';
@@ -203,65 +203,65 @@ document.addEventListener('mousemove', (e) => {
     setTimeout(() => sparkle.remove(), 800);
 });
 
-// THE AESTHETIC PLAYLIST 
+// Playlist
 const globalAudio = document.getElementById('global-audio');
 const trackRows = document.querySelectorAll('.track-row');
 
 function playTrack(fileName, clickedRow) {
-let isDragging = false; 
+    let isDragging = false; 
 
-globalAudio.addEventListener('timeupdate', () => {
-    if (!globalAudio.duration) return;
-    
+    // 1. SLIDER EVENT LISTENER
+    globalAudio.addEventListener('timeupdate', () => {
+        if (!globalAudio.duration) return;
+        
+        const activeRow = document.querySelector('.track-row.playing-now');
+        if (!activeRow) return;
 
-    const activeRow = document.querySelector('.track-row.playing-now');
-    if (!activeRow) return;
+        const slider = activeRow.querySelector('.track-slider');
+        const timeCurrent = activeRow.querySelector('.time-current');
+        const timeTotal = activeRow.querySelector('.time-total');
 
-    const slider = activeRow.querySelector('.track-slider');
-    const timeCurrent = activeRow.querySelector('.time-current');
-    const timeTotal = activeRow.querySelector('.time-total');
-
-    if (slider && !isDragging) {
-        const progressPercent = (globalAudio.currentTime / globalAudio.duration) * 100;
-        slider.value = progressPercent;
-    }
-
-
-    if (timeCurrent) timeCurrent.innerText = formatTime(globalAudio.currentTime);
-    if (timeTotal) timeTotal.innerText = formatTime(globalAudio.duration);
-});
-
-
-function formatTime(seconds) {
-    if (isNaN(seconds)) return "0:00";
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60);
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-}
-
-document.querySelectorAll('.track-slider').forEach(slider => {
-    
-    slider.addEventListener('mousedown', () => isDragging = true);
-    slider.addEventListener('touchstart', () => isDragging = true, {passive: true});
-
-    slider.addEventListener('input', (e) => {
-        if (globalAudio.duration) {
-            const seekTime = (e.target.value / 100) * globalAudio.duration;
-            globalAudio.currentTime = seekTime;
+        if (slider && !isDragging) {
+            const progressPercent = (globalAudio.currentTime / globalAudio.duration) * 100;
+            slider.value = progressPercent;
         }
+
+        if (timeCurrent) timeCurrent.innerText = formatTime(globalAudio.currentTime);
+        if (timeTotal) timeTotal.innerText = formatTime(globalAudio.duration);
     });
 
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return "0:00";
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60);
+        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
 
-    slider.addEventListener('mouseup', () => isDragging = false);
-    slider.addEventListener('touchend', () => isDragging = false);
-});
-    
+    document.querySelectorAll('.track-slider').forEach(slider => {
+        slider.addEventListener('mousedown', () => isDragging = true);
+        slider.addEventListener('touchstart', () => isDragging = true, {passive: true});
+
+        slider.addEventListener('input', (e) => {
+            if (globalAudio.duration) {
+                const seekTime = (e.target.value / 100) * globalAudio.duration;
+                globalAudio.currentTime = seekTime;
+            }
+        });
+
+        slider.addEventListener('mouseup', () => isDragging = false);
+        slider.addEventListener('touchend', () => isDragging = false);
+    });
+        
+    // 2. PLAY/PAUSE LOGIC 
     const playBtnIcon = clickedRow.querySelector('.row-play-btn');
     const bgMusic = document.getElementById('bg-music'); 
+    const floatBtn = document.getElementById('float-play-btn'); 
 
-  if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
+    // Pause if clicking the song that is ALREADY playing
+    if (clickedRow.classList.contains('playing-now') && !globalAudio.paused) {
         globalAudio.pause();
         playBtnIcon.innerHTML = "▶";
+        if (floatBtn) floatBtn.innerHTML = "▶"; 
         if (bgMusic) {
             bgMusic.play().catch(e => console.log(e));
             fadeAudio(bgMusic, 0.6, 1500); 
@@ -269,14 +269,17 @@ document.querySelectorAll('.track-slider').forEach(slider => {
         return;
     }
 
-
+    // Play if clicking the song that is PAUSED 
     if (clickedRow.classList.contains('playing-now') && globalAudio.paused) {
         if (bgMusic) bgMusic.pause(); 
         globalAudio.play();
         playBtnIcon.innerHTML = "⏸";
+        if (floatBtn) floatBtn.innerHTML = "⏸"; 
         return;
     }
 
+    // 3. Playing new song
+    const trackRows = document.querySelectorAll('.track-row'); // Safety definition 
     trackRows.forEach(row => {
         row.classList.remove('playing-now');
         row.querySelector('.row-play-btn').innerHTML = "▶";
@@ -289,6 +292,15 @@ document.querySelectorAll('.track-slider').forEach(slider => {
 
     clickedRow.classList.add('playing-now');
     playBtnIcon.innerHTML = "⏸";
+
+    // 4. UPDATE FLOATING PLAYER INFO WITH THE NEW SONG
+    const floatSong = document.getElementById('float-song-name');
+    const floatArtist = document.getElementById('float-artist-name');
+    if (floatSong && floatArtist) {
+        floatSong.innerText = clickedRow.querySelector('.song-name').innerText;
+        floatArtist.innerText = clickedRow.querySelector('.artist-name').innerText;
+    }
+    if (floatBtn) floatBtn.innerHTML = "⏸";
 }
 
 // CHAPTER 3 — THE SORTING HAT 
@@ -376,7 +388,7 @@ const triviaQuestions = [
     { q: "What is the core of the Elder Wand made of?", options: ["Thestral Tail Hair", "Dragon Heartstring", "Phoenix Feather", "Unicorn Hair"], answer: "Thestral Tail Hair" }
 ];
 
-// Snape-style remarks for correct answers
+// remarks for correct answers
 const cheekyRemarks = [
     "Five points to Slytherin.",
     "Acceptable. Barely.",
@@ -384,7 +396,7 @@ const cheekyRemarks = [
     "Perhaps you do have a brain after all."
 ];
 
-// Snape-style remarks for wrong answers
+// remarks for wrong answers
 const wrongRemarks = [
     "Severus Snape looks disappointed.",
     "Five points from Slytherin.",
@@ -512,6 +524,17 @@ function qSetComplete() {
 const allRooms = ['marauders-map', 'slytherin-room', 'headmaster-office', 'great-hall'];
 
 function travelTo(roomId) {
+
+const floatPlayer = document.getElementById('floating-player');
+    const hasActiveSong = document.querySelector('.track-row.playing-now');
+    if (floatPlayer && hasActiveSong) {
+        if (roomId === 'slytherin-room') {
+            floatPlayer.classList.remove('active'); // Hide in playlist room
+        } else {
+            floatPlayer.classList.add('active');    // Show everywhere else
+        }
+    }
+
     allRooms.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -550,6 +573,16 @@ function travelTo(roomId) {
 }
 
 function returnToMap() {
+    // 1. Show floating player if a song is playing
+    const floatPlayer = document.getElementById('floating-player');
+    const hasActiveSong = document.querySelector('.track-row.playing-now');
+    if (floatPlayer && hasActiveSong) floatPlayer.classList.add('active');
+
+    // 2. Grab audio locally so the button NEVER crashes
+    const globalAudio = document.getElementById('global-audio');
+    const bgMusic = document.getElementById('bg-music');
+
+    // 3. Hide all other rooms
     allRooms.forEach(id => {
         if (id === 'marauders-map') return;
         const el = document.getElementById(id);
@@ -559,16 +592,18 @@ function returnToMap() {
         }
     });
 
+    // 4. Reveal the Map
     const map = document.getElementById('marauders-map');
     if (map) {
         map.classList.remove('hidden-room');
         map.classList.add('visible-room');
         map.scrollIntoView({ behavior: 'smooth' });
-        const bgMusic = document.getElementById('bg-music');
-    if (bgMusic && globalAudio.paused) {
-        bgMusic.play().catch(e => console.log(e));
-        fadeAudio(bgMusic, 0.6, 2000);
-    }
+        
+        // 5. Resume background music if no track is playing
+        if (bgMusic && globalAudio && globalAudio.paused) {
+            bgMusic.play().catch(e => console.log(e));
+            fadeAudio(bgMusic, 0.6, 2000);
+        }
     }
 }
 
@@ -618,7 +653,7 @@ const memoryImages = [
     "teen1.jpg", "teen2.jpg", "teen3.jpg", "teen4.jpg", "teen5.jpg",
     "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg"
 ];
-const specialImageIndex = 4; // the photo that gets the golden-frame treatment
+const specialImageIndex = 4; // Special photo
 const goldenCaption = "the favourite, hands down...";
 const pensieveSlider = document.getElementById("pensieve-slider");
 
@@ -873,6 +908,32 @@ function startMagicObservers() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const floatPlayBtn = document.getElementById('float-play-btn');
+    if (floatPlayBtn) {
+        floatPlayBtn.addEventListener('click', () => {
+            const globalAudio = document.getElementById('global-audio');
+            const activeRow = document.querySelector('.track-row.playing-now');
+            const rowPlayBtn = activeRow ? activeRow.querySelector('.row-play-btn') : null;
+            const bgMusic = document.getElementById('bg-music');
+
+            if (!globalAudio.paused) {
+                globalAudio.pause();
+                floatPlayBtn.innerHTML = "▶";
+                if (rowPlayBtn) rowPlayBtn.innerHTML = "▶";
+                if (bgMusic) {
+                    bgMusic.play().catch(e => console.log(e));
+                    fadeAudio(bgMusic, 0.6, 1500); 
+                }
+            } else {
+                if (bgMusic) bgMusic.pause();
+                globalAudio.play();
+                floatPlayBtn.innerHTML = "⏸";
+                if (rowPlayBtn) rowPlayBtn.innerHTML = "⏸";
+            }
+        });
+    }
+
     generateStars(document.getElementById('starfield'), 140);
 
     const bookCover = document.getElementById('book-cover');
@@ -942,10 +1003,7 @@ function spawnFloatingLetter() {
     }, 9000);
 }
 
-// =========================================================================
 // EASTER EGG: ALOHOMORA TRIVIA BYPASS
-// =========================================================================
-
 let cheatCode = "";
 
 window.addEventListener('keydown', (e) => {
@@ -1004,7 +1062,7 @@ function playAlohomoraSequence() {
     textEl.className = 'alohomora-secret-text';
     triviaSection.appendChild(textEl);
 
-    // The lines of text you want to display sequentially
+    // sequential lines for alohomora
     const lines = [
         "Cheating?",
         "Five points from Slytherin.",
@@ -1031,7 +1089,7 @@ function playAlohomoraSequence() {
                 }, 800);
             }, 2200);
         } else {
-            // Sequence finished! Clean up the text and travel to the map
+            // Sequence finished. Clean up the text and travel to the map
             textEl.remove();
             returnToMap();
         }
@@ -1041,10 +1099,7 @@ function playAlohomoraSequence() {
     showNextLine();
 }
 
-// =========================================================================
 // EASTER EGG: LUMOS & NOX
-// =========================================================================
-
 let spellCode = "";
 
 // 1. Create the invisible light overlay when the page loads
@@ -1064,26 +1119,24 @@ window.addEventListener('keydown', (e) => {
     // Turn the light ON
     if (spellCode === "lumos") {
         lumosLight.classList.add('active');
-        document.body.classList.add('lumos-cursor-active'); // 👇 Turns on the glowing wand
+        document.body.classList.add('lumos-cursor-active'); // Turns on the glowing wand
         spellCode = ""; 
     }
     
     // Turn the light OFF
     if (spellCode.endsWith("nox")) {
         lumosLight.classList.remove('active');
-        document.body.classList.remove('lumos-cursor-active'); // 👇 Reverts to the normal wand
+        document.body.classList.remove('lumos-cursor-active'); // Reverts to the normal wand
         spellCode = ""; 
     }
 });
 
-// =========================================================================
-// EASTER EGG: MISCHIEF MANAGED (THE GRAND FINALE)
-// =========================================================================
 
+// EASTER EGG: MISCHIEF MANAGED (THE GRAND FINALE)
 let mischiefCode = "";
 
 window.addEventListener('keydown', (e) => {
-    // Ignore spaces to make it easier for her to type
+    // Ignore spaces 
     if (e.key === " ") return;
 
     mischiefCode += e.key.toLowerCase();
@@ -1100,6 +1153,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 function triggerMischiefManaged() {
+    document.getElementById('floating-player').style.display = 'none';
     document.body.classList.add('override-blue-scrollbar');
     // 1. Fade out the music
     const bgMusic = document.getElementById('bg-music');
@@ -1107,12 +1161,11 @@ function triggerMischiefManaged() {
     if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 3000);
     if (globalAudio && !globalAudio.paused) fadeAudio(globalAudio, 0, 3000);
 
-    // 2. Create the cinematic black screen
+    // 2. cinematic black screen
     const finaleOverlay = document.createElement('div');
     finaleOverlay.className = 'mischief-managed-overlay';
     
-    // 3. Create the final text
-    // 3. Create the final text
+    // 3. final text
     const finaleText = document.createElement('div');
     finaleText.className = 'mischief-managed-text';
     finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.25em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. Happy Birthday Chikki.<br>I Love You<span class='delayed-always'>Always...</span></span>";
@@ -1120,7 +1173,6 @@ function triggerMischiefManaged() {
     finaleOverlay.appendChild(finaleText);
     document.body.appendChild(finaleOverlay);
 
-    // 👇 THE FIX: Scroll the camera directly to the overlay we just created!
     finaleOverlay.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
@@ -1136,7 +1188,7 @@ function triggerMischiefManaged() {
     }, 2500); 
 }
 
-// EASTER EGG: EXPECTO PATRONUM 
+// EXPECTO PATRONUM 
 let patronusCode = "";
 window.addEventListener('keydown', (e) => {
     if (e.key === " ") return;
@@ -1154,8 +1206,10 @@ window.addEventListener('keydown', (e) => {
 
 function triggerPatronus() {
     if (document.querySelector('.patronus-overlay')) return;
-
     document.body.classList.add('override-blue-scrollbar');
+
+    const floatPlayer = document.getElementById('floating-player');
+    if (floatPlayer) floatPlayer.classList.remove('active');
 
    // 1.
     const overlay = document.createElement('div');
@@ -1191,8 +1245,26 @@ function triggerPatronus() {
     setTimeout(() => {
         overlay.classList.remove('active');
         document.body.classList.remove('override-blue-scrollbar');
+
+        const hasActiveSong = document.querySelector('.track-row.playing-now');
+        if (floatPlayer && hasActiveSong) floatPlayer.classList.add('active');
+
         setTimeout(() => {
             overlay.remove();
         }, 2500);
     }, 8000); 
 }
+
+// Floating player override 
+document.addEventListener('DOMContentLoaded', () => {
+    const player = document.getElementById('floating-player');
+    
+    if (player) {
+        // forces to the root of the page
+        document.body.appendChild(player);
+        document.body.style.perspective = 'none';
+        document.body.style.transform = 'none';
+        document.body.style.filter = 'none';
+        document.documentElement.style.perspective = 'none';
+    }
+});
