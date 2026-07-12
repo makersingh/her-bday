@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- Persistent starfield layer, populated by script.js -->
     <div id="starfield" class="starfield"></div>
 
     <!-- CHAPTER 1 — THE BOOK  -->
@@ -115,59 +114,38 @@
         <section id="slytherin-room" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
 
-            <h3 class="player-title">Let's play one of your favourite before we move on?</h3>
+            <h1 class="hp-title" style="text-align: center; font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 3rem); margin-bottom: 5px; text-transform: uppercase; color: #f2f2f2; letter-spacing: 4px; font-weight: bold; text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);">The Common Room</h1>
+        
+            <h2 class="section-title"; style="font-size: 1.8rem;">
+                Let's play one of your favourites, shall we?
+            </h2>
+
             <div class="aesthetic-playlist">
+                <div class="central-player">
+                    <div class="album-orb"></div>
+                    <h3 id="central-song" class="central-song-name">Common Room Hush</h3>
+                    <p id="central-artist" class="central-artist-name">add track1.mp3 to assets/music</p>
 
-                <div class="track-row" onclick="playTrack('music1.mp3', this)">
-                    <div class="track-info">
-                        <span class="song-name">I Like Me Better</span>
-                        <span class="artist-name">Lauv</span>
-                        
-                        <div class="track-progress-container" onclick="event.stopPropagation()">
-                            <span class="time-current">0:00</span>
-                            <input type="range" class="track-slider" min="0" max="100" value="0">
-                            <span class="time-total">0:00</span>
-                        </div>
+                    <div class="central-progress">
+                        <span id="central-current" class="time-stamp">0:00</span>
+                        <input type="range" id="central-slider" class="seek-slider" min="0" max="100" value="0">
+                        <span id="central-total" class="time-stamp">0:00</span>
                     </div>
-                    <button class="row-play-btn">▶</button>
+
+                    <div class="central-controls">
+                        <button id="central-prev" class="central-ctrl-btn">⏮</button>
+                        <button id="central-play" class="central-play-btn">▶</button>
+                        <button id="central-next" class="central-ctrl-btn">⏭</button>
+                    </div>
                 </div>
 
-                <div class="track-row" onclick="playTrack('music2.mp3', this)">
-                    <div class="track-info">
-                        <span class="song-name">Othaiyadi Pathayila</span>
-                        <span class="artist-name">Dhibu Ninan Thomas</span>
-                        
-                        <div class="track-progress-container" onclick="event.stopPropagation()">
-                            <span class="time-current">0:00</span>
-                            <input type="range" class="track-slider" min="0" max="100" value="0">
-                            <span class="time-total">0:00</span>
-                        </div>
-                    </div>
-                    <button class="row-play-btn">▶</button>
+                <div class="playlist-tracks">
+                    <div class="simple-track active" onclick="playTrack(0)">I Like Me Better</div>
+                    <div class="simple-track" onclick="playTrack(1)">Othaiyadi Pathayila</div>
+                    <div class="simple-track" onclick="playTrack(2)">Safarnama</div>
                 </div>
-
-                <div class="track-row" onclick="playTrack('music3.mp3', this)">
-                    <div class="track-info">
-                        <span class="song-name">Safarnama</span>
-                        <span class="artist-name">Lucky Ali</span>
-                        
-                        <div class="track-progress-container" onclick="event.stopPropagation()">
-                            <span class="time-current">0:00</span>
-                            <input type="range" class="track-slider" min="0" max="100" value="0">
-                            <span class="time-total">0:00</span>
-                        </div>
-                    </div>
-                    <button class="row-play-btn">▶</button>
-                </div>
-
-                <audio id="global-audio" src="music1.mp3" loop></audio>
-
-            </div>
-            <div class="room-transition">
-                <p class="magical-transition-text">All set? Let's move on to the headmaster's office for a surprise, shall we?</p>
-                <button class="back-to-map-btn" onclick="travelTo('headmaster-office')">
-                    Enter The Headmaster's Office
-                </button>
+                
+                <audio id="global-audio" src="music1.mp3"></audio>
             </div>
         </section>
 
@@ -176,7 +154,11 @@
 
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
 
-            <h2 class="section-title">A Pensieve of Precious Moments</h2>
+            <h1 style="text-align: center; font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 3rem); margin-top: 20px; margin-bottom: 5px; text-transform: uppercase; color: #f2f2f2; letter-spacing: 4px; font-weight: bold; text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);">The Headmaster's Office</h1>
+            <h2 class="section-title"; style="font-size: 1.8rem;">
+                A pensieve of precious moments...
+            </h2>
+
             <div class="pensieve-layout">
                 <div class="pensieve-left">
                     <div class="slideshow-container">
@@ -205,7 +187,11 @@
         <section id="great-hall" class="magic-room hidden-room">
             <button class="back-to-map-btn" onclick="returnToMap()">← Return to Map</button>
 
-            <h2 class="section-title">A Heart Full of Magic</h2>
+            <h1 style="text-align: center; font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 3rem); margin-top: 20px; margin-bottom: 5px; text-transform: uppercase; color: #f2f2f2; letter-spacing: 4px; font-weight: bold; text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);">The Great Hall</h1>
+            <h2 class="section-title"; style="font-size: 1.8rem;">
+                A heart full of magic...
+            </h2>
+
             <div class="heart-collage-container" id="heart-grid">
                 <img src="collage1.jpg" class="heart-pic pic-1">
                 <img src="collage2.jpg" class="heart-pic pic-2">
@@ -233,6 +219,7 @@
         </section>
 
     </div>  
+    <div id="lumos-overlay"></div>
     <div id="floating-player" class="floating-music-player">
         <div class="floating-info">
             <span id="float-song-name" class="float-song">Song Name</span>
@@ -245,6 +232,8 @@
         </div>
     </div>
 
+    <div id="spell-caption" class="spell-caption"></div>
+    
     <script src="script.js"></script>
 
 </body>

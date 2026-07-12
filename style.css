@@ -1008,8 +1008,8 @@ body.slytherin-theme-active .slytherin-banner {
 }
 
 .aesthetic-playlist {
-    margin-top: 80px; 
-    margin-bottom: 70px; 
+    margin-top: 10px; 
+    margin-bottom: 50px; 
 }
 
 .sorting-section { position: relative; }
@@ -1579,29 +1579,6 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
 
 /* EASTER EGG: LUMOS & NOX */
 
-.lumos-light-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(255, 250, 230, 0.05); 
-    backdrop-filter: brightness(1.6) contrast(1.1);
-    -webkit-backdrop-filter: brightness(1.6) contrast(1.1); 
-    pointer-events: none; 
-    z-index: 9998; 
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out; 
-}
-
-.lumos-light-overlay.active {
-    opacity: 1;
-}
-
-
-@keyframes lumosFlicker {
-    0% { opacity: 0.85; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1.03); }
-}
-
-
 body.lumos-cursor-active,
 body.lumos-cursor-active * {
     cursor: url('wand-glow.png'), auto !important; 
@@ -1870,4 +1847,172 @@ body.lumos-cursor-active * {
 @media (max-width: 768px) {
     .float-controls { gap: 12px; }
     .float-track-btn { font-size: 1.1rem; }
+}
+
+/* =========================================================================
+   LUMOS FLASHLIGHT OVERLAY
+========================================================================= */
+#lumos-overlay {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    z-index: 99999 !important; /* Forces it over absolutely everything */
+    pointer-events: none; 
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    
+    /* The cinematic pitch-black gradient */
+    background: radial-gradient(
+        circle 350px at var(--mx, 50%) var(--my, 50%), 
+        transparent 0%, 
+        rgba(0, 0, 0, 0.85) 40%, 
+        rgba(0, 0, 0, 0.98) 70%, 
+        #000000 100%
+    );
+}
+
+/* The new trigger class */
+#lumos-overlay.darkness-falling {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   NEW CENTRALIZED SLYTHERIN PLAYLIST
+   ========================================================================== */
+.central-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* The Glowing Green Sphere */
+.album-orb {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #63a983 0%, #3a7957 60%, #1e4530 100%);
+    box-shadow: 0 0 50px rgba(58, 121, 87, 0.5), inset 0 0 25px rgba(0, 0, 0, 0.6);
+    margin: 15px 0 25px 0;
+    animation: orbPulse 4s infinite alternate;
+}
+
+@keyframes orbPulse {
+    0% { box-shadow: 0 0 50px rgba(58, 121, 87, 0.3), inset 0 0 25px rgba(0, 0, 0, 0.6); transform: scale(1); }
+    100% { box-shadow: 0 0 70px rgba(99, 169, 131, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.7); transform: scale(1.03); }
+}
+
+.central-song-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.central-artist-name {
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    color: #a0a0a0;
+    margin-bottom: 25px;
+}
+
+/* The centralized progress bar */
+.central-progress {
+    display: flex;
+    align-items: center;
+    width: 90%;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.seek-slider {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    height: 4px;
+    border-radius: 2px;
+    outline: none;
+}
+
+.seek-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #88d4ab;
+    box-shadow: 0 0 10px #5ca07c;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.seek-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+/* Playback Buttons */
+.central-controls { display: flex; align-items: center; gap: 30px; }
+
+.central-ctrl-btn {
+    background: none; border: none; color: #888; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+}
+.central-ctrl-btn:hover { color: #fff; transform: scale(1.15); }
+
+.central-play-btn {
+    background: #88d4ab;
+    color: #000;
+    border: none;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(136, 212, 171, 0.3);
+    transition: 0.2s;
+}
+.central-play-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(136, 212, 171, 0.5); }
+
+/* The Playlist Rows */
+.playlist-tracks { width: 100%; display: flex; flex-direction: column; gap: 5px; }
+
+.simple-track {
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: #a0a0a0;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+.simple-track:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+
+/* The highlighted state for the active song */
+.simple-track.active {
+    background: #233a2d; /* Dark Slytherin Green highlight */
+    color: #fff;
+    font-weight: bold;
+}
+
+/* SPELL CAPTION POPUP */
+.spell-caption {
+    position: fixed;
+    left: 50%;
+    bottom: 70px; 
+    transform: translate(-50%, 20px);
+    z-index: 999999;
+    font-family: var(--font-magic); 
+    font-size: 1.5rem;
+    color: var(--gold-bright);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 5px rgba(0,0,0,0.9);
+    letter-spacing: 3px;
+    pointer-events: none; 
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.spell-caption.show {
+    opacity: 1;
+    transform: translate(-50%, 0); /* Floats up slightly */
 }
