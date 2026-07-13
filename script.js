@@ -407,7 +407,7 @@ function revealSlytherin() {
 // CHAPTER 4 — THE EXAMINATION CHAMBER 
 const triviaQuestions = [
     { q: "What is Harry Potter's position on the Gryffindor Quidditch team?", options: ["Keeper", "Chaser", "Seeker", "Beater"], answer: "Seeker" },
-    { q: "Which spell is used to conjure a Patronus?", options: ["Expelliarmus", "Expecto Patronum", "Lumos", "Alohomora"], answer: "Expecto Patronum" },
+    { q: "What is the name of the Slytherin house ghost?", options: ["Nearly Headless Nick", "The Bloody Baron", "Moaning Myrtle", "The Grey Lady"], answer: "The Bloody Baron" },
     { q: "What is the core of the Elder Wand made of?", options: ["Thestral Tail Hair", "Dragon Heartstring", "Phoenix Feather", "Unicorn Hair"], answer: "Thestral Tail Hair" }
 ];
 
