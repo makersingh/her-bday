@@ -12,7 +12,7 @@ function preloadAssets() {
     ];
 
     const audioToPreload = [
-        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3"
+        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3"
     ];
 
 
@@ -34,6 +34,15 @@ window.onbeforeunload = function () {
     window.scrollTo(0, 0);
 };
 window.scrollTo(0, 0);
+
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('cinematic-preloader');
+    if (preloader) {
+        preloader.classList.add('fade-out');
+
+        setTimeout(() => preloader.remove(), 1500); 
+    }
+});
 
 
 // UTILITIES 
@@ -101,11 +110,11 @@ function fadeAudio(audio, targetVolume, duration) {
 }
 
 // Chapter-1 The Book
+// Chapter-1 The 3D Entrance
 function openBook() {
     preloadAssets();
-    const bookCover = document.getElementById('book-cover');
+    const bookScene = document.getElementById('book-cover'); 
     const magicWorld = document.getElementById('magic-world');
-    const particleLayer = document.getElementById('book-particles');
     const bgMusic = document.getElementById('bg-music');
     
     if (bgMusic) {
@@ -113,31 +122,23 @@ function openBook() {
         bgMusic.play().catch(e => console.log(e));
     }
 
-    if (!bookCover) {
-        console.error('Could not find book-cover element!');
-        return;
-    }
+    if (!bookScene) return;
 
-    if (particleLayer) {
-        spawnParticles(particleLayer, 'dust-particle', 16, { spreadX: 160, spreadY: 140, life: 1800 });
-        spawnParticles(particleLayer, 'spark-particle', 10, { spreadX: 200, spreadY: 160, life: 1300 });
-    }
+    // Trigger the 3D cinematic split
+    bookScene.classList.add('open-anim');
 
-
-    bookCover.classList.add('book-open-anim');
-
+    // Give the gates 1.8 seconds to swing open, then reveal the world
     setTimeout(() => {
-        bookCover.style.display = 'none';
+        bookScene.style.display = 'none';
 
         if (magicWorld) {
             magicWorld.style.display = 'block';
-            
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => magicWorld.classList.add('show-world'));
             });
             startHeroSequence();
         }
-    }, 1500); 
+    }, 1800); 
 }
 
 
@@ -443,6 +444,10 @@ function loadTriviaQuestion() {
         btn.className = "trivia-btn";
         btn.innerText = option;
         btn.onclick = () => verifyTriviaAnswer(option);
+        if (typeof playHoverSound === "function") {
+            btn.addEventListener('mouseenter', playHoverSound);
+            btn.addEventListener('click', playClickSound);
+        }
         optsContainer.appendChild(btn);
     });
 }
@@ -892,7 +897,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = false;
+let sortingStarted = true;
 
 //sorting hat 
 function startMagicObservers() {
@@ -945,7 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    generateStars(document.getElementById('starfield'), 140);
+    makeDustField('ambientCanvas', 60, 0.5); // Slow, dense background dust
+    makeDustField('dustCanvas', 30, 1.2);    // Fast, sparse foreground dust
 
     const bookCover = document.getElementById('book-cover');
     if (bookCover) {
@@ -962,8 +968,8 @@ document.addEventListener('DOMContentLoaded', () => {
     buildHallCandles();
 
     startMagicObservers();
-
-    // 👇 NEW: FLOATING PLAYER SYNC & INITIAL LOAD 👇
+    initMicroInteractions();
+    
     const floatPlayBtn = document.getElementById('float-play-btn');
     if (floatPlayBtn) {
         floatPlayBtn.addEventListener('click', togglePlay);
@@ -1163,6 +1169,9 @@ window.addEventListener('keydown', (e) => {
         
         showSpellCaption("Lumos"); 
         spellCode = ""; 
+
+        const lumosSfx = new Audio('lumos.mp3'); 
+        lumosSfx.play().catch(e => console.log(e));
     }
     
     // Turn the flashlight OFF
@@ -1312,3 +1321,90 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.style.perspective = 'none';
     }
 });
+
+// ============ THE GPU CANVAS DUST ENGINE ============
+function makeDustField(canvasId, particleCount, speedMultiplier = 1) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    const particles = [];
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.5 * speedMultiplier,
+            dy: (Math.random() - 0.5) * 0.5 * speedMultiplier,
+            alpha: Math.random(),
+            dAlpha: (Math.random() - 0.5) * 0.02
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+            p.x += p.dx; p.y += p.dy; p.alpha += p.dAlpha;
+            if (p.alpha <= 0 || p.alpha >= 1) p.dAlpha *= -1;
+            if (p.x < 0 || p.x > w) p.dx *= -1;
+            if (p.y < 0 || p.y > h) p.dy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`; // Glowing gold dust
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+// ============ MICRO-INTERACTION SFX ============
+// Preload the subtle UI sounds
+const hoverSfx = new Audio('hover.mp3'); 
+const clickSfx = new Audio('click.mp3');
+
+// Keep the volumes low so they are felt, not just heard
+hoverSfx.volume = 0.15; 
+clickSfx.volume = 0.3;
+
+function playHoverSound() {
+    // Clones the audio so it can overlap if she moves the mouse quickly
+    const soundClone = hoverSfx.cloneNode();
+    soundClone.volume = hoverSfx.volume;
+    soundClone.play().catch(e => console.log("Audio play prevented:", e));
+}
+
+function playClickSound() {
+    const soundClone = clickSfx.cloneNode();
+    soundClone.volume = clickSfx.volume;
+    soundClone.play().catch(e => console.log("Audio play prevented:", e));
+}
+
+function initMicroInteractions() {
+    // Grab every interactive button and pin on the site
+    const interactiveElements = document.querySelectorAll(`
+        .map-pin, 
+        .trivia-btn, 
+        .back-to-map-btn, 
+        .simple-track, 
+        .central-play-btn, 
+        .central-ctrl-btn, 
+        .float-play-btn, 
+        .float-track-btn
+    `);
+
+    // Attach the sound engines to them
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', playHoverSound);
+        el.addEventListener('click', playClickSound);
+    });
+}

@@ -8,20 +8,26 @@
 </head>
 <body>
 
-    <div id="starfield" class="starfield"></div>
+    <div id="cinematic-preloader">
+        <div class="preloader-text">Muttering the incantation...</div>
+    </div>
 
-    <!-- CHAPTER 1 — THE BOOK  -->
-    <div id="book-cover" class="book-cover">
-        <div class="book-content">
+    <canvas id="ambientCanvas" class="magic-canvas background-canvas"></canvas>
+    <canvas id="dustCanvas" class="magic-canvas foreground-canvas"></canvas>
+
+    <div id="book-cover" class="book-scene">
+        <div class="gate gate-left"></div>
+        <div class="gate gate-right"></div>
+        
+        <div class="book-content" id="gate-text">
             <p class="author">Pralay Presents</p>
             <h1 class="hp-title">Harry Potter</h1>
             <h2 class="hp-subtitle">AND THE BEAUTY<br>OF "MUNMUN PANDEY"</h2>
             <div class="magic-wand-line"></div>
             <p class="click-to-open">Tap to open...</p>
         </div>
-        <!-- dust / spark particles get spawned into here on click -->
-        <div class="book-particles" id="book-particles"></div>
     </div>
+
 
     <div id="magic-world" class="hidden-world" style="display: none;">
         

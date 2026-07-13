@@ -30,12 +30,38 @@
 }
 
 body {
-    background: linear-gradient(135deg, #020202 0%, #0a1930 50%, #081a10 100%);
+    background: linear-gradient(135deg, #060a14 0%, #0a111e 50%, #000000 100%);
     background-size: 400% 400%;
     animation: darkGradientBG 15s ease infinite;
     color: var(--cream);
     overflow-x: hidden;
     perspective: 1500px;
+}
+
+/* CINEMATIC PRELOADER */
+#cinematic-preloader {
+    position: fixed;
+    inset: 0;
+    background: #030508; /* Matches your ultra-deep void */
+    z-index: 9999999; /* Forces it above absolutely everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1.5s ease;
+}
+
+.preloader-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: var(--silver);
+    letter-spacing: 4px;
+    animation: pulseText 1.5s infinite; /* Uses your existing pulse animation */
+}
+
+/* The class JS adds when loading is finished */
+#cinematic-preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* Default wand cursor  */
@@ -84,32 +110,92 @@ label,
     50%      { opacity: 0.4; }
 }
 
-/* THE BOOK COVER */
 
-.book-cover {
+/* =========================================================================
+   CANVAS AMBIENT DUST
+========================================================================= */
+.magic-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    height: 100dvh; 
-    background: linear-gradient(to right, #040b17, #0a1930);
-    border-left: 20px solid #010408;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+}
+.background-canvas { z-index: 0; opacity: 0.8; } /* Floating behind the rooms */
+.foreground-canvas { z-index: 9999; opacity: 0.8; } /* Floating in front of the screen */
+
+/* =========================================================================
+   3D ENTRANCE GATES
+========================================================================= */
+.book-scene {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
     z-index: 2000;
     display: flex;
     justify-content: center;
     align-items: center;
-    transform-origin: left center;
-    transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1.5s ease;
-    box-shadow: inset 20px 0 50px rgba(0,0,0,0.8);
-    cursor: pointer;
+    perspective: 1500px; /* This adds the true 3D depth! */
+    overflow: hidden;
+    background: #02050a; /* Dark void behind the text */
 }
 
-.book-content {
+/* The two halves of the gate */
+.gate {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #040b17, #0a1930);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
+    transition: transform 2s cubic-bezier(0.25, 1, 0.4, 1), opacity 2s ease;
+    z-index: 1;
+}
+
+.gate-left {
+    left: 0;
+    transform-origin: left center;
+    border-right: 2px solid var(--gold);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+}
+
+.gate-right {
+    right: 0;
+    transform-origin: right center;
+    border-left: 2px solid var(--gold);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+}
+
+/* The Floating Glass Box */
+#gate-text {
+    position: relative;
+    z-index: 10;
+    background: rgba(4, 11, 23, 0.7);
+    padding: 50px;
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: pointer;
     text-align: center;
-    padding: 40px;
-    border: 2px solid rgba(192, 192, 192, 0.2);
-    border-radius: 5px;
+}
+
+/* THE CINEMATIC 3D ANIMATION WHEN CLICKED */
+.book-scene.open-anim .gate-left {
+    transform: rotateY(-110deg) translateZ(100px); /* Swings open toward the camera */
+    opacity: 0.2;
+}
+
+.book-scene.open-anim .gate-right {
+    transform: rotateY(110deg) translateZ(100px); /* Swings open toward the camera */
+    opacity: 0.2;
+}
+
+.book-scene.open-anim #gate-text {
+    transform: scale(1.4) translateZ(200px); /* Zooms into the screen and fades */
+    opacity: 0;
+    filter: blur(10px);
+    pointer-events: none;
 }
 
 .author {
@@ -154,12 +240,6 @@ label,
     font-style: italic;
     color: var(--silver);
     animation: pulseText 1.5s infinite;
-}
-
-.book-open-anim {
-   transform: perspective(1500px) rotateY(-110deg); 
-    opacity: 0;
-    pointer-events: none;
 }
 
 /* THE MAGICAL WORLD */
