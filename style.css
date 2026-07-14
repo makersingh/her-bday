@@ -30,7 +30,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #060a14 0%, #0a111e 50%, #000000 100%);
+    background: linear-gradient(135deg, #09111c 0%, #050811 50%, #02050a 100%);
     background-size: 400% 400%;
     animation: darkGradientBG 15s ease infinite;
     color: var(--cream);
@@ -42,8 +42,8 @@ body {
 #cinematic-preloader {
     position: fixed;
     inset: 0;
-    background: #030508; /* Matches your ultra-deep void */
-    z-index: 9999999; /* Forces it above absolutely everything */
+    background: #030508; 
+    z-index: 9999999; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,10 +55,10 @@ body {
     font-size: clamp(1.2rem, 4vw, 2rem);
     color: var(--silver);
     letter-spacing: 4px;
-    animation: pulseText 1.5s infinite; /* Uses your existing pulse animation */
+    animation: pulseText 1.5s infinite; 
 }
 
-/* The class JS adds when loading is finished */
+/* when loading is finished */
 #cinematic-preloader.fade-out {
     opacity: 0;
     pointer-events: none;
@@ -103,29 +103,24 @@ label,
 }
 
 
-/* Drives the "click to open" pulse and the typed-letter cursor blink.
-   Both referenced this animation before, but it was never defined. */
+/* click to open pulse and the typed-letter cursor blink */
 @keyframes pulseText {
     0%, 100% { opacity: 1; }
     50%      { opacity: 0.4; }
 }
 
 
-/* =========================================================================
-   CANVAS AMBIENT DUST
-========================================================================= */
+/* CANVAS AMBIENT DUST */
 .magic-canvas {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     pointer-events: none;
 }
-.background-canvas { z-index: 0; opacity: 0.8; } /* Floating behind the rooms */
-.foreground-canvas { z-index: 9999; opacity: 0.8; } /* Floating in front of the screen */
+.background-canvas { z-index: 0; opacity: 0.8; } 
+.foreground-canvas { z-index: 9999; opacity: 0.8; }
 
-/* =========================================================================
-   3D ENTRANCE GATES
-========================================================================= */
+/* 3D ENTRANCE GATES */
 .book-scene {
     position: fixed;
     top: 0; left: 0;
@@ -134,9 +129,9 @@ label,
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1500px; /* This adds the true 3D depth! */
+    perspective: 1500px; 
     overflow: hidden;
-    background: #02050a; /* Dark void behind the text */
+    background: #02050a; 
 }
 
 /* The two halves of the gate */
@@ -1453,20 +1448,20 @@ body.slytherin-theme-active .slytherin-banner {
 
 /* 2. DEFAULT THEME */
 ::-webkit-scrollbar-track {
-    background: #020202; 
+    background: #02050a; 
     border-left: 2px solid #000;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #2a475e 0%, #1c3243 100%); 
-    border: 2px solid #020202; 
+    background: linear-gradient(180deg, #09111c 0%, #050811 50%, #030810 100%); 
+    border: 2px solid #02050a; 
     border-radius: 10px; 
-    box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1); 
+    box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.05); 
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #83adc2 0%, #688fa6 100%); 
+    background: linear-gradient(180deg, #122136 0%, #0a1324 50%, #040912 100%); 
     cursor: pointer;
 }
 
@@ -1474,15 +1469,19 @@ body.slytherin-theme-active .slytherin-banner {
 body.slytherin-theme-active::-webkit-scrollbar-track {
     background: #010a05; 
     border-left: 2px solid #000;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 body.slytherin-theme-active::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--slytherin-green) 0%, #0a2113 100%); 
+    background: linear-gradient(180deg, #0e2918 0%, #07190d 50%, #020a05 100%); 
     border: 2px solid #010a05;
+    border-radius: 10px;
+    box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.05); 
 }
 
 body.slytherin-theme-active::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #2f8f53 0%, #1a472a 100%); 
+    background: linear-gradient(180deg, #163d24 0%, #0a2113 50%, #051209 100%); 
+    cursor: pointer;
 }
 
 /* 4. TEMPORARY BLUE OVERRIDE FOR EASTER EGGS */
@@ -1929,9 +1928,7 @@ body.lumos-cursor-active * {
     .float-track-btn { font-size: 1.1rem; }
 }
 
-/* =========================================================================
-   LUMOS FLASHLIGHT OVERLAY
-========================================================================= */
+/* LUMOS FLASHLIGHT OVERLAY */
 #lumos-overlay {
     position: fixed;
     top: 0; left: 0; 
@@ -1956,9 +1953,7 @@ body.lumos-cursor-active * {
     opacity: 1;
 }
 
-/* ==========================================================================
-   NEW CENTRALIZED SLYTHERIN PLAYLIST
-   ========================================================================== */
+/* NEW CENTRALIZED SLYTHERIN PLAYLIST */
 .central-player {
     display: flex;
     flex-direction: column;

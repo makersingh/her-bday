@@ -12,7 +12,7 @@ function preloadAssets() {
     ];
 
     const audioToPreload = [
-        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3"
+        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3"
     ];
 
 
@@ -208,7 +208,7 @@ document.addEventListener('mousemove', (e) => {
 const audioData = [
     { file: "music1.mp3", title: "I Like Me Better", artist: "Lauv" },
     { file: "music2.mp3", title: "Othaiyadi Pathayila", artist: "Dhibu Ninan Thomas" },
-    { file: "music3.mp3", title: "Safarnama", artist: "Lucky Ali" }
+    { file: "music3.mp3", title: "Vachindamma", artist: "Sid Sriram" }
 ];
 let currentTrackIdx = 0;
 const globalAudio = document.getElementById('global-audio');
@@ -897,7 +897,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = true;
+let sortingStarted = false;
 
 //sorting hat 
 function startMagicObservers() {
@@ -1299,8 +1299,13 @@ function triggerPatronus() {
         overlay.classList.remove('active');
         document.body.classList.remove('override-blue-scrollbar');
 
-        const hasActiveSong = document.querySelector('.track-row.playing-now');
-        if (floatPlayer && hasActiveSong) floatPlayer.classList.add('active');
+        const globalAudio = document.getElementById('global-audio');
+        const slytherinRoom = document.getElementById('slytherin-room');        
+        const isInCommonRoom = slytherinRoom && !slytherinRoom.classList.contains('hidden-room');
+
+        if (floatPlayer && globalAudio && !globalAudio.paused && !isInCommonRoom) {
+            floatPlayer.classList.add('active');
+        }
 
         setTimeout(() => {
             overlay.remove();
@@ -1322,7 +1327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ============ THE GPU CANVAS DUST ENGINE ============
+// THE GPU CANVAS DUST ENGINE 
 function makeDustField(canvasId, particleCount, speedMultiplier = 1) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -1367,33 +1372,40 @@ function makeDustField(canvasId, particleCount, speedMultiplier = 1) {
     draw();
 }
 
-// ============ MICRO-INTERACTION SFX ============
+// MICRO-INTERACTION SFX 
 // Preload the subtle UI sounds
-const hoverSfx = new Audio('hover.mp3'); 
+const hoverSfx = new Audio('hover.mp3');
 const clickSfx = new Audio('click.mp3');
+const uiClickSfx = new Audio('uiclick.mp3'); 
 
-// Keep the volumes low so they are felt, not just heard
 hoverSfx.volume = 0.15; 
 clickSfx.volume = 0.3;
+uiClickSfx.volume = 0.3; 
 
 function playHoverSound() {
-    // Clones the audio so it can overlap if she moves the mouse quickly
     const soundClone = hoverSfx.cloneNode();
     soundClone.volume = hoverSfx.volume;
     soundClone.play().catch(e => console.log("Audio play prevented:", e));
 }
 
+// Used ONLY for Trivia
 function playClickSound() {
     const soundClone = clickSfx.cloneNode();
     soundClone.volume = clickSfx.volume;
     soundClone.play().catch(e => console.log("Audio play prevented:", e));
 }
 
+// Used for the Map and Music Player
+function playUIClickSound() {
+    const soundClone = uiClickSfx.cloneNode();
+    soundClone.volume = uiClickSfx.volume;
+    soundClone.play().catch(e => console.log("Audio play prevented:", e));
+}
+
 function initMicroInteractions() {
-    // Grab every interactive button and pin on the site
-    const interactiveElements = document.querySelectorAll(`
+    // 1. Grab only the Map and Music UI elements
+    const uiElements = document.querySelectorAll(`
         .map-pin, 
-        .trivia-btn, 
         .back-to-map-btn, 
         .simple-track, 
         .central-play-btn, 
@@ -1402,8 +1414,17 @@ function initMicroInteractions() {
         .float-track-btn
     `);
 
-    // Attach the sound engines to them
-    interactiveElements.forEach(el => {
+    // Attach the NEW UI click sound to them
+    uiElements.forEach(el => {
+        el.addEventListener('mouseenter', playHoverSound);
+        el.addEventListener('click', playUIClickSound);
+    });
+
+    // 2. Grab any static trivia buttons (just in case)
+    const triviaElements = document.querySelectorAll('.trivia-btn');
+    
+    // Attach the ORIGINAL click sound to them
+    triviaElements.forEach(el => {
         el.addEventListener('mouseenter', playHoverSound);
         el.addEventListener('click', playClickSound);
     });
