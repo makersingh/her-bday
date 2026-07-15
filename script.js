@@ -599,7 +599,9 @@ function travelTo(roomId) {
 
     if (roomId === 'headmaster-office') {
         startPensieve();
+        setTimeout(releaseTheSnitch, 3000); 
     }
+    
 }
 
 function returnToMap() {
@@ -1429,3 +1431,75 @@ function initMicroInteractions() {
         el.addEventListener('click', playClickSound);
     });
 }
+
+
+// ============ THE GOLDEN SNITCH ENGINE ============
+let snitchInterval;
+
+function releaseTheSnitch() {
+    const snitch = document.getElementById('golden-snitch');
+    if (!snitch) return;
+
+    // Reset it in case she re-enters the room
+    snitch.classList.remove('caught');
+    snitch.classList.add('active');
+    
+    const swoopAndDive = () => {
+        // Keep it strictly inside the visible screen boundaries
+        const maxX = window.innerWidth - 80;
+        const maxY = window.innerHeight - 80;
+        
+        const randomX = Math.max(40, Math.random() * maxX);
+        const randomY = Math.max(40, Math.random() * maxY);
+        
+        snitch.style.left = randomX + 'px';
+        snitch.style.top = randomY + 'px';
+    };
+
+    // First jump
+    swoopAndDive();
+    
+    // Teleports to a new random location every 1.1 seconds
+    clearInterval(snitchInterval);
+    snitchInterval = setInterval(swoopAndDive, 1300); 
+}
+
+// When she finally catches it
+document.addEventListener('DOMContentLoaded', () => {
+    const snitch = document.getElementById('golden-snitch');
+    const points = document.getElementById('snitch-points');
+
+    if (snitch && points) {
+        // 👇 NEW: Changed 'click' to 'pointerdown' for instant reflexes 👇
+        snitch.addEventListener('pointerdown', (e) => {
+            // 1. Freeze it in place immediately
+            clearInterval(snitchInterval);
+            
+            // Grab its exact current pixel position so it doesn't jump
+            const currentRect = snitch.getBoundingClientRect();
+            snitch.style.left = currentRect.left + 'px';
+            snitch.style.top = currentRect.top + 'px';
+            
+            // Trigger the explosion
+            snitch.classList.add('caught');
+            
+            // 2. Play a magical chime if your sound engine is active
+            if (typeof playUIClickSound === "function") playUIClickSound();
+            
+            // 3. Move the hidden text to the exact X/Y coordinates of the catch
+            points.style.left = e.clientX + 'px';
+            points.style.top = e.clientY + 'px';
+            
+            // 4. Trigger the cinematic popup
+            requestAnimationFrame(() => {
+                points.classList.add('show');
+            });
+            
+            // 5. Clean up after 3 seconds so the screen is clear
+            setTimeout(() => {
+                points.classList.remove('show');
+                snitch.classList.remove('active');
+            }, 3000);
+        });
+    }
+});
