@@ -1537,46 +1537,64 @@ body.slytherin-theme-active.override-blue-scrollbar::-webkit-scrollbar-thumb:hov
 }
 
 @media (max-width: 768px) {
-    .glow-text { font-size: clamp(2.2rem, 9vw, 4rem); }
-    .potter-callout { font-size: clamp(2.4rem, 11vw, 4.5rem); }
-    .greeting-text { font-size: clamp(1.05rem, 4vw, 1.5rem); }
-    .highlight-text { font-size: clamp(1.25rem, 5vw, 1.8rem); }
-    .hp-subtitle { font-size: clamp(0.95rem, 4vw, 1.4rem); letter-spacing: 3px; }
-    .section-title { font-size: clamp(1.9rem, 8vw, 2.8rem); }
-    #hat-text { font-size: clamp(1.3rem, 6vw, 2rem); }
-    .sorting-title { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    /* 1. Preloader Fixes */
+    #cinematic-preloader { text-align: center; padding: 0 20px; }
+    .preloader-text { line-height: 1.5; }
+
+    /* 2. Chapter 0 / Auth Fixes */
+    .auth-panel { padding: 35px 20px; width: 90%; }
+    .auth-subtitle { font-size: clamp(0.9rem, 4vw, 1.2rem); letter-spacing: 2px; text-align: center; }
+    .auth-desc { font-size: clamp(0.8rem, 3.5vw, 0.95rem); margin-bottom: 25px; text-align: center; }
+    .auth-submit-btn { padding: 10px 30px; font-size: 1rem; }
+    #auth-identity { font-size: clamp(1rem, 4vw, 1.5rem); letter-spacing: 2px; margin-bottom: 10px; }
+    #auth-welcome { font-size: clamp(1.8rem, 7vw, 2.5rem); line-height: 1.2; padding: 0 10px; }
+    .auth-whisper { font-size: clamp(1.5rem, 7vw, 2.5rem); text-align: center; width: 90%; }
+    .snape-silhouette { width: 200px; height: 350px; right: -20px; }
+
+    /* 3. Typography Scaling for Main Rooms */
+    .glow-text { font-size: clamp(1.8rem, 7vw, 2.8rem); line-height: 1.2; }
+    .potter-callout { font-size: clamp(1.8rem, 7vw, 2.8rem); line-height: 1.2; padding: 0 10px; }
+    .greeting-text { font-size: clamp(1rem, 4vw, 1.3rem); }
+    .highlight-text { font-size: clamp(1.15rem, 4.5vw, 1.5rem); }
+    .hp-subtitle { font-size: clamp(0.9rem, 3.5vw, 1.3rem); letter-spacing: 3px; line-height: 1.4; }
+    .section-title { font-size: clamp(1.3rem, 5.5vw, 1.8rem); line-height: 1.3; padding: 0 15px; }
+    #hat-text { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+    .sorting-title { font-size: clamp(1.1rem, 4.5vw, 1.5rem); line-height: 1.4; padding: 0 10px; }
     .player-title { font-size: clamp(1.15rem, 5vw, 1.6rem); margin-bottom: 40px; }
-    .trivia-question { font-size: clamp(1rem, 4.5vw, 1.3rem); }
-    #typing-text { font-size: clamp(1.05rem, 4vw, 1.4rem); }
-
-    .greeting-content { padding: 32px 22px; }
-    .letter-content { padding: 28px 24px; }
-    .trivia-lock-overlay { padding: 28px 22px; }
-
-    .exam-candles, .hall-candles { gap: 22px; }
-
-
-    .slytherin-banner { min-width: 70px; padding-top: 28vh; }
-
-    .floating-hat { top: -70px; }
-
-    /* 7. Shrink Floating Hogwarts Letters for small screens */
-    .floating-letter {
-        width: 150px !important; 
-        padding: 10px 12px !important;
-        font-size: 0.7rem !important;
-    }
+    .trivia-question { font-size: clamp(1rem, 4.5vw, 1.3rem); line-height: 1.4; }
+    #typing-text { font-size: clamp(1rem, 4vw, 1.3rem); line-height: 1.6; }
     
-    /* Shrink the Red Wax Seal to match */
-    .floating-letter::after {
-        width: 22px !important;
-        height: 22px !important;
-        line-height: 22px !important;
-        font-size: 12px !important;
-        bottom: -8px !important;
-        right: -8px !important;
+    /* 4. Universal Titles (Headmaster / Common Room / Great Hall) */
+    h1[style*="font-family: var(--font-display)"] {
+        font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
+        line-height: 1.3;
+        padding: 0 15px;
     }
 
+    /* 5. Layout & Spacing Fixes */
+    .greeting-content { padding: 32px 20px; width: 90%; margin: 0 auto; }
+    .letter-content { padding: 28px 20px; }
+    .trivia-lock-overlay { padding: 28px 20px; width: 90%; }
+    .exam-candles, .hall-candles { gap: 20px; }
+    
+    /* 6. Sorting Hat Positioning */
+    .floating-hat { top: -55px; width: 130px; }
+
+    /* 7. Slytherin Banners */
+    .slytherin-banner { min-width: 60px; padding-top: 30vh; }
+
+    /* 8. Floating Hogwarts Letters - Less Obtrusive */
+    .floating-letter {
+        width: 130px !important; 
+        padding: 8px 10px !important;
+        font-size: 0.65rem !important;
+        opacity: 0.65 !important; /* Makes them slightly transparent so they don't block UI */
+    }
+    .floating-letter::after {
+        width: 18px !important; height: 18px !important;
+        line-height: 18px !important; font-size: 9px !important;
+        bottom: -6px !important; right: -6px !important;
+    }
 }
 
 @media (max-width: 480px) {

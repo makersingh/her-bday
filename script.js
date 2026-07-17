@@ -162,12 +162,33 @@ const heroTitleText = "Happy Birthday, Munmun";
 
 function materializeTitle(el, text) {
     el.innerHTML = '';
-    [...text].forEach((ch, idx) => {
-        const span = document.createElement('span');
-        span.className = 'letter';
-        span.textContent = ch === ' ' ? '\u00A0' : ch;
-        span.style.animationDelay = (idx * 55) + 'ms';
-        el.appendChild(span);
+    const words = text.split(' ');
+    let charIndex = 0;
+
+    words.forEach((word, wIdx) => {
+        // Creates a wrapper for each word so it never breaks in the middle
+        const wordSpan = document.createElement('span');
+        wordSpan.style.display = 'inline-block';
+        wordSpan.style.whiteSpace = 'nowrap';
+
+        [...word].forEach((ch) => {
+            const span = document.createElement('span');
+            span.className = 'letter';
+            span.textContent = ch;
+            span.style.animationDelay = (charIndex * 55) + 'ms';
+            wordSpan.appendChild(span);
+            charIndex++;
+        });
+
+        el.appendChild(wordSpan);
+
+        // Adds the space back between words
+        if (wIdx < words.length - 1) {
+            const space = document.createElement('span');
+            space.innerHTML = '&nbsp;';
+            el.appendChild(space);
+            charIndex++; 
+        }
     });
 }
 
@@ -393,6 +414,12 @@ function revealSlytherin() {
     const sortingContainer = document.querySelector('.sorting-container');
     const dimOverlay = document.getElementById('sorting-dim');
 
+    // 👇 NEW: Update the heading text instantly
+    const sortingTitle = document.querySelector('.sorting-title');
+    if (sortingTitle) {
+        sortingTitle.innerText = "The Sorting Hat has decided your house!";
+    }
+
     document.body.classList.add('slytherin-theme-active');
     if (dimOverlay) dimOverlay.classList.remove('active'); 
 
@@ -401,7 +428,6 @@ function revealSlytherin() {
         setTimeout(() => sortingContainer.classList.remove('camera-shake'), 500);
     }
 
-    
     if (sortingPhoto) {
         const rect = sortingPhoto.getBoundingClientRect();
         let bursts = 0;
