@@ -140,34 +140,37 @@
             <h2 class="potter-callout map-heading" style="text-align: center; margin-top: 60px;">The Marauder's Map</h2>
             <p class="greeting-text" style="text-align: center;">Tap a location to explore your magic...</p>
 
-            <div class="parchment-map" id="parchment-map">
+          <div class="parchment-map" id="parchment-map">
                 <div class="footprint-layer" id="footprint-layer"></div>
 
-                <!-- 1. Top Center -->
-                <div class="map-pin" style="top: 25%; left: 50%;" data-room="great-hall">
-                    <span class="map-pin-icon">✨</span>
-                    <span class="map-pin-label">The Great Hall</span>
-                </div>
-
-                <!-- 2. Left Middle -->
-                <div class="map-pin" style="top: 50%; left: 20%;" data-room="ministry-of-time">
-                    <span class="map-pin-icon">⏳</span>
-                    <span class="map-pin-label">The Ministry of Time</span>
-                </div>
-
-                <!-- 3. Right Middle -->
-                <div class="map-pin" style="top: 50%; left: 80%;" data-room="headmaster-office">
-                    <span class="map-pin-icon">📜</span>
-                    <span class="map-pin-label">The Headmaster's Office</span>
-                </div>
-
-                <!-- 4. Bottom Center -->
-                <div class="map-pin" style="top: 70%; left: 50%;" data-room="slytherin-room">
+                <!-- 1. Far Left -->
+                <div class="map-pin" style="top: 65%; left: 20%;" data-room="slytherin-room">
                     <span class="map-pin-icon">🐍</span>
                     <span class="map-pin-label">The Common Room</span>
                 </div>
 
-                <div class="map-you-are-here" id="map-anchor">🦶</div>
+                <!-- 2. Top Left-Center -->
+                <div class="map-pin" style="top: 28%; left: 32%;" data-room="ministry-of-time">
+                    <span class="map-pin-icon">⏳</span>
+                    <span class="map-pin-label">The Ministry of Time</span>
+                </div>
+
+                <!-- 3. Top Right-Center -->
+                <div class="map-pin" style="top: 28%; left: 68%;" data-room="great-hall">
+                    <span class="map-pin-icon">✨</span>
+                    <span class="map-pin-label">The Great Hall</span>
+                </div>
+
+                <!-- 4. Far Right -->
+                <div class="map-pin" style="top: 65%; left: 80%;" data-room="headmaster-office">
+                    <span class="map-pin-icon">📜</span>
+                    <span class="map-pin-label">The Headmaster's Office</span>
+                </div>
+
+                <!-- Increased size and added a custom class for positioning -->
+                <div class="map-you-are-here" id="map-anchor">
+                    <img src="M.pandey.png" class="mpandey-marker">
+                </div>
             </div>
         </section>
 

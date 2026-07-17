@@ -1354,7 +1354,7 @@ body.slytherin-theme-active .slytherin-banner {
     aspect-ratio: 4 / 3;
     margin: 40px auto 50px;
     border-radius: 8px;
-    background-image: url('map-bg.jpg');
+    background-image: url('map-bg.png');
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat;
@@ -2694,4 +2694,31 @@ body.ministry-theme-active #magic-world {
     color: var(--gold);
     font-size: 1rem;
     filter: drop-shadow(0 0 5px var(--gold));
+}
+
+.mpandey-marker {
+    width: 200px; 
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: floating-animation 4s ease-in-out infinite;
+}
+
+@keyframes floating-animation {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); } /* Floats up 10px */
+    100% { transform: translateY(0px); }  /* Floats back down */
+}
+
+.mpandey-marker:hover {
+    transform: scale(1.1) rotate(-1deg);
+}
+
+.map-you-are-here {
+    position: absolute;
+    bottom: 5%; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    pointer-events: none;
 }
