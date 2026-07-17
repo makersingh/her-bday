@@ -8,12 +8,56 @@
 </head>
 <body>
 
+   <!-- THE CINEMATIC PRELOADER -->
     <div id="cinematic-preloader">
         <div class="preloader-text">Muttering the incantation...</div>
+        <button id="enter-site-btn" class="enter-site-btn">Tap to Enter</button>
     </div>
 
     <canvas id="ambientCanvas" class="magic-canvas background-canvas"></canvas>
     <canvas id="dustCanvas" class="magic-canvas foreground-canvas"></canvas>
+
+<section id="auth-section" class="auth-section">
+        <div class="auth-bg">
+            <div class="auth-fog"></div>
+            <div class="auth-rays"></div>
+            <div class="auth-ash" id="auth-ash"></div>
+        </div>
+
+        <audio id="auth-ambient" src="auth-ambient.mp3" loop></audio>
+        <audio id="auth-fizzle" src="fizzle.mp3"></audio>
+        <audio id="auth-success-sfx" src="success.mp3"></audio>
+        
+        <div class="auth-panel" id="auth-panel">
+            <div class="auth-seal-container">
+                <div class="auth-seal" id="auth-seal">H</div>
+                <svg class="spell-circle-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="48" id="spell-circle-path"></circle>
+                </svg>
+            </div>
+            
+            <h1 class="hp-title auth-title">THE RESTRICTED ARCHIVES</h1>
+            <h2 class="auth-subtitle">Magical Authorization Required</h2>
+            <p class="auth-desc">Certain memories reveal themselves only to those they were written for.</p>
+            
+            <div class="auth-input-container">
+                <input type="password" id="auth-input" placeholder="Speak the secret phrase..." autocomplete="off">
+            </div>
+            
+            <button class="auth-submit-btn" id="auth-wand-btn">Alohomora</button>
+            
+            <p id="auth-feedback" class="auth-feedback"></p>
+        </div>
+        
+        <div id="snape-silhouette" class="snape-silhouette"></div>
+        <div id="auth-blackout" class="auth-blackout"></div>
+        <p id="auth-whisper" class="auth-whisper">The answer has always been close to your heart...</p>
+        
+        <div id="auth-success-text" class="auth-success-text">
+            <p id="auth-identity">Identity Confirmed.</p>
+            <p id="auth-welcome">Welcome back, Miss Chikki Pandey.</p>
+        </div>
+    </section>
 
     <div id="book-cover" class="book-scene">
         <div class="gate gate-left"></div>

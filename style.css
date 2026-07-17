@@ -41,6 +41,7 @@ body {
 /* CINEMATIC PRELOADER */
 #cinematic-preloader {
     position: fixed;
+    flex-direction: column;
     inset: 0;
     background: #030508; 
     z-index: 9999999; 
@@ -56,6 +57,37 @@ body {
     color: var(--silver);
     letter-spacing: 4px;
     animation: pulseText 1.5s infinite; 
+}
+
+/* The Tap to Enter Button */
+.enter-site-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--gold-bright);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    padding: 12px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 40px;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    
+    /* Fades in smoothly after the page loads */
+    opacity: 0;
+    animation: fadeInBtn 2s ease forwards 1s; 
+}
+
+.enter-site-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeInBtn {
+    to { opacity: 1; }
 }
 
 /* when loading is finished */
@@ -2074,7 +2106,7 @@ body.lumos-cursor-active * {
 .spell-caption {
     position: fixed;
     left: 50%;
-    bottom: 70px; 
+    bottom: 100px; 
     transform: translate(-50%, 20px);
     z-index: 999999;
     font-family: var(--font-magic); 
@@ -2171,3 +2203,178 @@ body.lumos-cursor-active * {
     opacity: 1;
     transform: translate(-50%, -150px) scale(1); /* Floats up into the air */
 }
+
+/* =========================================================================
+   CHAPTER 0: AUTHORIZATION (THE RESTRICTED ARCHIVES)
+========================================================================= */
+.auth-section {
+    position: fixed;
+    inset: 0;
+    z-index: 150000; /* Sits above the book cover, below the preloader */
+    background: #02050a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: opacity 2s ease, filter 2s ease;
+}
+
+/* Ambient Background Magic */
+.auth-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.auth-fog {
+    position: absolute; inset: -50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+    animation: slowFog 20s infinite alternate linear;
+    filter: blur(20px);
+}
+@keyframes slowFog { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.2) translate(5%, 5%); } }
+
+/* The Glassmorphism Panel */
+.auth-panel {
+    position: relative;
+    z-index: 10;
+    background: rgba(10, 15, 25, 0.6);
+    padding: 60px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(212, 175, 55, 0.05);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    transition: all 1s ease;
+}
+
+/* The Hogwarts Seal & Spell Circle */
+.auth-seal-container {
+    position: relative;
+    width: 100px; height: 100px;
+    margin: 0 auto 30px auto;
+    display: flex; justify-content: center; align-items: center;
+}
+.auth-seal {
+    width: 70px; height: 70px;
+    background: #8b0000; color: #ffcccc;
+    border-radius: 50%; font-family: 'Georgia', serif;
+    font-size: 40px; line-height: 70px; font-weight: bold;
+    box-shadow: 0 0 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.2);
+    transition: all 1.5s ease;
+}
+.spell-circle-svg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transform: rotate(-90deg); /* Start at top */
+    pointer-events: none;
+}
+#spell-circle-path {
+    fill: none;
+    stroke: var(--gold-bright);
+    stroke-width: 2;
+    stroke-dasharray: 302; /* 2 * PI * 48 */
+    stroke-dashoffset: 302;
+    filter: drop-shadow(0 0 8px var(--gold));
+    transition: stroke-dashoffset 1.5s linear, stroke 0.5s ease;
+}
+#spell-circle-path.drawing { stroke-dashoffset: 0; }
+#spell-circle-path.spell-fail { stroke: #2f8f53; filter: drop-shadow(0 0 8px #2f8f53); opacity: 0; transition: stroke 0.2s, opacity 1s ease 0.5s; }
+
+/* Typography */
+.auth-title { font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 5px; color: var(--gold); }
+.auth-subtitle { font-family: var(--font-display); font-size: 1.2rem; color: var(--silver); letter-spacing: 3px; margin-bottom: 15px; }
+.auth-desc { font-style: italic; color: #a0a0a0; font-size: 0.95rem; margin-bottom: 35px; }
+
+/* The Input Field & Typing Magic */
+.auth-input-container { position: relative; margin-bottom: 30px; }
+#auth-input {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: none; border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+    color: var(--cream);
+    font-family: var(--font-display);
+    font-size: 1.2rem; padding: 15px; text-align: center; outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+#auth-input::placeholder { color: #555; font-style: italic; }
+#auth-input:focus { border-bottom: 2px solid var(--gold-bright); box-shadow: 0 10px 15px -10px rgba(212,175,55,0.5); }
+.glow-typing { box-shadow: inset 0 0 20px rgba(212,175,55,0.3) !important; border-bottom: 2px solid var(--gold-bright) !important; }
+
+/* The Magical Submit Button */
+.auth-submit-btn {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--gold-bright);
+    font-family: var(--font-magic);
+    font-size: 1.2rem;
+    padding: 12px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.auth-submit-btn:hover {
+    background: rgba(212, 175, 55, 0.25);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Casting State (Button pulses while the spell circle draws) */
+.auth-submit-btn.casting {
+    pointer-events: none;
+    animation: pulseButton 1.5s infinite;
+}
+
+@keyframes pulseButton {
+    0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: scale(1); }
+    50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8); transform: scale(1.05); }
+}
+
+/* Feedback & Failures */
+.auth-feedback {
+    margin-top: 25px; min-height: 25px;
+    font-family: var(--font-display); font-size: 1rem; color: #ff5c6c;
+    opacity: 0; transition: opacity 0.4s ease;
+}
+.auth-shake { animation: authShake 0.4s ease forwards; }
+@keyframes authShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
+.auth-fail-flash { box-shadow: inset 0 0 40px rgba(255,0,0,0.3) !important; border-color: #ff5c6c !important; }
+
+/* Easter Eggs */
+.snape-silhouette {
+    position: absolute; right: -50px; bottom: 0;
+    width: 300px; height: 500px;
+    background: url('snape.png') no-repeat bottom center; background-size: contain;
+    opacity: 0; filter: blur(5px); transition: opacity 2s ease, filter 2s ease, transform 4s ease;
+    pointer-events: none; z-index: 5; transform: translateX(50px);
+}
+.snape-silhouette.show { 
+    opacity: 0.6; 
+    filter: blur(0px); 
+    transform: translateX(0); 
+}
+
+.auth-blackout { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 900; pointer-events: none; transition: opacity 2s ease; }
+.auth-whisper {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: var(--font-magic); font-size: 3rem; color: #a0a0a0; z-index: 901;
+    opacity: 0; transition: opacity 2s ease; pointer-events: none; text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+/* Cinematic Success Sequence */
+.auth-success-text {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 999; text-align: center; pointer-events: none; width: 100%;
+}
+#auth-identity, #auth-welcome {
+    font-family: var(--font-display); font-size: 2rem; color: var(--gold-bright);
+    opacity: 0; text-shadow: 0 0 20px var(--gold); transition: opacity 1.5s ease, filter 1.5s ease;
+}
+#auth-identity { margin-bottom: 20px; letter-spacing: 4px; }
+#auth-welcome { font-family: var(--font-magic); font-size: 4rem; letter-spacing: 2px; }
+
+.auth-seal.success-glow { background: var(--gold-bright); box-shadow: 0 0 60px var(--gold-bright); color: #000; transform: scale(1.2); }
+.auth-panel.dissolve { opacity: 0; filter: blur(20px); transform: scale(1.1); }
+

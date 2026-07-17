@@ -35,12 +35,26 @@ window.onbeforeunload = function () {
 };
 window.scrollTo(0, 0);
 
+// Preloader & First Interaction Audio Trigger
 window.addEventListener('load', () => {
     const preloader = document.getElementById('cinematic-preloader');
-    if (preloader) {
-        preloader.classList.add('fade-out');
+    const enterBtn = document.getElementById('enter-site-btn');
 
-        setTimeout(() => preloader.remove(), 1500); 
+    if (preloader && enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            // 1. Force the ambient audio to start playing at 15% volume
+            const ambient = document.getElementById('auth-ambient');
+            if (ambient) {
+                ambient.volume = 0.15;
+                ambient.play().catch(e => console.log("Audio blocked:", e));
+            }
+
+            // 2. Fade out the preloader to reveal Chapter 0
+            preloader.classList.add('fade-out');
+
+            // 3. Remove the preloader from the code so it doesn't block clicks
+            setTimeout(() => preloader.remove(), 1500); 
+        });
     }
 });
 
@@ -118,7 +132,7 @@ function openBook() {
     const bgMusic = document.getElementById('bg-music');
     
     if (bgMusic) {
-        bgMusic.volume = 0.6; 
+        bgMusic.volume = 0.3; 
         bgMusic.play().catch(e => console.log(e));
     }
 
@@ -938,6 +952,169 @@ function startMagicObservers() {
     observer.observe(sortingSection);
 }
 
+// ============ CHAPTER 0: THE RESTRICTED ARCHIVES ENGINE ============
+const authInput = document.getElementById('auth-input');
+const authWandBtn = document.getElementById('auth-wand-btn');
+const spellCirclePath = document.getElementById('spell-circle-path');
+const authFeedback = document.getElementById('auth-feedback');
+const authPanel = document.getElementById('auth-panel');
+let authFailCount = 0;
+let isAuthenticating = false;
+
+// The Snape Persona Remarks
+const failureRemarks = [
+    "Professor Snape raises an eyebrow.",
+    "That was... ambitious.",
+    "The castle refuses to recognise you.",
+    "The portraits begin whispering.",
+    "Turn to page 394 and try again.",
+    "Magic does not appreciate guessing.",
+    "Even Peeves would know better.",
+    "Access denied by the Headmaster.",
+    "The password has escaped you."
+];
+
+// Typing Magic
+if (authInput) {
+    authInput.addEventListener('input', () => {
+        // Starts the ambient audio gently on first interaction
+        const ambient = document.getElementById('auth-ambient');
+        if (ambient && ambient.paused) { ambient.volume = 0.15; ambient.play().catch(e=>console.log(e)); }
+        
+        // The golden typing glow
+        authInput.classList.add('glow-typing');
+        setTimeout(() => authInput.classList.remove('glow-typing'), 150);
+        
+        // Spawn tiny sparks around the input box
+        if (typeof spawnParticles === "function") {
+            const rect = authInput.getBoundingClientRect();
+            spawnParticles(document.body, 'spark-particle', 1, {
+                left: rect.left + Math.random() * rect.width,
+                top: rect.top + (Math.random() * rect.height),
+                life: 600
+            });
+        }
+    });
+
+    // Let 'Enter' key trigger the wand
+    authInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') authWandBtn.click();
+    });
+}
+
+// Wand Authorization Trace
+if (authWandBtn) {
+    authWandBtn.addEventListener('click', () => {
+        if (isAuthenticating || authInput.value.trim() === "") return;
+        isAuthenticating = true;
+        
+        const attempt = authInput.value.trim().toLowerCase();
+        
+        // 1. Clear old errors & start the spell trace
+        authFeedback.style.opacity = 0;
+        authInput.classList.remove('auth-fail-flash');
+        authPanel.classList.remove('auth-shake');
+        spellCirclePath.classList.remove('spell-fail');
+        
+        authWandBtn.classList.add('casting');
+        spellCirclePath.classList.add('drawing');
+        
+        // 2. Wait 1.5s for the wand to trace the full circle
+        setTimeout(() => {
+            if (attempt === "paglu pandey") {
+                triggerAuthSuccess();
+            } else {
+                triggerAuthFailure();
+            }
+        }, 1500);
+    });
+}
+
+function triggerAuthFailure() {
+    authFailCount++;
+    const fizzleSfx = document.getElementById('auth-fizzle');
+    if (fizzleSfx) fizzleSfx.play().catch(e=>console.log(e));
+
+    // Green spark fizzle effect
+    spellCirclePath.classList.add('spell-fail');
+    authWandBtn.classList.remove('casting');
+    spellCirclePath.classList.remove('drawing');
+    
+    // Shake & Red Glow
+    authPanel.classList.add('auth-shake');
+    authInput.classList.add('auth-fail-flash');
+    
+    // Sarcastic Remark
+    authFeedback.innerText = failureRemarks[Math.floor(Math.random() * failureRemarks.length)];
+    authFeedback.style.opacity = 1;
+    
+    // Reset wand so she can try again
+    setTimeout(() => { isAuthenticating = false; }, 500);
+
+    // Easter Eggs Logic
+    if (authFailCount === 3) {
+        const snape = document.getElementById('snape-silhouette');
+        if (snape) {
+            snape.classList.add('show');
+            authFeedback.innerText = "Clearly fame isn't everything.";
+            setTimeout(() => snape.classList.remove('show'), 4000);
+        }
+    } else if (authFailCount === 5) {
+        const blackout = document.getElementById('auth-blackout');
+        const whisper = document.getElementById('auth-whisper');
+        if (blackout && whisper) {
+            blackout.style.opacity = 1; whisper.style.opacity = 1;
+            setTimeout(() => { blackout.style.opacity = 0; whisper.style.opacity = 0; }, 3500);
+        }
+    } else if (authFailCount === 8) {
+        authFeedback.innerText = "Hint: It's the nickname someone loves calling you.";
+    }
+}
+
+function triggerAuthSuccess() {
+    const successSfx = document.getElementById('auth-success-sfx');
+    if (successSfx) successSfx.play().catch(e=>console.log(e));
+    
+    const ambient = document.getElementById('auth-ambient');
+    if (ambient) fadeAudio(ambient, 0, 2000); // Fade out ambient track
+
+    // The glowing seal & disappearing UI
+    document.getElementById('auth-seal').classList.add('success-glow');
+    authInput.style.opacity = 0;
+    authWandBtn.style.opacity = 0;
+    authFeedback.style.opacity = 0;
+    
+    // Spawns a massive burst of gold particles from the seal
+    if (typeof spawnParticles === "function") {
+        const rect = document.getElementById('auth-seal').getBoundingClientRect();
+        for(let i=0; i<3; i++) {
+            setTimeout(() => {
+                spawnParticles(document.body, 'spark-particle', 15, { left: rect.left + 35, top: rect.top + 35, life: 1200, spreadX: 300, spreadY: 300 });
+            }, i * 400);
+        }
+    }
+
+    // Cinematic Text Sequence
+    setTimeout(() => {
+        authPanel.classList.add('dissolve'); // Dissolves the glass panel
+        document.getElementById('auth-identity').style.opacity = 1;
+        
+        setTimeout(() => {
+            document.getElementById('auth-identity').style.opacity = 0;
+            document.getElementById('auth-welcome').style.opacity = 1;
+            
+            // Final transition: Fade everything out and reveal the existing book cover beneath it
+            setTimeout(() => {
+                document.getElementById('auth-section').style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById('auth-section').style.display = 'none';
+                    // Optional: You can auto-trigger preloadAssets() here if you want to get a head start
+                    if (typeof preloadAssets === "function") preloadAssets();
+                }, 2000);
+            }, 3000);
+        }, 2000);
+    }, 1500);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
