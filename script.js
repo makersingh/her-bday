@@ -589,9 +589,16 @@ function qSetComplete() {
 }
 
 // CHAPTER 5 — THE MARAUDER'S MAP 
-const allRooms = ['marauders-map', 'slytherin-room', 'headmaster-office', 'great-hall'];
+const allRooms = ['marauders-map', 'slytherin-room', 'headmaster-office', 'ministry-of-time', 'great-hall'];
 
 function travelTo(roomId) {
+    
+    if (roomId === 'ministry-of-time') {
+        document.body.classList.add('ministry-theme-active');
+    } else {
+        document.body.classList.remove('ministry-theme-active');
+    }
+
     const floatPlayer = document.getElementById('floating-player');
     const globalAudio = document.getElementById('global-audio'); // Grab the actual audio engine
     
@@ -645,6 +652,7 @@ function travelTo(roomId) {
 }
 
 function returnToMap() {
+    document.body.classList.remove('ministry-theme-active');
     const floatPlayer = document.getElementById('floating-player');
     const globalAudio = document.getElementById('global-audio');
     const bgMusic = document.getElementById('bg-music');
@@ -1705,4 +1713,194 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         });
     }
+});
+
+// ============ CHAPTER VIII: THE MINISTRY OF TIME (CINEMATIC ENGINE) ============
+let timeInterval;
+let timeIgnited = false;
+let previousValues = { years: -1, months: -1, days: -1, hours: -1, minutes: -1, seconds: -1 };
+
+function igniteMinistryOfTime() {
+    if (timeIgnited) return;
+    timeIgnited = true;
+
+    // 1. Play Lumos sound
+    const lumosSfx = new Audio('lumos.mp3');
+    lumosSfx.volume = 0.5;
+    lumosSfx.play().catch(e => console.log(e));
+
+    // 2. The Slow Light Spread
+    const spread = document.getElementById('lumos-spread');
+    if (spread) spread.classList.add('ignite');
+    
+    const overlay = document.getElementById('time-lumos-overlay');
+    
+    // 3. Reveal the Environment slowly
+    setTimeout(() => {
+        overlay.style.opacity = 0;
+        document.getElementById('ministry-of-time').classList.add('room-lit');
+        setTimeout(() => overlay.style.visibility = "hidden", 2000);
+    }, 1500);
+
+    // 4. Start the Ceremonial Text Sequence
+    setTimeout(() => {
+        runCeremonySequence();
+    }, 3500);
+}
+
+function runCeremonySequence() {
+    const lines = [
+        { id: 'ceremony-line-1', text: "The Ministry of Magic confirms..." },
+        { id: 'ceremony-line-2', text: "...that Miss Munmun Pandey..." },
+        { id: 'ceremony-line-3', text: "...has now completed..." }
+    ];
+
+    let delay = 0;
+
+    // Type each line, leave it on screen, then fade them all out
+    lines.forEach((lineObj, index) => {
+        setTimeout(() => {
+            writeLineMagic(lineObj.id, lineObj.text);
+        }, delay);
+        delay += 2500; // 2.5 seconds between each line starting
+    });
+
+    // 1 second of total silence after the final line finishes
+    setTimeout(() => {
+        lines.forEach(lineObj => {
+            const el = document.getElementById(lineObj.id);
+            if(el) el.classList.add('fade-out');
+        });
+
+        // Start the explosive staggered reveal of the artifacts
+        setTimeout(() => {
+            lines.forEach(lineObj => {
+                const el = document.getElementById(lineObj.id);
+                if(el) el.style.display = 'none'; // Remove from flow
+            });
+            const ceremonyWrap = document.getElementById('ceremony-wrapper');
+            if (ceremonyWrap) ceremonyWrap.style.display = 'none';
+            revealArtifactsSequentially();
+        }, 1500);
+
+    }, delay + 1000);
+}
+
+function writeLineMagic(elementId, text) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.innerHTML = '';
+    
+    [...text].forEach((ch, idx) => {
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        el.appendChild(span);
+        
+        // Trigger the CSS animation sequentially
+        setTimeout(() => {
+            span.classList.add('reveal');
+        }, idx * 60); // Speed of typing
+    });
+}
+
+function revealArtifactsSequentially() {
+    const artifacts = ['art-years', 'art-months', 'art-days', 'art-hours', 'art-minutes', 'art-seconds'];
+    
+    // Start the hidden clock so numbers are ready when revealed
+    updateTimeCalculations();
+    
+    artifacts.forEach((id, index) => {
+        setTimeout(() => {
+            const pod = document.getElementById(id);
+            if (pod) {
+                pod.classList.add('revealed');
+                
+                // Spawn a tiny golden burst on each reveal
+                const rect = pod.getBoundingClientRect();
+                if(typeof spawnParticles === "function") {
+                    spawnParticles(document.body, 'spark-particle', 10, {
+                        left: rect.left + rect.width / 2, top: rect.top + rect.height / 2,
+                        life: 1500, spreadX: 150, spreadY: 150
+                    });
+                }
+                
+                // Optional: Play a tiny magical pop sound
+                if (typeof playUIClickSound === "function") playUIClickSound();
+            }
+        }, index * 800); // 0.8 seconds pause between each artifact appearing
+    });
+
+    // After the final artifact (seconds) is revealed, start the live timer and final UI
+    setTimeout(() => {
+        timeInterval = setInterval(updateTimeCalculations, 1000);
+        
+        setTimeout(() => {
+            document.getElementById('time-final-message').classList.add('revealed');
+            const btn = document.getElementById('time-transition-btn');
+            if(btn) {
+                btn.style.opacity = 1;
+                btn.style.pointerEvents = "auto";
+            }
+        }, 2000);
+    }, artifacts.length * 800);
+}
+
+function updateTimeCalculations() {
+    // Current System Time
+    const systemNow = new Date();
+    
+    // Convert system time to pure IST (UTC + 5:30) to guarantee accuracy regardless of user location
+    const utcNow = systemNow.getTime() + (systemNow.getTimezoneOffset() * 60000);
+    const now = new Date(utcNow + (5.5 * 60 * 60 * 1000));
+    
+    // Birth Details: Oct 5, 2010, 11:42 AM IST
+    const birthDate = new Date(2010, 9, 5, 11, 42, 0); // Month is 0-indexed (9 = Oct)
+
+    let years = now.getFullYear() - birthDate.getFullYear();
+    let months = now.getMonth() - birthDate.getMonth();
+    let days = now.getDate() - birthDate.getDate();
+    let hours = now.getHours() - birthDate.getHours();
+    let minutes = now.getMinutes() - birthDate.getMinutes();
+    let seconds = now.getSeconds() - birthDate.getSeconds();
+
+    // Cascading subtraction for accurate calendar differences
+    if (seconds < 0) { minutes--; seconds += 60; }
+    if (minutes < 0) { hours--; minutes += 60; }
+    if (hours < 0) { days--; hours += 24; }
+    if (days < 0) {
+        months--;
+        // Get the exact number of days in the previous month
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+    }
+    if (months < 0) { years--; months += 12; }
+
+    const currentValues = { years, months, days, hours, minutes, seconds };
+
+    // Update the DOM and trigger the magical pulse animation for any value that changes
+    Object.keys(currentValues).forEach(key => {
+        const val = currentValues[key];
+        const el = document.getElementById(`time-val-${key}`);
+        if (el && val !== previousValues[key]) {
+            el.innerText = val;
+            
+            // Trigger the glowing pulse on the parent pod
+            const pod = document.getElementById(`art-${key}`);
+            if (pod && timeIgnited) {
+                pod.classList.remove('pulse');
+                void pod.offsetWidth; // Force CSS reflow
+                pod.classList.add('pulse');
+            }
+        }
+    });
+
+    previousValues = currentValues;
+}
+
+// Cleanup if the user leaves the room early
+document.querySelectorAll('.map-pin, .back-to-map-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        clearInterval(timeInterval);
+    });
 });

@@ -143,17 +143,28 @@
             <div class="parchment-map" id="parchment-map">
                 <div class="footprint-layer" id="footprint-layer"></div>
 
-                <div class="map-pin" style="top:62%; left:18%;" data-room="slytherin-room">
-                    <span class="map-pin-icon">🐍</span>
-                    <span class="map-pin-label">The Common Room</span>
-                </div>
-                <div class="map-pin" style="top:20%; left:50%;" data-room="great-hall">
+                <!-- 1. Top Center -->
+                <div class="map-pin" style="top: 25%; left: 50%;" data-room="great-hall">
                     <span class="map-pin-icon">✨</span>
                     <span class="map-pin-label">The Great Hall</span>
                 </div>
-                <div class="map-pin" style="top:62%; left:80%;" data-room="headmaster-office">
+
+                <!-- 2. Left Middle -->
+                <div class="map-pin" style="top: 50%; left: 20%;" data-room="ministry-of-time">
+                    <span class="map-pin-icon">⏳</span>
+                    <span class="map-pin-label">The Ministry of Time</span>
+                </div>
+
+                <!-- 3. Right Middle -->
+                <div class="map-pin" style="top: 50%; left: 80%;" data-room="headmaster-office">
                     <span class="map-pin-icon">📜</span>
                     <span class="map-pin-label">The Headmaster's Office</span>
+                </div>
+
+                <!-- 4. Bottom Center -->
+                <div class="map-pin" style="top: 70%; left: 50%;" data-room="slytherin-room">
+                    <span class="map-pin-icon">🐍</span>
+                    <span class="map-pin-label">The Common Room</span>
                 </div>
 
                 <div class="map-you-are-here" id="map-anchor">🦶</div>
@@ -234,9 +245,134 @@
             </div>
             <div class="room-transition">
                 <button class="back-to-map-btn" onclick="travelTo('great-hall')">
-                    Go to the Great Hall
+                    Go to the Ministry of Time
                 </button>
             </div>
+        </section>
+
+<!-- CHAPTER 8 — THE MINISTRY OF TIME (CINEMATIC) -->
+        <section id="ministry-of-time" class="magic-room hidden-room cinematic-time-room">
+            
+            <!-- Official Ministry Title Card -->
+            <div class="ministry-title-wrapper">
+                <p class="ministry-kicker">Ministry of Magic</p>
+                <h1 class="ministry-main-heading">Department of Time</h1>
+                <div class="ministry-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-star">✦</div>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+
+            <!-- 1. The Lumos Ignition Overlay -->
+            <div id="time-lumos-overlay" class="time-lumos-overlay">
+                <div class="lumos-orb-container" onclick="igniteMinistryOfTime()">
+                    <div class="lumos-orb-spark"></div>
+                    <p class="lumos-hint">Touch the light...</p>
+                </div>
+                <!-- The spreading light effect -->
+                <div id="lumos-spread" class="lumos-spread"></div>
+            </div>
+
+            <button class="back-to-map-btn cinematic-back" onclick="returnToMap()">← Return to Map</button>
+
+            <!-- 2. The Living Background Environment -->
+            <div class="ministry-environment">
+                <!-- Giant Ambient Time-Turner Centerpiece -->
+                <div class="giant-time-turner">
+                    <div class="tt-ring outer-ring"></div>
+                    <div class="tt-ring middle-ring"></div>
+                    <div class="tt-ring inner-ring"></div>
+                    <div class="tt-spokes"></div>
+                </div>
+                <!-- Floating magical dust -->
+                <div id="room-dust-container" class="room-dust-container"></div>
+            </div>
+
+            <!-- 3. The Ceremonial Text Reveal -->
+            <div class="ceremony-text-wrapper" id="ceremony-wrapper">
+                <p id="ceremony-line-1" class="ceremony-line"></p>
+                <p id="ceremony-line-2" class="ceremony-line"></p>
+                <p id="ceremony-line-3" class="ceremony-line"></p>
+            </div>
+
+            <!-- 4. The Magical Artifacts (Hidden Initially) -->
+            <div class="artifact-gallery" id="artifact-gallery">
+                
+                <!-- Artifact: Years Lived (Brass Hourglass) -->
+                <div class="artifact-pod" id="art-years">
+                    <div class="relic relic-hourglass">
+                        <div class="hg-top"></div>
+                        <div class="hg-glass">
+                            <span id="time-val-years" class="time-value">0</span>
+                            <div class="hg-sand"></div>
+                        </div>
+                        <div class="hg-bottom"></div>
+                    </div>
+                    <p class="artifact-label">Years Lived</p>
+                </div>
+
+                <!-- Artifact: Moons Witnessed (Glowing Moon Crystal) -->
+                <div class="artifact-pod" id="art-months">
+                    <div class="relic relic-moon">
+                        <div class="moon-crater cr-1"></div>
+                        <div class="moon-crater cr-2"></div>
+                        <span id="time-val-months" class="time-value">0</span>
+                    </div>
+                    <p class="artifact-label">Moons Witnessed</p>
+                </div>
+
+                <!-- Artifact: Sunrises Seen (Golden Compass) -->
+                <div class="artifact-pod" id="art-days">
+                    <div class="relic relic-compass">
+                        <div class="compass-ring"></div>
+                        <div class="compass-needle"></div>
+                        <span id="time-val-days" class="time-value">0</span>
+                    </div>
+                    <p class="artifact-label">Sunrises Seen</p>
+                </div>
+
+                <!-- Artifact: Hours Enchanted (Pocket Watch) -->
+                <div class="artifact-pod" id="art-hours">
+                    <div class="relic relic-watch">
+                        <div class="watch-crown"></div>
+                        <div class="watch-face">
+                            <span id="time-val-hours" class="time-value">0</span>
+                        </div>
+                    </div>
+                    <p class="artifact-label">Hours Enchanted</p>
+                </div>
+
+                <!-- Artifact: Moments Cherished (Crystal Vial) -->
+                <div class="artifact-pod" id="art-minutes">
+                    <div class="relic relic-vial">
+                        <div class="vial-cork"></div>
+                        <div class="vial-liquid"></div>
+                        <span id="time-val-minutes" class="time-value">0</span>
+                    </div>
+                    <p class="artifact-label">Moments Cherished</p>
+                </div>
+
+                <!-- Artifact: Heartbeats (Pulsing Orb) -->
+                <div class="artifact-pod" id="art-seconds">
+                    <div class="relic relic-orb">
+                        <div class="orb-core"></div>
+                        <span id="time-val-seconds" class="time-value">0</span>
+                    </div>
+                    <p class="artifact-label">Heartbeats of Magic</p>
+                </div>
+
+            </div>
+
+            <!-- 5. Foreground Cinematic Depth -->
+            <div class="foreground-blur-candles" id="fg-candles"></div>
+
+            <p id="time-final-message" class="time-final-message">May every sunrise yet to come be even more magical than the last.</p>
+            
+            <div class="room-transition" id="time-transition-btn" style="opacity: 0; pointer-events: none; transition: opacity 2s;">
+                <button class="back-to-map-btn" onclick="travelTo('great-hall')">Enter the Great Hall</button>
+            </div>
+            
         </section>
 
         <!--  CHAPTER 7 — THE GREAT HALL FINALE  -->
