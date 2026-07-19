@@ -12,7 +12,8 @@ function preloadAssets() {
     ];
 
     const audioToPreload = [
-        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3"
+        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3",
+        "marauders-map.mp3", "slytherin-common-room.mp3", "ministry-of-time.mp3", "great-hall.mp3", "headmasters-office.mp3"
     ];
 
 
@@ -123,8 +124,325 @@ function fadeAudio(audio, targetVolume, duration) {
     }, step);
 }
 
+// CENTRALIZED AUDIO MANAGER
+const AudioManager = {
+
+    // ── Pre-created singleton Audio instances (one per track, never recreated) ──
+    tracks: {
+        'marauders-map':     (() => { const a = new Audio('marauders-map.mp3');          a.loop = true; a.preload = 'auto'; return a; })(),
+        'slytherin-room':    (() => { const a = new Audio('slytherin-common-room.mp3');   a.loop = true; a.preload = 'auto'; return a; })(),
+        'ministry-of-time':  (() => { const a = new Audio('ministry-of-time.mp3');        a.loop = true; a.preload = 'auto'; return a; })(),
+        'great-hall':        (() => { const a = new Audio('great-hall.mp3');               a.loop = true; a.preload = 'auto'; return a; })(),
+        'headmaster-office': (() => { const a = new Audio('headmasters-office.mp3');       a.loop = true; a.preload = 'auto'; return a; })(),
+    },
+
+    // ── Individual Volume Levels ──
+    trackVolumes: {
+        'marauders-map':     0.6,  
+        'slytherin-room':    0.5,
+        'ministry-of-time':  0.5,
+        'great-hall':        0.5,
+        'headmaster-office': 0.5
+    },
+
+    // ── State  ──
+    currentAmbient: null,        // Key of the currently playing ambient track
+    currentRoom: null,           // Which room the user is in right now
+    isMinistryActive: false,     // True when inside Ministry of Time (highest priority override)
+    preMinistryState: null,      // Snapshot saved before entering Ministry: { ambientKey, playlistPlaying, playlistTime, playlistTrackIdx }
+    playlistPlaying: false,      // True when a playlist song is actively playing
+    _fadeTimers: new Map(),      // Active fade intervals per ambient Audio object
+
+
+    //  FADE UTILITIES — Reusable, never duplicated
+    fadeIn(audio, targetVol = 0.5, duration = 1000) {
+        if (!audio) return;
+        this._clearFade(audio);
+
+        audio.volume = 0;
+        audio.play().catch(e => console.log('AudioManager fadeIn blocked:', e));
+
+        const steps   = Math.max(1, duration / 50);
+        const volStep = targetVol / steps;
+
+        const timer = setInterval(() => {
+            const nv = audio.volume + volStep;
+            if (nv >= targetVol) {
+                audio.volume = targetVol;
+                clearInterval(timer);
+                this._fadeTimers.delete(audio);
+            } else {
+                audio.volume = nv;
+            }
+        }, 50);
+        this._fadeTimers.set(audio, timer);
+    },
+
+    
+    fadeOut(audio, duration = 1000, callback) {
+        if (!audio || audio.paused) { if (callback) callback(); return; }
+        this._clearFade(audio);
+
+        const startVol = audio.volume;
+        if (startVol <= 0) { audio.pause(); if (callback) callback(); return; }
+
+        const steps   = Math.max(1, duration / 50);
+        const volStep = startVol / steps;
+
+        const timer = setInterval(() => {
+            const nv = audio.volume - volStep;
+            if (nv <= 0.005) {
+                audio.volume = 0;
+                audio.pause();
+                clearInterval(timer);
+                this._fadeTimers.delete(audio);
+                if (callback) callback();
+            } else {
+                audio.volume = nv;
+            }
+        }, 50);
+        this._fadeTimers.set(audio, timer);
+    },
+
+    
+    crossFade(fromKey, toKey, duration = 1000) {
+        const fromAudio = fromKey ? this.tracks[fromKey] : null;
+        const toAudio   = toKey   ? this.tracks[toKey]   : null;
+        if (fromAudio) this.fadeOut(fromAudio, duration);
+        if (toAudio) {
+            const targetVol = this.trackVolumes[toKey] || 0.5;
+            this.fadeIn(toAudio, targetVol, duration);
+        }
+        this.currentAmbient = toKey;
+    },
+
+    /** Clears any pending fade interval on an ambient Audio object. */
+    _clearFade(audio) {
+        if (this._fadeTimers.has(audio)) {
+            clearInterval(this._fadeTimers.get(audio));
+            this._fadeTimers.delete(audio);
+        }
+    },
+
+
+    _fadeOutExternal(audio, duration = 1000, callback) {
+        if (!audio || audio.paused) { if (callback) callback(); return; }
+        if (audio.fadeInterval) clearInterval(audio.fadeInterval);
+
+        const startVol = audio.volume;
+        if (startVol <= 0) { audio.pause(); if (callback) callback(); return; }
+
+        const steps   = Math.max(1, duration / 50);
+        const volStep = startVol / steps;
+
+        audio.fadeInterval = setInterval(() => {
+            const nv = audio.volume - volStep;
+            if (nv <= 0.005) {
+                audio.volume = 0; audio.pause();
+                clearInterval(audio.fadeInterval); audio.fadeInterval = null;
+                if (callback) callback();
+            } else { audio.volume = nv; }
+        }, 50);
+    },
+
+    /** Fades in ANY Audio element from volume 0 to targetVol. */
+    _fadeInExternal(audio, targetVol = 0.5, duration = 1000) {
+        if (!audio) return;
+        if (audio.fadeInterval) clearInterval(audio.fadeInterval);
+
+        audio.volume = 0;
+        audio.play().catch(e => console.log('AudioManager _fadeInExternal blocked:', e));
+
+        const steps   = Math.max(1, duration / 50);
+        const volStep = targetVol / steps;
+
+        audio.fadeInterval = setInterval(() => {
+            const nv = audio.volume + volStep;
+            if (nv >= targetVol) {
+                audio.volume = targetVol;
+                clearInterval(audio.fadeInterval); audio.fadeInterval = null;
+            } else { audio.volume = nv; }
+        }, 50);
+    },
+
+    //  HIGH-LEVEL COMMANDS — Called by existing functions
+
+    enterRoom(roomId) {
+        this.currentRoom = roomId;
+
+        // ── Leaving Ministry-Restore previous state first ──
+        if (this.isMinistryActive && roomId !== 'ministry-of-time') {
+            this._leaveMinistry();
+            return;
+        }
+
+        // ── Entering Ministry- Override everything ──
+        if (roomId === 'ministry-of-time') {
+            this._enterMinistry();
+            return;
+        }
+
+        // ── Playlist is playing- It outranks all ambient except Ministry ──
+        if (this.playlistPlaying) {
+            // Fade out any lingering ambient; playlist continues uninterrupted
+            if (this.currentAmbient) {
+                this.fadeOut(this.tracks[this.currentAmbient], 800);
+                this.currentAmbient = null;
+            }
+            return;
+        }
+
+        // ── Normal ambient switching ──
+        const targetKey = this._ambientKeyFor(roomId);
+        if (targetKey && targetKey !== this.currentAmbient) {
+            this.crossFade(this.currentAmbient, targetKey, 1000);
+        } else if (!targetKey && this.currentAmbient) {
+            this.fadeOut(this.tracks[this.currentAmbient], 1000);
+            this.currentAmbient = null;
+        }
+    },
+
+    /** Maps a room ID to its ambient track key. */
+    _ambientKeyFor(roomId) {
+        const map = {
+            'marauders-map':    'marauders-map',
+            'slytherin-room':   'slytherin-room',
+            'ministry-of-time': 'ministry-of-time',
+            'great-hall':       'great-hall',
+            'headmaster-office':'headmaster-office',
+        };
+        return map[roomId] || null;
+    },
+
+    
+    _enterMinistry() {
+        const globalAudio = document.getElementById('global-audio');
+
+        // Snapshot current state so we can restore it when leaving
+        this.preMinistryState = {
+            ambientKey:       this.currentAmbient,
+            playlistPlaying:  this.playlistPlaying,
+            playlistTime:     globalAudio ? globalAudio.currentTime : 0,
+            playlistTrackIdx: (typeof currentTrackIdx !== 'undefined') ? currentTrackIdx : 0,
+        };
+
+        // Fade out any active ambient track
+        if (this.currentAmbient && this.tracks[this.currentAmbient]) {
+            this.fadeOut(this.tracks[this.currentAmbient], 800);
+        }
+
+        // Fade out playlist if it was playing
+        if (this.playlistPlaying && globalAudio && !globalAudio.paused) {
+            this._fadeOutExternal(globalAudio, 800, () => {
+                const cp = document.getElementById('central-play');
+                const fp = document.getElementById('float-play-btn');
+                if (cp) cp.innerHTML = '▶';
+                if (fp) fp.innerHTML = '▶';
+            });
+        }
+
+        // Hide floating player inside Ministry
+        const floatPlayer = document.getElementById('floating-player');
+        if (floatPlayer) floatPlayer.classList.remove('active');
+
+        this.currentAmbient  = null;
+        this.playlistPlaying = false;
+        this.isMinistryActive = true;
+
+        // Fade in Ministry ambience
+        const minVol = this.trackVolumes['ministry-of-time'] || 0.5;
+        this.fadeIn(this.tracks['ministry-of-time'], minVol, 1200);
+        this.currentAmbient = 'ministry-of-time';
+    },
+
+
+    _leaveMinistry() {
+        this.fadeOut(this.tracks['ministry-of-time'], 1000);
+        this.isMinistryActive = false;
+
+        const saved = this.preMinistryState;
+        this.preMinistryState = null;
+
+        // Was the playlist playing before Ministry? Resume it from the saved position.
+        if (saved && saved.playlistPlaying) {
+            const globalAudio = document.getElementById('global-audio');
+            if (globalAudio) {
+                // Restore the exact track and playback position
+                if (saved.playlistTrackIdx !== currentTrackIdx) {
+                    loadTrack(saved.playlistTrackIdx);
+                }
+                globalAudio.currentTime = saved.playlistTime || 0;
+                this._fadeInExternal(globalAudio, 0.5, 1000);
+
+                const cp = document.getElementById('central-play');
+                const fp = document.getElementById('float-play-btn');
+                if (cp) cp.innerHTML = '⏸';
+                if (fp) fp.innerHTML = '⏸';
+
+                // Show floating player (unless in the Common Room where the full player is visible)
+                const floatPlayer = document.getElementById('floating-player');
+                if (floatPlayer && this.currentRoom !== 'slytherin-room') {
+                    floatPlayer.classList.add('active');
+                }
+            }
+            this.playlistPlaying = true;
+            this.currentAmbient  = null;
+            return;
+        }
+
+        // No playlist — start the ambient for whatever room we're entering
+        const targetKey = this._ambientKeyFor(this.currentRoom);
+        if (targetKey) {
+            const targetVol = this.trackVolumes[targetKey] || 0.5;
+            this.fadeIn(this.tracks[targetKey], targetVol, 1000);
+            this.currentAmbient = targetKey;
+        } else {
+            this.currentAmbient = null;
+        }
+    },
+
+    
+    onPlaylistStart() {
+        if (this.isMinistryActive) return; // Ministry overrides everything
+        this.playlistPlaying = true;
+        if (this.currentAmbient) {
+            this.fadeOut(this.tracks[this.currentAmbient], 800);
+            this.currentAmbient = null;
+        }
+    },
+
+
+    onPlaylistStop() {
+        if (this.isMinistryActive) return; // Ministry overrides everything
+        this.playlistPlaying = false;
+        const targetKey = this._ambientKeyFor(this.currentRoom);
+        if (targetKey) {
+            const targetVol = this.trackVolumes[targetKey] || 0.5;
+            this.fadeIn(this.tracks[targetKey], targetVol, 1000);
+            this.currentAmbient = targetKey;
+        }
+    },
+
+
+    stopAll(duration = 3000) {
+        // Fade out every ambient track
+        Object.values(this.tracks).forEach(audio => {
+            if (!audio.paused) this.fadeOut(audio, duration);
+        });
+        // Fade out playlist
+        const globalAudio = document.getElementById('global-audio');
+        if (globalAudio && !globalAudio.paused) this._fadeOutExternal(globalAudio, duration);
+        // Fade out sorting ceremony music if still somehow playing
+        const bgMusic = document.getElementById('bg-music');
+        if (bgMusic && !bgMusic.paused) this._fadeOutExternal(bgMusic, duration);
+
+        this.currentAmbient  = null;
+        this.playlistPlaying = false;
+        this.isMinistryActive = false;
+    }
+};
+
 // Chapter-1 The Book
-// Chapter-1 The 3D Entrance
 function openBook() {
     preloadAssets();
     const bookScene = document.getElementById('book-cover'); 
@@ -280,7 +598,6 @@ function loadTrack(index) {
 }
 
 function togglePlay() {
-    const bgMusic = document.getElementById('bg-music');
     const floatPlayer = document.getElementById('floating-player');
     const slytherinRoom = document.getElementById('slytherin-room');
     
@@ -288,21 +605,22 @@ function togglePlay() {
     const isInCommonRoom = slytherinRoom && !slytherinRoom.classList.contains('hidden-room');
     
     if (globalAudio.paused) {
-        if(bgMusic) bgMusic.pause();
         globalAudio.play();
         if(centralPlayBtn) centralPlayBtn.innerHTML = "⏸";
         if(floatPlayBtn) floatPlayBtn.innerHTML = "⏸";
         
         // Only shows the floating player if NOT in the common room
         if(floatPlayer && !isInCommonRoom) floatPlayer.classList.add('active'); 
+        
+        // Notify AudioManager: playlist started (fades out any room ambient)
+        AudioManager.onPlaylistStart();
     } else {
         globalAudio.pause();
         if(centralPlayBtn) centralPlayBtn.innerHTML = "▶";
         if(floatPlayBtn) floatPlayBtn.innerHTML = "▶";
-        if(bgMusic) {
-            bgMusic.play().catch(e => console.log(e));
-            fadeAudio(bgMusic, 0.6, 1500); 
-        }
+        
+        // Notify AudioManager: playlist stopped (resumes room ambient)
+        AudioManager.onPlaylistStop();
     }
 }
 
@@ -315,13 +633,14 @@ function playTrack(index) {
     
     loadTrack(index);
     globalAudio.play();
-    const bgMusic = document.getElementById('bg-music');
-    if(bgMusic) bgMusic.pause();
     if(centralPlayBtn) centralPlayBtn.innerHTML = "⏸";
     if(floatPlayBtn) floatPlayBtn.innerHTML = "⏸";
     
     // Only shows the floating player if NOT in the common room
     if(floatPlayer && !isInCommonRoom) floatPlayer.classList.add('active'); 
+    
+    // Notify AudioManager: playlist started (fades out any room ambient)
+    AudioManager.onPlaylistStart();
 }
 
 function nextTrack() { playTrack((currentTrackIdx + 1) % audioData.length); }
@@ -585,6 +904,10 @@ function qSetComplete() {
             map.classList.add('visible-room');
             map.scrollIntoView({ behavior: 'smooth' });
         }
+        // Fade out sorting ceremony music and hand off to Marauder's Map ambient
+        const bgMusic = document.getElementById('bg-music');
+        if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 1500);
+        AudioManager.enterRoom('marauders-map');
     }, 3500);
 }
 
@@ -600,16 +923,17 @@ function travelTo(roomId) {
     }
 
     const floatPlayer = document.getElementById('floating-player');
-    const globalAudio = document.getElementById('global-audio'); // Grab the actual audio engine
+    const globalAudio = document.getElementById('global-audio');
     
-    // BULLETPROOF CHECK: Is the music actually playing?
+    // Is the playlist music actually playing?
     const isPlaying = globalAudio && !globalAudio.paused;
 
     if (floatPlayer && isPlaying) {
-        if (roomId === 'slytherin-room') {
-            floatPlayer.classList.remove('active'); // Hide in playlist room
+        // Hide floating player in the playlist room and in Ministry (Ministry overrides everything)
+        if (roomId === 'slytherin-room' || roomId === 'ministry-of-time') {
+            floatPlayer.classList.remove('active');
         } else {
-            floatPlayer.classList.add('active');    // Show everywhere else
+            floatPlayer.classList.add('active');
         }
     }
 
@@ -628,17 +952,8 @@ function travelTo(roomId) {
         targetRoom.scrollIntoView({ behavior: 'smooth' });
     }
 
-    const bgMusic = document.getElementById('bg-music');
-    
-    if (roomId === 'slytherin-room') {
-        if (bgMusic) fadeAudio(bgMusic, 0, 1200); 
-    } else {
-        // If they travel somewhere else and no track is playing, resume background ambiance
-        if (bgMusic && globalAudio && globalAudio.paused) {
-            bgMusic.play().catch(e => console.log(e));
-            fadeAudio(bgMusic, 0.6, 1800);
-        }
-    }
+    // ── Audio Manager handles all ambient/playlist transitions ──
+    AudioManager.enterRoom(roomId);
 
     if (roomId === 'great-hall') {
         setTimeout(revealHeartCollage, 500);
@@ -655,12 +970,6 @@ function returnToMap() {
     document.body.classList.remove('ministry-theme-active');
     const floatPlayer = document.getElementById('floating-player');
     const globalAudio = document.getElementById('global-audio');
-    const bgMusic = document.getElementById('bg-music');
-
-    // BULLETPROOF CHECK: Show floating player if a track is actively playing
-    if (floatPlayer && globalAudio && !globalAudio.paused) {
-        floatPlayer.classList.add('active');
-    }
 
     // Hide all other rooms
     allRooms.forEach(id => {
@@ -678,12 +987,15 @@ function returnToMap() {
         map.classList.remove('hidden-room');
         map.classList.add('visible-room');
         map.scrollIntoView({ behavior: 'smooth' });
-        
-        // Resume background music if no track is playing
-        if (bgMusic && globalAudio && globalAudio.paused) {
-            bgMusic.play().catch(e => console.log(e));
-            fadeAudio(bgMusic, 0.6, 2000);
-        }
+    }
+
+    // ── Audio Manager handles ambient restoration ──
+    // If playlist is playing, AudioManager will NOT start Marauder's Map ambient (playlist has priority)
+    AudioManager.enterRoom('marauders-map');
+
+    // Show floating player if playlist is actively playing (AudioManager may have restored it from Ministry)
+    if (floatPlayer && globalAudio && !globalAudio.paused) {
+        floatPlayer.classList.add('active');
     }
 }
 
@@ -947,7 +1259,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = true;
+let sortingStarted = false;
 
 //sorting hat 
 function startMagicObservers() {
@@ -1336,6 +1648,9 @@ function playAlohomoraSequence() {
         } else {
             // Sequence finished. Clean up the text and travel to the map
             textEl.remove();
+            // Fade out sorting ceremony music before entering the map
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 1500);
             returnToMap();
         }
     }
@@ -1421,11 +1736,8 @@ window.addEventListener('keydown', (e) => {
 function triggerMischiefManaged() {
     document.getElementById('floating-player').style.display = 'none';
     document.body.classList.add('override-blue-scrollbar');
-    // 1. Fade out the music
-    const bgMusic = document.getElementById('bg-music');
-    const globalAudio = document.getElementById('global-audio');
-    if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 3000);
-    if (globalAudio && !globalAudio.paused) fadeAudio(globalAudio, 0, 3000);
+    // 1. Fade out all music (ambient tracks + playlist + sorting track)
+    AudioManager.stopAll(3000);
 
     // 2. cinematic black screen
     const finaleOverlay = document.createElement('div');
