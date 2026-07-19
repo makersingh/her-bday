@@ -1389,18 +1389,28 @@ body.slytherin-theme-active .slytherin-banner {
     transition: transform 0.3s ease;
 }
 
+/* Update your existing label class */
 .map-pin-label {
     font-family: var(--font-display);
     font-size: 0.72rem;
     letter-spacing: 1px;
     color: #2b1d0e;
     background: rgba(255, 250, 235, 0.8);
-    padding: 2px 8px;
     border-radius: 20px;
     white-space: nowrap;
+    
+    max-width: 0;
+    padding: 2px 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.8s steps(15), padding 0.4s ease, opacity 0.4s ease;
 }
 
-.map-pin:hover .map-pin-icon { transform: scale(1.25) rotate(-4deg); }
+.map-pin:hover .map-pin-label {
+    max-width: 200px; 
+    padding: 2px 8px;
+    opacity: 1;
+}
 
 .map-you-are-here {
     position: absolute;
@@ -2721,4 +2731,48 @@ body.ministry-theme-active #magic-world {
     transform: translateX(-50%);
     z-index: 5;
     pointer-events: none;
+}
+
+/* The magical expanding ink reveal */
+#marauders-map.visible-room #parchment-map {
+    /* Triggers the exact moment she enters the map room */
+    animation: inkSpread 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* The physical animation engine */
+@keyframes inkSpread {
+    0% { 
+        clip-path: circle(2% at 50% 95%); /* Starts as a tiny dot behind the ribbon */
+        opacity: 0;
+    }
+    10% {
+        opacity: 1; /* Fades in quickly */
+    }
+    100% { 
+        clip-path: circle(150% at 50% 95%); /* Bleeds outward to reveal everything */
+        opacity: 1;
+    }
+}
+
+.idle-secret-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-magic);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #4a3a22; /* Dark ink color */
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    text-align: center;
+    letter-spacing: 3px;
+    mix-blend-mode: multiply; /* Makes it look like real ink soaking into the paper */
+    filter: blur(4px);
+    transition: opacity 3s ease-in, filter 3s ease-in;
+}
+
+.idle-secret-message.reveal-ink {
+    opacity: 0.6;
+    filter: blur(0px);
 }

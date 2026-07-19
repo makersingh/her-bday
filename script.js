@@ -947,7 +947,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = false;
+let sortingStarted = true;
 
 //sorting hat 
 function startMagicObservers() {
@@ -1904,3 +1904,44 @@ document.querySelectorAll('.map-pin, .back-to-map-btn').forEach(btn => {
         clearInterval(timeInterval);
     });
 });
+
+// THE MARAUDER'S MAP IDLE ENGINE
+let mapIdleTimer;
+const secretMessages = [
+    "Mischief Managed...",
+    "Turn Back...",
+    "He's Watching...",
+    "The Castle Never Sleeps...",
+    "I solemnly swear that I am up to no good."
+];
+
+function resetMapIdleTimer() {
+    const secretMsgEl = document.getElementById('idle-secret-message');
+    const mapSection = document.getElementById('marauders-map');
+    
+    // Instantly hide the message if she moves the mouse
+    if (secretMsgEl) {
+        secretMsgEl.classList.remove('reveal-ink');
+    }
+
+    clearTimeout(mapIdleTimer);
+
+    // Only start counting if she is actually looking at the map
+    if (mapSection && mapSection.classList.contains('visible-room')) {
+        mapIdleTimer = setTimeout(() => {
+            if (secretMsgEl) {
+                // Pick a random spooky message
+                const randomMsg = secretMessages[Math.floor(Math.random() * secretMessages.length)];
+                secretMsgEl.innerText = randomMsg;
+                
+                // Bleed the ink onto the screen
+                secretMsgEl.classList.add('reveal-ink');
+            }
+        }, 30000); // 30 seconds of pure silence
+    }
+}
+
+// Listen for any movement or clicks to reset the timer
+window.addEventListener('mousemove', resetMapIdleTimer);
+window.addEventListener('click', resetMapIdleTimer);
+window.addEventListener('touchstart', resetMapIdleTimer);
