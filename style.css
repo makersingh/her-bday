@@ -11,7 +11,7 @@
     /* Brand palette  */
     --gold: #d4af37;
     --gold-bright: #ffd700;
-    --slytherin-green: #1a472a;
+    --slytherin-green: #0a140f; /* Dark emerald — matches Ministry of Time tone */
     --silver: #c0c0c0;
     --teal-silver: #8faeb0;
     --cream: #e0e0e0;
@@ -829,7 +829,7 @@ label,
 /* DYNAMIC SLYTHERIN THEME SHIFT */
 body.slytherin-theme-active {
     transition: background-color 3s ease-in-out, background-image 3s ease-in-out !important;
-    background: linear-gradient(135deg, #010a05 0%, #0a2113 50%, #031409 100%) !important;
+    background: linear-gradient(135deg, #020a06 0%, #0a140f 50%, #030805 100%) !important;
     background-size: 400% 400% !important;
 }
 
