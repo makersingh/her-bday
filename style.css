@@ -29,12 +29,20 @@
     font-family: var(--font-body);
 }
 
+html {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+}
+
 body {
     background: linear-gradient(135deg, #09111c 0%, #050811 50%, #02050a 100%);
     background-size: 400% 400%;
     animation: darkGradientBG 15s ease infinite;
     color: var(--cream);
     overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
     perspective: 1500px;
 }
 
@@ -2775,4 +2783,372 @@ body.ministry-theme-active #magic-world {
 .idle-secret-message.reveal-ink {
     opacity: 0.6;
     filter: blur(0px);
+}
+
+/* =========================================================================
+   MOBILE RESPONSIVENESS — COMPREHENSIVE OVERHAUL
+   Added to make every section beautiful on phones (320px–480px)
+   ========================================================================= */
+
+/* ── Base fixes (all screen sizes) ── */
+.floating-music-player {
+    max-width: 500px;
+}
+
+.float-song {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+/* ── Expanded 480px breakpoint ── */
+@media (max-width: 480px) {
+
+    /* Gate / Book Entrance */
+    #gate-text {
+        padding: 28px 20px !important;
+    }
+
+    /* Auth Section */
+    .auth-panel {
+        padding: 25px 15px !important;
+    }
+    .snape-silhouette {
+        width: 150px !important;
+        height: 280px !important;
+    }
+    .auth-seal {
+        font-size: 28px !important;
+    }
+    #auth-welcome {
+        font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
+    }
+    #auth-identity {
+        font-size: clamp(1rem, 5vw, 1.6rem) !important;
+    }
+
+    /* Sorting Ceremony */
+    .sorting-image-wrapper {
+        margin-top: 40px !important;
+    }
+    .floating-hat {
+        top: -40px !important;
+    }
+
+    /* Pensieve Layout */
+    .pensieve-layout {
+        gap: 20px !important;
+    }
+    .letter-content {
+        padding: 20px 15px !important;
+    }
+
+    /* Music Player */
+    .album-orb {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    .central-controls {
+        gap: 20px !important;
+    }
+    .central-song-name {
+        font-size: 1.1rem !important;
+    }
+
+    /* Floating Player */
+    .floating-music-player {
+        padding: 8px 15px !important;
+    }
+    .float-song {
+        max-width: 100px !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* Map Section */
+    .map-location {
+        padding: 10px 20px !important;
+        font-size: 1.2rem !important;
+    }
+    .map-pin {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    .map-pin-icon {
+        font-size: 1.5rem !important;
+    }
+    .map-pin-label {
+        font-size: 0.65rem !important;
+    }
+
+    /* Ministry Artifact Gallery — 2 column grid */
+    .artifact-gallery {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px !important;
+        max-width: 100% !important;
+        padding: 0 10px !important;
+    }
+    .artifact-pod {
+        margin: 0 !important;
+    }
+
+    /* Relic size reductions */
+    .relic-hourglass {
+        width: 55px !important;
+        height: 85px !important;
+    }
+    .relic-moon {
+        width: 70px !important;
+        height: 70px !important;
+    }
+    .relic-compass {
+        width: 75px !important;
+        height: 75px !important;
+    }
+    .relic-watch {
+        width: 70px !important;
+        height: 70px !important;
+    }
+    .relic-vial {
+        width: 42px !important;
+        height: 90px !important;
+    }
+    .relic-orb {
+        width: 65px !important;
+        height: 65px !important;
+    }
+    .relic-orb .time-value {
+        font-size: 2rem !important;
+    }
+    .time-value {
+        font-size: 1.4rem !important;
+    }
+    .artifact-label {
+        font-size: 0.65rem !important;
+    }
+
+    /* Ceremony text */
+    .ceremony-line {
+        font-size: clamp(0.9rem, 3.5vw, 1.5rem) !important;
+    }
+
+    /* Ministry title */
+    .ministry-main-heading {
+        font-size: clamp(1.2rem, 5vw, 2rem) !important;
+    }
+    .ministry-kicker {
+        font-size: clamp(0.7rem, 2.5vw, 1rem) !important;
+    }
+
+    /* Slytherin Banners — further reduce */
+    .slytherin-banner {
+        min-width: 40px !important;
+        width: 8vw !important;
+    }
+
+    /* Spell Caption — avoid floating player overlap */
+    .spell-caption {
+        bottom: 60px !important;
+        font-size: 1.1rem !important;
+    }
+
+    /* Snitch Points */
+    .snitch-points {
+        white-space: normal !important;
+        font-size: clamp(1.5rem, 6vw, 3rem) !important;
+    }
+
+    /* Back to Map buttons */
+    .back-to-map-btn {
+        font-size: 0.85rem !important;
+        padding: 8px 16px !important;
+    }
+
+    /* Time final message */
+    .time-final-message {
+        font-size: clamp(0.85rem, 3vw, 1.2rem) !important;
+        padding: 0 15px !important;
+    }
+
+    /* Heart collage */
+    .heart-collage-container {
+        max-width: 90vw !important;
+    }
+
+    /* Trivia */
+    .trivia-question {
+        font-size: 1.1rem !important;
+    }
+    .nonchalant-feedback {
+        font-size: 1rem !important;
+    }
+
+    /* Section titles (now controlled by CSS since inline was removed) */
+    .section-title {
+        font-size: clamp(1rem, 4vw, 1.5rem) !important;
+    }
+
+    /* Greeting */
+    .greeting-content {
+        padding: 20px 15px !important;
+    }
+
+    /* Idle secret message on map */
+    .idle-secret-message {
+        font-size: 0.7rem !important;
+    }
+}
+
+/* ── New 360px breakpoint for very small phones ── */
+@media (max-width: 360px) {
+
+    /* Heart collage — reduce hover scale to prevent overflow */
+    .heart-pic.revealed:hover {
+        transform: scale(1.5) !important;
+    }
+
+    /* Artifact gallery — single column */
+    .artifact-gallery {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Further font reductions */
+    .glow-text {
+        font-size: clamp(1.2rem, 6vw, 2rem) !important;
+    }
+    .potter-callout {
+        font-size: clamp(1.2rem, 5vw, 2rem) !important;
+    }
+    .hp-subtitle {
+        font-size: clamp(0.7rem, 3vw, 1rem) !important;
+    }
+
+    /* Map pins tighter */
+    .map-pin-icon {
+        font-size: 1.3rem !important;
+    }
+
+    /* Float song even more compact */
+    .float-song {
+        max-width: 70px !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Auth */
+    .auth-panel {
+        padding: 20px 10px !important;
+    }
+    .snape-silhouette {
+        width: 120px !important;
+        height: 220px !important;
+    }
+}
+
+/* ── Touch device support (no hover) ── */
+@media (hover: none) {
+
+    /* Heart collage pics — show a subtle glow on tap instead of hover scale */
+    .heart-pic.revealed {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .heart-pic.revealed:active {
+        transform: scale(1.8);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        z-index: 100;
+    }
+
+    /* Map pin labels — visible on tap via JS-added class */
+    .map-pin.label-visible .map-pin-label {
+        max-width: 200px !important;
+        opacity: 1 !important;
+        padding: 4px 10px !important;
+    }
+
+    /* Simple track — active state instead of hover */
+    .simple-track:active {
+        background: rgba(212, 175, 55, 0.1);
+    }
+
+    /* Map pin hover effects should work on active/tap */
+    .map-pin:active .map-pin-icon {
+        transform: scale(1.3);
+    }
+
+    /* Back-to-map button — active feedback */
+    .back-to-map-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* ── Mobile Spell Book UI ── */
+.spell-book-toggle {
+    position: fixed;
+    bottom: 80px;
+    right: 15px;
+    z-index: 9999;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(10px);
+    color: var(--gold);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: spellBookPulse 3s infinite alternate;
+}
+.spell-book-toggle:active {
+    transform: scale(0.9);
+}
+@keyframes spellBookPulse {
+    0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.15); }
+    100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.4); }
+}
+
+.spell-book-menu {
+    position: fixed;
+    bottom: 135px;
+    right: 15px;
+    z-index: 9998;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.spell-book-menu.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.spell-book-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    padding: 10px 18px;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 1px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+.spell-book-btn:active {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.5);
 }

@@ -548,7 +548,7 @@ function startHeroSequence() {
 }
 
 // Wand Sparkles
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('pointermove', (e) => {
     const sparkle = document.createElement('div');
     sparkle.className = 'wand-sparkle';
     
@@ -769,7 +769,9 @@ function revealSlytherin() {
         }, 250);
     }
 
-    setTimeout(() => { document.body.style.overflowY = 'auto'; }, 2000);
+    setTimeout(() => {
+        unlockScroll();
+    }, 2000);
 }
 
 // CHAPTER 4 — THE EXAMINATION CHAMBER 
@@ -1043,6 +1045,14 @@ function showFootprints(pinEl) {
 function initMapPins() {
     document.querySelectorAll('.map-pin').forEach(pin => {
         pin.addEventListener('mouseenter', () => showFootprints(pin));
+        pin.addEventListener('touchstart', () => showFootprints(pin), { passive: true });
+        pin.addEventListener('click', (e) => {
+            // Remove label-visible from all other pins
+            document.querySelectorAll('.map-pin').forEach(p => {
+                if (p !== pin) p.classList.remove('label-visible');
+            });
+            pin.classList.toggle('label-visible');
+        });
         pin.addEventListener('click', () => travelTo(pin.dataset.room));
     });
 }
@@ -1282,7 +1292,7 @@ function startMagicObservers() {
                 sortingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
               setTimeout(() => {
-                    document.body.style.overflowY = 'hidden';
+                    lockScroll();
                     const dimOverlay = document.getElementById('sorting-dim');
                     if (dimOverlay) dimOverlay.classList.add('active');
 
@@ -1529,7 +1539,8 @@ const letterMessages = [
 let isLetterOnCooldown = false;
 
 window.addEventListener('scroll', () => {
-    if (!isLetterOnCooldown && Math.random() < 0.10) {
+    const spawnChance = ('ontouchstart' in window) ? 0.03 : 0.1;
+    if (!isLetterOnCooldown && Math.random() < spawnChance) {
         spawnFloatingLetter();
 
         isLetterOnCooldown = true;
@@ -1905,6 +1916,19 @@ function makeDustField(canvasId, particleCount, speedMultiplier = 1) {
     draw();
 }
 
+// Global Scroll Lock Utilities
+function preventScroll(e) { e.preventDefault(); }
+function lockScroll() {
+    document.addEventListener('wheel', preventScroll, { passive: false });
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+    document.documentElement.style.overflow = 'hidden';
+}
+function unlockScroll() {
+    document.removeEventListener('wheel', preventScroll, { passive: false });
+    document.removeEventListener('touchmove', preventScroll, { passive: false });
+    document.documentElement.style.overflow = '';
+}
+
 // MICRO-INTERACTION SFX 
 // Preload the subtle UI sounds
 const hoverSfx = new Audio('hover.mp3');
@@ -2268,3 +2292,100 @@ function resetMapIdleTimer() {
 window.addEventListener('mousemove', resetMapIdleTimer);
 window.addEventListener('click', resetMapIdleTimer);
 window.addEventListener('touchstart', resetMapIdleTimer);
+
+// ============ MOBILE SPELL BOOK (Touch device easter egg access) ============
+(function initSpellBook() {
+    // Only show on devices that truly have no hover (phones/tablets, NOT touch-laptops)
+    const isHoverless = window.matchMedia('(hover: none)').matches;
+    if (!isHoverless) return;
+
+    // Create toggle button
+    const toggle = document.createElement('button');
+    toggle.className = 'spell-book-toggle';
+    toggle.innerHTML = '✦';
+    toggle.setAttribute('aria-label', 'Open Spell Book');
+    document.body.appendChild(toggle);
+
+    // Create menu
+    const menu = document.createElement('div');
+    menu.className = 'spell-book-menu';
+    menu.innerHTML = `
+        <button class="spell-book-btn" data-spell="lumos">☀ Lumos</button>
+        <button class="spell-book-btn" data-spell="nox">🌑 Nox</button>
+        <button class="spell-book-btn" data-spell="alohomora">🔓 Alohomora</button>
+        <button class="spell-book-btn" data-spell="patronum">🦌 Expecto Patronum</button>
+        <button class="spell-book-btn" data-spell="mischief">🗺 Mischief Managed</button>
+    `;
+    document.body.appendChild(menu);
+
+    // Toggle menu open/close
+    let isOpen = false;
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isOpen = !isOpen;
+        menu.classList.toggle('open', isOpen);
+        toggle.innerHTML = isOpen ? '✕' : '✦';
+    });
+
+    // Close on outside tap
+    document.addEventListener('click', () => {
+        if (isOpen) {
+            isOpen = false;
+            menu.classList.remove('open');
+            toggle.innerHTML = '✦';
+        }
+    });
+    menu.addEventListener('click', (e) => e.stopPropagation());
+
+    // Spell handlers — call existing functions
+    menu.querySelectorAll('.spell-book-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const spell = btn.getAttribute('data-spell');
+            isOpen = false;
+            menu.classList.remove('open');
+            toggle.innerHTML = '✦';
+
+            switch(spell) {
+                case 'lumos': {
+                    // Inline lumos logic (matches keyboard easter egg)
+                    const overlay = document.getElementById('lumos-overlay');
+                    if (overlay) overlay.classList.add('darkness-falling');
+                    document.body.classList.add('lumos-cursor-active');
+                    if (typeof showSpellCaption === 'function') showSpellCaption('Lumos');
+                    const sfx = new Audio('lumos.mp3');
+                    sfx.play().catch(() => {});
+                    break;
+                }
+                case 'nox': {
+                    // Inline nox logic (matches keyboard easter egg)
+                    const overlay = document.getElementById('lumos-overlay');
+                    if (overlay) overlay.classList.remove('darkness-falling');
+                    document.body.classList.remove('lumos-cursor-active');
+                    if (typeof showSpellCaption === 'function') showSpellCaption('Nox');
+                    break;
+                }
+                case 'alohomora': {
+                    // Must hide trivia elements first, then play the text sequence
+                    const triviaBox = document.getElementById('trivia-gate');
+                    const triviaHeading = document.querySelector('.trivia-heading');
+                    const triviaCandles = document.getElementById('exam-candles');
+                    // Immediately hide trivia UI to prevent overlap
+                    if (triviaBox) { triviaBox.style.display = 'none'; }
+                    if (triviaHeading) { triviaHeading.style.display = 'none'; }
+                    if (triviaCandles) { triviaCandles.style.display = 'none'; }
+                    // Play the cinematic text sequence directly
+                    if (typeof playAlohomoraSequence === 'function') {
+                        playAlohomoraSequence();
+                    }
+                    break;
+                }
+                case 'patronum':
+                    if (typeof triggerPatronus === 'function') triggerPatronus();
+                    break;
+                case 'mischief':
+                    if (typeof triggerMischiefManaged === 'function') triggerMischiefManaged();
+                    break;
+            }
+        });
+    });
+})();
