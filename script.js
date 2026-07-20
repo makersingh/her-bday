@@ -348,8 +348,16 @@ const AudioManager = {
         this.currentAmbient  = null;
         this.playlistPlaying = false;
         this.isMinistryActive = true;
+        // NOTE: Ministry audio is NOT started here. It starts when the user
+        // clicks the glowing orb, which calls AudioManager.startMinistryAudio().
+    },
 
-        // Fade in Ministry ambience
+    /**
+     * Called by igniteMinistryOfTime() when the user clicks the glowing orb.
+     * This is the moment the Ministry ambient actually begins playing.
+     */
+    startMinistryAudio() {
+        if (!this.isMinistryActive) return;
         const minVol = this.trackVolumes['ministry-of-time'] || 0.5;
         this.fadeIn(this.tracks['ministry-of-time'], minVol, 1200);
         this.currentAmbient = 'ministry-of-time';
@@ -2040,6 +2048,9 @@ function igniteMinistryOfTime() {
     const lumosSfx = new Audio('lumos.mp3');
     lumosSfx.volume = 0.5;
     lumosSfx.play().catch(e => console.log(e));
+
+    // 1b. Start the Ministry ambient music (deferred from room entry to here)
+    AudioManager.startMinistryAudio();
 
     // 2. The Slow Light Spread
     const spread = document.getElementById('lumos-spread');
