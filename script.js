@@ -962,6 +962,11 @@ function travelTo(roomId) {
         targetRoom.scrollIntoView({ behavior: 'smooth' });
     }
 
+    // Hide intro sections to restrict scrolling and unlock scroll
+    const intro = document.getElementById('intro-sections');
+    if (intro) intro.classList.add('hidden-room');
+    unlockScroll();
+
     // ── Audio Manager handles all ambient/playlist transitions ──
     AudioManager.enterRoom(roomId);
 
@@ -991,12 +996,15 @@ function returnToMap() {
         }
     });
 
+    const reopenBtn = document.getElementById('reopen-map-btn');
+    if (reopenBtn) reopenBtn.classList.remove('active');
+
     // Reveal the Map
     const map = document.getElementById('marauders-map');
     if (map) {
         map.classList.remove('hidden-room');
         map.classList.add('visible-room');
-        map.scrollIntoView({ behavior: 'smooth' });
+        lockScroll(); // Full-screen takeover
     }
 
     // ── Audio Manager handles ambient restoration ──
@@ -1006,6 +1014,21 @@ function returnToMap() {
     // Show floating player if playlist is actively playing (AudioManager may have restored it from Ministry)
     if (floatPlayer && globalAudio && !globalAudio.paused) {
         floatPlayer.classList.add('active');
+    }
+}
+
+function hideMaraudersMap() {
+    const map = document.getElementById('marauders-map');
+    if (map) {
+        map.classList.remove('visible-room');
+        map.classList.add('hidden-room');
+        unlockScroll();
+        
+        const reopenBtn = document.getElementById('reopen-map-btn');
+        if (reopenBtn) reopenBtn.classList.add('active');
+
+        const intro = document.getElementById('intro-sections');
+        if (intro) intro.classList.remove('hidden-room');
     }
 }
 
@@ -1262,17 +1285,20 @@ function showFinaleText() {
     if (t1) {
         t1.textContent = "After all this time?";
         t1.classList.add('visible');
+        t1.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     setTimeout(() => {
         if (t2) {
             t2.textContent = "Always...";
             t2.classList.add('visible');
+            t2.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, 2200);
     setTimeout(() => {
         if (t3) {
             t3.textContent = "Happy birthday, Chikki!";
             t3.classList.add('visible');
+            t3.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, 5000);
 }

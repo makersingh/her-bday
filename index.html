@@ -75,12 +75,14 @@
 
     <div id="magic-world" class="hidden-world" style="display: none;">
         
-        <!--  CHAPTER 2 — THE HERO -->
-        <header class="hero" id="hero-section">
-            <p class="wand-text" id="wand-text"></p>
-            <h1 class="glow-text materializing" id="hero-title"></h1>
-            <p class="subtitle" id="hero-subtitle" style="opacity:0;">The magic is just beginning...</p>
-        </header>
+        <!-- INTRO SECTIONS (Hidden when entering rooms) -->
+        <div id="intro-sections">
+            <!--  CHAPTER 2 — THE HERO -->
+            <header class="hero" id="hero-section">
+                <p class="wand-text" id="wand-text"></p>
+                <h1 class="glow-text materializing" id="hero-title"></h1>
+                <p class="subtitle" id="hero-subtitle" style="opacity:0;">The magic is just beginning...</p>
+            </header>
 
         <section class="potter-greeting-section" id="greeting-section">
             <div class="greeting-content">
@@ -134,11 +136,14 @@
                 <div class="seal-row" id="seal-row"></div>
             </div>
         </section>
+        </div> <!-- End of intro-sections -->
+
+        <!-- REOPEN MAP BUTTON (Fixed to screen, originally hidden) -->
+        <button id="reopen-map-btn" class="reopen-map-btn" onclick="returnToMap()">Open Marauder's Map </button>
 
         <!-- CHAPTER 5 — THE MARAUDER'S MAP -->
         <section id="marauders-map" class="map-section hidden-room">
-            <h2 class="potter-callout map-heading" style="text-align: center; margin-top: clamp(30px, 6vw, 60px);">The Marauder's Map</h2>
-            <p class="greeting-text" style="text-align: center;">Tap a location to explore your magic...</p>
+            <button class="map-close-btn" id="close-map-btn" aria-label="Close map" onclick="hideMaraudersMap()">✕</button>
 
           <div class="parchment-map" id="parchment-map">
                 <div id="idle-secret-message" class="idle-secret-message"></div>
