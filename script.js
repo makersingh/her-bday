@@ -1,33 +1,39 @@
+// Global helper for secure image mapping
+function getSecureURL(url) {
+    if (window.secretImageMap && window.secretImageMap[url]) {
+        return window.secretImageMap[url];
+    }
+    return url;
+}
+
 // Preloader
-function preloadAssets() {
-    const imagesToPreload = [
-        "sorting-hat.png", "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "map-bg.png",
-        "sort5.jpg", "sort6.jpg", "child1.jpg", "child2.jpg", "child3.jpg", "patronus.jpg",
-        "child4.jpg", "child5.jpg", "teen1.jpg", "teen2.jpg", "teen3.jpg", 
-        "teen4.jpg", "teen5.jpg", "now1.jpg", "now2.jpg", "now3.jpg", 
-        "now4.jpg", "now5.jpg", "collage1.jpg", "collage2.jpg", "collage3.jpg",
-        "collage4.jpg", "collage5.jpg", "collage6.jpg", "collage7.jpg",
-        "collage8.jpg", "collage9.jpg", "collage10.jpg", "collage11.jpg",
-        "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg"
-    ];
+function preloadAssets(isSecurePhase = false) {
+    if (!isSecurePhase) {
+        // Phase 1: Preload public assets (audio and UI images) when user clicks "Tap to Enter"
+        const publicImages = ["sorting-hat.png", "map-bg.png"];
+        publicImages.forEach(src => { const img = new Image(); img.src = src; });
 
-    const audioToPreload = [
-        "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3",
-        "marauders-map.mp3", "slytherin-common-room.mp3", "ministry-of-time.mp3", "great-hall.mp3", "headmasters-office.mp3"
-    ];
-
-
-    imagesToPreload.forEach((src) => {
-        const img = new Image();
-        img.src = src;
-    });
-
-    audioToPreload.forEach((src) => {
-        const audio = new Audio(src);
-        audio.load();
-    });
-    
-    console.log("Magic assets preloaded successfully!");
+        const audioToPreload = [
+            "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3",
+            "marauders-map.mp3", "slytherin-common-room.mp3", "ministry-of-time.mp3", "great-hall.mp3", "headmasters-office.mp3"
+        ];
+        audioToPreload.forEach(src => { const audio = new Audio(src); audio.load(); });
+        console.log("Public assets preloaded!");
+    } else {
+        // Phase 2: Preload secure photos only after password decrypts the filenames
+        const secureImages = [
+            "sort1.jpg", "sort2.jpg", "sort3.jpg", "sort4.jpg", "sort5.jpg", "sort6.jpg", 
+            "child1.jpg", "child2.jpg", "child3.jpg", "patronus.jpg", "child4.jpg", "child5.jpg", 
+            "teen1.jpg", "teen2.jpg", "teen3.jpg", "teen4.jpg", "teen5.jpg", 
+            "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg", 
+            "collage1.jpg", "collage2.jpg", "collage3.jpg", "collage4.jpg", "collage5.jpg", 
+            "collage6.jpg", "collage7.jpg", "collage8.jpg", "collage9.jpg", "collage10.jpg", 
+            "collage11.jpg", "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg"
+        ].map(getSecureURL);
+        
+        secureImages.forEach(src => { const img = new Image(); img.src = src; });
+        console.log("Secure photos preloaded!");
+    }
 }
 
 // Top on refresh
@@ -718,7 +724,7 @@ function playSortingHat() {
     setTimeout(() => {
         hatTextElement.innerHTML = hatLines[hatIndex];
         if (sortingPhoto && sortingImages[hatIndex]) {
-            sortingPhoto.src = sortingImages[hatIndex];
+            sortingPhoto.src = getSecureURL(sortingImages[hatIndex]);
         }
 
         hatTextElement.style.opacity = 1;
@@ -912,7 +918,7 @@ function qSetComplete() {
         if (map) {
             map.classList.remove('hidden-room');
             map.classList.add('visible-room');
-            map.scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo(0, 0);
         }
         // Fade out sorting ceremony music and hand off to Marauder's Map ambient
         const bgMusic = document.getElementById('bg-music');
@@ -959,7 +965,7 @@ function travelTo(roomId) {
     if (targetRoom) {
         targetRoom.classList.remove('hidden-room');
         targetRoom.classList.add('visible-room');
-        targetRoom.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo(0, 0);
     }
 
     // Hide intro sections to restrict scrolling and unlock scroll
@@ -1004,6 +1010,7 @@ function returnToMap() {
     if (map) {
         map.classList.remove('hidden-room');
         map.classList.add('visible-room');
+        window.scrollTo(0, 0);
         lockScroll(); // Full-screen takeover
     }
 
@@ -1167,7 +1174,7 @@ function advancePensieve() {
     setTimeout(() => {
         pensieveIndex = (pensieveIndex + 1) % memoryImages.length;
         if (pensieveSlider) {pensieveSlider.value = pensieveIndex;}
-        img.src = memoryImages[pensieveIndex];
+        img.src = getSecureURL(memoryImages[pensieveIndex]);
 
         img.classList.remove('memory-vintage-0', 'memory-vintage-1', 'memory-vintage-2', 'pan-a', 'pan-b', 'special-pop');
         img.classList.add(vintageClassFor(pensieveIndex));
@@ -1203,7 +1210,7 @@ if (pensieveSlider) {
 
         const img = document.getElementById("memory-img");
 
-        img.src = memoryImages[pensieveIndex];
+        img.src = getSecureURL(memoryImages[pensieveIndex]);
 
         img.classList.remove(
             'memory-vintage-0',
@@ -1411,9 +1418,33 @@ if (authWandBtn) {
         
         // 2. Wait 1.5s for the wand to trace the full circle
         setTimeout(() => {
-            if (attempt === "paglu pandey") {
-                triggerAuthSuccess();
-            } else {
+            const encryptedMap = "U2FsdGVkX18CMYtaP6qt15jgH4SPC65UkrW5UORspR4TktrFTi0R0YKVPjtDTnyTlb5sqL+2Eu1o/ViBMkYSpaWLBaOAgjF0RveGU0fyMNCOCFljN7qPdVQZtw+Y5EhQR8QslDbx/3L/OLSiBtKfQXMSvim0TXSlPHXAHGNGFjJcIYHE7ioZyXKG9Bs5E9PlOoJkO0RnaDsiSoP+JckYsPVsKVhJq6rvhsnTYzsX/7bCT3btY02IeH71fJw/Gy0mnBWLKhfzymf7rW6rNBBZ78GM7/H9vUF26yieMc/JI1E8An9F8vaGbROwGsm41/XKGSIGrBYQZpS3PQnFeYpergdy4+QtKV0gdyYEv+lLuTUT2zcjfztDJ8iKlgkgwssM0bQHVrvMh06vinBBzK9ydL9UEm/Vzndp6fIi2hTgecWMdQjjKo5BtoFsKjQy6HOjlRWMK5BM3K2Mce5/B+fdUTg6JThalhuN2b+SqXI0gWqk92V0FpWTsyBQiEhQJHLbhdVhH5v//KqBVaWC+YQGf7m1a5bvVZInfAgM23QfxNr9Bp9JWhGxX/8k4sH1Pa0w16qGpAFft50HfYT24df09mB39N5MgOHKDlvbdg8naa/B4eRKQwz/DAdA3Fzgh4KTEjSzNF9mpVe3TT0Kzo4/xpZA9J/gZdOsrE4zf6hzZQKk9fJ+Iv7/FS53ZKh0VCVlv+H2oyFZhcxLT1uo9R5WJM+Zsz4yLBRWyYS+XipXdEWHwgZXris37vAn7JnCSHRK8zyMa+OkKeffUbKnv64OW0iaT7zzQGkbtByko1iZkVaS5fqT+YEPhaxciCQJ6qbSYhKtfhLQ9jB01EiDGByTlLZqqaanrVWkAKDQw5mYEnAxAMSI0husb7ytm/l47uLO6A4JDZg09IuEUjASghg55p0TXmNTdV46tMnWjHHFGY+xJ0iPuh6SFeNdkqRH7lTCaMXrz8GuhHI7z30x29FC7PKNeyHZrtZk1kJOjCoKJaWFAESMFoGHzzqyw39iuJq+Bgxsy2Q56S0AiUbJmeoHpLqi7MQlqb/6M6suG4R4ZPsQO+BxcuFxdnWGKYg9NTD83CPovNAzHOgWncfXpMViDx0TRys14iarz3gmvxsbj5ueoMyq02i8mgbZBn7S+eskseIoKNpB2lq0DnsCUzqTPoXNMOAGuU7m3EbJDkzk70/hT5lAJxuxjB8M8hKz/4ZjqNtSVYiJMlQnrLpjn/bn9/irv0Y6wPe7KCsntyw6mWPFykJl1I2cBUEYrle4riZFV5YDfpWmd/qtpSAVDNL72udUWGjL9Qrj97zgHrgP95OmTuRqVSzS0BNxgM532WwyLOoO8psPxd8/7mAu8jUS3cPPY0FciE7nM9SJDihCfB7n+KPmdcUaIosr0A9VGicKON+Nrh5zB2Odry/UhStWRy1G2/zp75W1/EuZAm8f17Ke5TvnLvCkZDgACKmA0jcXTX/aAfjB6jbakOyGekWI3irpjPnRy060LpLRnVAF/g395PUt7I7rSPK1qw5wasQu6J+/O3UrfmQBsz40dZQZ/wMN4Aqi9L2ZsvCrD8hEf6C+pMKOdw4C1gCXUiPlHrwW";
+            
+            try {
+                // Attempt to decrypt using the typed password
+                const bytes = CryptoJS.AES.decrypt(encryptedMap, attempt);
+                const decryptedJSON = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (decryptedJSON.length > 0) {
+                    // Decryption succeeded! Parse the secret map
+                    const imageMap = JSON.parse(decryptedJSON);
+                    window.secretImageMap = imageMap; // Store globally for script.js to access
+                    
+                    // Inject the secret image filenames into the HTML tags dynamically
+                    const secureImages = document.querySelectorAll('img[data-secure-id]');
+                    secureImages.forEach(img => {
+                        const secureId = img.getAttribute('data-secure-id');
+                        if (imageMap[secureId]) {
+                            img.src = imageMap[secureId];
+                        }
+                    });
+                    
+                    triggerAuthSuccess();
+                } else {
+                    triggerAuthFailure();
+                }
+            } catch (error) {
+                // Decryption failed (wrong key or bad data)
                 triggerAuthFailure();
             }
         }, 1500);
@@ -1499,7 +1530,7 @@ function triggerAuthSuccess() {
                 setTimeout(() => {
                     document.getElementById('auth-section').style.display = 'none';
                     // Optional: You can auto-trigger preloadAssets() here if you want to get a head start
-                    if (typeof preloadAssets === "function") preloadAssets();
+                    if (typeof preloadAssets === "function") preloadAssets(true);
                 }, 2000);
             }, 3000);
         }, 2000);
@@ -1845,7 +1876,8 @@ function triggerPatronus() {
 
     // 3. 
     const img = document.createElement('img');
-    img.src = 'patronus.jpg';
+    img.src = getSecureURL('patronus.jpg');
+    img.alt = 'Expecto Patronum';
     img.className = 'patronus-img';
 
     // 4. 
