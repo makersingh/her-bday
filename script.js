@@ -1,3 +1,12 @@
+// REGISTER PWA SERVICE WORKER
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then((registration) => console.log('ServiceWorker registration successful'))
+            .catch((err) => console.log('ServiceWorker registration failed: ', err));
+    });
+}
+
 // Global helper for secure image mapping
 function getSecureURL(url) {
     if (window.secretImageMap && window.secretImageMap[url]) {
@@ -554,13 +563,22 @@ function startHeroSequence() {
 }
 
 // Wand Sparkles
-document.addEventListener('pointermove', (e) => {
+function createSparkle(e) {
+    let pageX = e.pageX;
+    let pageY = e.pageY;
+    
+    // Support touch events
+    if (e.touches && e.touches.length > 0) {
+        pageX = e.touches[0].pageX;
+        pageY = e.touches[0].pageY;
+    }
+
+    if (pageX === undefined) return;
+
     const sparkle = document.createElement('div');
     sparkle.className = 'wand-sparkle';
-    
-    
-    sparkle.style.left = `${e.pageX}px`;
-    sparkle.style.top = `${e.pageY}px`;
+    sparkle.style.left = `${pageX}px`;
+    sparkle.style.top = `${pageY}px`;
 
     const randomX = (Math.random() - 0.5) * 15;
     const randomY = (Math.random() - 0.5) * 15;
@@ -569,7 +587,9 @@ document.addEventListener('pointermove', (e) => {
 
     document.body.appendChild(sparkle);
     setTimeout(() => sparkle.remove(), 800);
-});
+}
+document.addEventListener('pointermove', createSparkle);
+document.addEventListener('touchmove', createSparkle, { passive: true });
 
 // Playlist 
 const audioData = [
@@ -1539,16 +1559,29 @@ function triggerAuthSuccess() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Constantly update the Lumos flashlight coordinates to match the cursor
-    window.addEventListener('pointermove', (e) => {
+    // Constantly update the Lumos flashlight coordinates to match the cursor or finger
+    function updateLumosPosition(e) {
         const lumosOverlay = document.getElementById('lumos-overlay');
         
         // Only run the math if the room is actually dark
         if (lumosOverlay && lumosOverlay.classList.contains('darkness-falling')) {
-            lumosOverlay.style.setProperty('--mx', e.clientX + 'px');
-            lumosOverlay.style.setProperty('--my', e.clientY + 'px');
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            
+            // Support touch events
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            if (clientX !== undefined) {
+                lumosOverlay.style.setProperty('--mx', clientX + 'px');
+                lumosOverlay.style.setProperty('--my', clientY + 'px');
+            }
         }
-    });
+    }
+    window.addEventListener('pointermove', updateLumosPosition);
+    window.addEventListener('touchmove', updateLumosPosition, { passive: true });
 
     makeDustField('ambientCanvas', 60, 0.5); // Slow, dense background dust
     makeDustField('dustCanvas', 30, 1.2);    // Fast, sparse foreground dust
