@@ -1,0 +1,11 @@
+# Development Scripts
+encrypt_all.js
+update_html.js
+
+# Data files
+encrypted_map.txt
+
+# Node
+node_modules/
+package.json
+package-lock.json
