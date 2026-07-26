@@ -2543,12 +2543,12 @@ function triggerMemoryExplosion(onComplete) {
         whooshAudio.play().catch(e => console.log('Audio play failed:', e));
     }
 
-    const numPhotos = 20;
+    const numPhotos = 22;
     const photos = [];
     const screenW = window.innerWidth;
     const screenH = window.innerHeight;
 
-    const galleryImages = Array.from({length: 20}, (_, i) => `gallery/gallery-${i + 1}.jpg`);
+    const galleryImages = Array.from({length: 22}, (_, i) => `gallery/gallery-${i + 1}.jpg`);
 
     for (let i = 0; i < numPhotos; i++) {
         const photoEl = document.createElement('div');
