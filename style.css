@@ -2551,11 +2551,10 @@ body.ministry-theme-active #magic-world {
 
 /* 2. Background Environment (Giant Time Turner) */
 .ministry-environment {
-    position: fixed; inset: 0;
+    position: absolute; inset: 0;
     pointer-events: none; z-index: 0;
     background: radial-gradient(circle at center, #0a140f 0%, #030805 60%, #000000 100%);
     opacity: 0; transition: opacity 3s ease 1s; 
-    overflow: hidden;
 }
 .cinematic-time-room.room-lit .ministry-environment { opacity: 1; }
 
@@ -3219,4 +3218,106 @@ body.ministry-theme-active #magic-world {
 .spell-book-btn:active {
     background: rgba(212, 175, 55, 0.15);
     border-color: rgba(212, 175, 55, 0.5);
+}
+
+/* =========================================================================
+   CINEMATIC MEMORY EXPLOSION TRANSITION
+========================================================================= */
+.cinematic-transition-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
+    background: #000;
+    overflow: hidden;
+    perspective: 1500px;
+    transform-style: preserve-3d;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.cinematic-transition-container.active {
+    display: block;
+    opacity: 1;
+}
+.cinematic-transition-container.fade-out {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.explosion-particles-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.explosion-photos-wrapper {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    transform-style: preserve-3d;
+    perspective: 1500px;
+}
+
+.magical-memory-photo {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 800px; height: 600px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 5px solid #d4c19a;
+    border-radius: 3px;
+    box-shadow:
+        0 0 12px rgba(212, 175, 55, 0.35),
+        0 0 30px rgba(212, 175, 55, 0.12),
+        0 8px 25px rgba(0, 0, 0, 0.7),
+        inset 0 0 15px rgba(139, 109, 56, 0.15);
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+}
+.magical-memory-photo::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px;
+    right: -5px; bottom: -5px;
+    border-radius: 3px;
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.1) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(212, 175, 55, 0.08) 100%
+    );
+    pointer-events: none;
+}
+.magical-memory-photo::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    box-shadow: inset 0 0 20px rgba(60, 40, 10, 0.3);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+/* Portal swirl at end */
+.portal-vortex {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.6) 0%, rgba(100, 149, 237, 0.3) 40%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                opacity 0.4s ease;
+    z-index: 10;
+    box-shadow: 0 0 80px rgba(212, 175, 55, 0.4), 0 0 160px rgba(100, 149, 237, 0.2);
 }

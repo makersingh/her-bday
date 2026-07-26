@@ -135,6 +135,9 @@ function fadeAudio(audio, targetVolume, duration) {
             (volumeStep < 0 && audio.volume <= targetVolume)) {
             audio.volume = targetVolume;
             clearInterval(audio.fadeInterval);
+            if (targetVolume === 0) {
+                audio.pause();
+            }
         }
     }, step);
 }
@@ -952,6 +955,37 @@ const allRooms = ['marauders-map', 'slytherin-room', 'headmaster-office', 'minis
 
 function travelTo(roomId) {
     
+    if (roomId === 'headmaster-office') {
+        // Hide all rooms first so map disappears
+        allRooms.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('visible-room');
+                el.classList.add('hidden-room');
+            }
+        });
+        
+        // Hide intro sections to restrict scrolling
+        const intro = document.getElementById('intro-sections');
+        if (intro) intro.classList.add('hidden-room');
+
+        // Instead of showing the room immediately, trigger the cinematic transition
+        triggerMemoryExplosion(function() {
+            // This callback fires after the explosion completes
+            const targetRoom = document.getElementById('headmaster-office');
+            if (targetRoom) {
+                targetRoom.classList.remove('hidden-room');
+                targetRoom.classList.add('visible-room');
+                window.scrollTo(0, 0);
+            }
+            unlockScroll(); // Allow scrolling within the room
+            AudioManager.enterRoom('headmaster-office');
+            startPensieve();
+            setTimeout(releaseTheSnitch, 3000);
+        });
+        return; // Don't execute the normal room-switching logic below
+    }
+
     if (roomId === 'ministry-of-time') {
         document.body.classList.add('ministry-theme-active');
     } else {
@@ -998,11 +1032,6 @@ function travelTo(roomId) {
 
     if (roomId === 'great-hall') {
         setTimeout(revealHeartCollage, 500);
-    }
-
-    if (roomId === 'headmaster-office') {
-        startPensieve();
-        setTimeout(releaseTheSnitch, 3000); 
     }
     
 }
@@ -1723,6 +1752,15 @@ function playAlohomoraSequence() {
     const triviaSection = document.getElementById('trivia-section');
     if (!triviaSection) return;
 
+    // Fade out sorting ceremony music or any ambient immediately for suspenseful silence
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 1500);
+    
+    if (AudioManager.currentAmbient) {
+        AudioManager.fadeOut(AudioManager.tracks[AudioManager.currentAmbient], 1500);
+        AudioManager.currentAmbient = null;
+    }
+
     // Create the invisible text container
     const textEl = document.createElement('div');
     textEl.className = 'alohomora-secret-text';
@@ -1757,9 +1795,6 @@ function playAlohomoraSequence() {
         } else {
             // Sequence finished. Clean up the text and travel to the map
             textEl.remove();
-            // Fade out sorting ceremony music before entering the map
-            const bgMusic = document.getElementById('bg-music');
-            if (bgMusic && !bgMusic.paused) fadeAudio(bgMusic, 0, 1500);
             returnToMap();
         }
     }
@@ -2480,3 +2515,216 @@ window.addEventListener('touchstart', resetMapIdleTimer);
         });
     });
 })();
+
+/* =========================================================================
+   CINEMATIC MEMORY EXPLOSION TRANSITION
+========================================================================= */
+function triggerMemoryExplosion(onComplete) {
+    const container = document.getElementById('memory-explosion-container');
+    const wrapper = document.getElementById('explosion-photos-wrapper');
+    const canvas = document.getElementById('explosion-particles');
+    const whooshAudio = document.getElementById('whoosh-sfx');
+
+    if (!container || !wrapper || !canvas) {
+        if (onComplete) onComplete();
+        return;
+    }
+
+    const intro = document.getElementById('intro-sections');
+    if (intro) intro.classList.add('hidden-room');
+    unlockScroll();
+
+    container.classList.add('active');
+    wrapper.innerHTML = ''; 
+
+    if (whooshAudio) {
+        whooshAudio.currentTime = 0;
+        whooshAudio.volume = 0.8;
+        whooshAudio.play().catch(e => console.log('Audio play failed:', e));
+    }
+
+    const numPhotos = 20;
+    const photos = [];
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    const galleryImages = Array.from({length: 20}, (_, i) => `gallery/gallery-${i + 1}.jpg`);
+
+    for (let i = 0; i < numPhotos; i++) {
+        const photoEl = document.createElement('div');
+        photoEl.className = 'magical-memory-photo';
+        photoEl.style.backgroundImage = `url('${getSecureURL(galleryImages[i])}')`;
+        photoEl.style.opacity = '0';
+        photoEl.style.display = 'none'; // Keep out of render tree until needed
+        
+        let startX = (Math.random() - 0.5) * screenW * 2.5;
+        let startY = (Math.random() - 0.5) * screenH * 2.5;
+        let rotX = (Math.random() - 0.5) * 40;
+        let rotY = (Math.random() - 0.5) * 40;
+        let rotZ = (Math.random() - 0.5) * 30;
+
+        if (i === numPhotos - 1) {
+            startX = 0; 
+            startY = 0;
+            rotX = 0;
+            rotY = 0;
+            rotZ = 0; 
+        }
+        
+        wrapper.appendChild(photoEl);
+
+        photos.push({
+            element: photoEl,
+            x: startX,
+            y: startY,
+            rotX: rotX,
+            rotY: rotY,
+            rotZ: rotZ,
+            startTime: i * 50, // Wait 50ms between each spawn
+            duration: 1000, // Flies in even faster (1 second)
+            completed: false
+        });
+    }
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = screenW;
+    canvas.height = screenH;
+    
+    // Richer, magical Pensieve background (deep midnight blue to black)
+    container.style.background = 'radial-gradient(circle at 50% 50%, #16264c 0%, #060b14 60%, #000000 100%)';
+
+    const particles = [];
+    for (let i = 0; i < 150; i++) {
+        // Pure golden and magical stardust, removing the large mist orbs
+        particles.push({
+            x: Math.random() * screenW,
+            y: Math.random() * screenH,
+            radius: Math.random() * 2 + 0.5, // Small, delicate stardust
+            speedX: (Math.random() - 0.5) * 8,
+            speedY: (Math.random() - 0.5) * 8,
+            opacity: Math.random() * 0.8 + 0.2,
+            // 70% Golden stardust, 30% Magical bright blue/white
+            color: Math.random() > 0.3 ? 'rgba(212, 175, 55,' : 'rgba(150, 200, 255,'
+        });
+    }
+
+    let globalStartTime = null;
+    let animationFrameId = null;
+    const totalDuration = (numPhotos - 1) * 50 + 1000; // Total time ~1.95 seconds
+
+    function animate(timestamp) {
+        if (!globalStartTime) globalStartTime = timestamp;
+        const elapsed = timestamp - globalStartTime;
+
+        photos.forEach((p, index) => {
+            if (p.completed) return;
+            
+            const photoElapsed = elapsed - p.startTime;
+            
+            if (photoElapsed < 0) {
+                return; // Not started yet
+            }
+
+            p.element.style.display = 'block';
+
+            let progress = Math.min(photoElapsed / p.duration, 1);
+            
+            // Extreme exponential easing for incredibly fast finish
+            const easeProgress = Math.pow(progress, 3);
+
+            // Travel from deep space (-10000) to past the camera (1500)
+            const currentZ = -10000 + (easeProgress * 11500);
+
+            let opacity = 0;
+            if (progress < 0.2) {
+                opacity = progress / 0.2; // Fade in
+            } else if (progress < 0.7 || index === numPhotos - 1) {
+                opacity = 1; // Solid
+            } else {
+                opacity = 1 - ((progress - 0.7) / 0.3); // Fade out quickly
+            }
+
+            p.element.style.transform = `translate(-50%, -50%) translate3d(${p.x}px, ${p.y}px, ${currentZ}px) rotateX(${p.rotX}deg) rotateY(${p.rotY}deg) rotateZ(${p.rotZ}deg)`;
+            p.element.style.opacity = opacity;
+            
+            if (index === numPhotos - 1) {
+                // Brighten the very last image as it gets close
+                p.element.style.filter = `brightness(${1 + (easeProgress * 1.5)})`;
+            }
+
+            if (progress >= 1 && index !== numPhotos - 1) {
+                p.completed = true;
+                p.element.style.display = 'none'; // Remove from render tree to save GPU
+            }
+        });
+
+        // Global acceleration multiplier for particles
+        const globalProgress = Math.min(elapsed / totalDuration, 1);
+        const globalSpeedMult = 1 + Math.pow(globalProgress, 4) * 8; 
+
+        // Create motion blur/trails instead of clearing the canvas instantly
+        ctx.fillStyle = 'rgba(6, 11, 20, 0.3)'; // Slightly transparent deep blue/black
+        ctx.fillRect(0, 0, screenW, screenH);
+
+        particles.forEach(p => {
+            const dx = (p.x - screenW/2);
+            const dy = (p.y - screenH/2);
+            p.x += p.speedX * globalSpeedMult + (dx * globalSpeedMult * 0.005);
+            p.y += p.speedY * globalSpeedMult + (dy * globalSpeedMult * 0.005);
+            
+            if (p.x < 0) p.x = screenW;
+            if (p.x > screenW) p.x = 0;
+            if (p.y < 0) p.y = screenH;
+            if (p.y > screenH) p.y = 0;
+
+            p.opacity += (Math.random() - 0.5) * 0.1;
+            p.opacity = Math.max(0.1, Math.min(1, p.opacity));
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `${p.color}${p.opacity})`;
+            ctx.fill();
+        });
+
+        if (elapsed < totalDuration) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            endExplosion();
+        }
+    }
+
+    function endExplosion() {
+        cancelAnimationFrame(animationFrameId);
+        
+        const flash = document.createElement('div');
+        flash.style.position = 'absolute';
+        flash.style.top = '0'; 
+        flash.style.left = '0'; 
+        flash.style.width = '100vw'; 
+        flash.style.height = '100vh';
+        flash.style.backgroundColor = '#fff';
+        flash.style.boxShadow = 'inset 0 0 100px #fff';
+        flash.style.opacity = '0';
+        flash.style.transition = 'opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        flash.style.zIndex = '100';
+        wrapper.appendChild(flash);
+        
+        setTimeout(() => {
+            flash.style.opacity = '1';
+        }, 10);
+
+        setTimeout(() => {
+            container.classList.add('fade-out');
+            
+            setTimeout(() => {
+                container.classList.remove('active');
+                container.classList.remove('fade-out');
+                wrapper.innerHTML = ''; 
+                if (onComplete) onComplete();
+            }, 600); 
+            
+        }, 300); 
+    }
+
+    animationFrameId = requestAnimationFrame(animate);
+}
