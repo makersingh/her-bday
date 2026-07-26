@@ -354,8 +354,8 @@ const AudioManager = {
             this._fadeOutExternal(globalAudio, 800, () => {
                 const cp = document.getElementById('central-play');
                 const fp = document.getElementById('float-play-btn');
-                if (cp) cp.innerHTML = '▶';
-                if (fp) fp.innerHTML = '▶';
+                if (cp) cp.innerHTML = '<div class="icon-play"></div>';
+                if (fp) fp.innerHTML = '<div class="icon-play"></div>';
             });
         }
 
@@ -402,8 +402,8 @@ const AudioManager = {
 
                 const cp = document.getElementById('central-play');
                 const fp = document.getElementById('float-play-btn');
-                if (cp) cp.innerHTML = '⏸';
-                if (fp) fp.innerHTML = '⏸';
+                if (cp) cp.innerHTML = '<div class="icon-pause"></div>';
+                if (fp) fp.innerHTML = '<div class="icon-pause"></div>';
 
                 // Show floating player (unless in the Common Room where the full player is visible)
                 const floatPlayer = document.getElementById('floating-player');
@@ -643,8 +643,8 @@ function togglePlay() {
     
     if (globalAudio.paused) {
         globalAudio.play();
-        if(centralPlayBtn) centralPlayBtn.innerHTML = "⏸";
-        if(floatPlayBtn) floatPlayBtn.innerHTML = "⏸";
+        if(centralPlayBtn) centralPlayBtn.innerHTML = '<div class="icon-pause"></div>';
+        if(floatPlayBtn) floatPlayBtn.innerHTML = '<div class="icon-pause"></div>';
         
         // Only shows the floating player if NOT in the common room
         if(floatPlayer && !isInCommonRoom) floatPlayer.classList.add('active'); 
@@ -653,8 +653,8 @@ function togglePlay() {
         AudioManager.onPlaylistStart();
     } else {
         globalAudio.pause();
-        if(centralPlayBtn) centralPlayBtn.innerHTML = "▶";
-        if(floatPlayBtn) floatPlayBtn.innerHTML = "▶";
+        if(centralPlayBtn) centralPlayBtn.innerHTML = '<div class="icon-play"></div>';
+        if(floatPlayBtn) floatPlayBtn.innerHTML = '<div class="icon-play"></div>';
         
         // Notify AudioManager: playlist stopped (resumes room ambient)
         AudioManager.onPlaylistStop();
@@ -670,8 +670,8 @@ function playTrack(index) {
     
     loadTrack(index);
     globalAudio.play();
-    if(centralPlayBtn) centralPlayBtn.innerHTML = "⏸";
-    if(floatPlayBtn) floatPlayBtn.innerHTML = "⏸";
+    if(centralPlayBtn) centralPlayBtn.innerHTML = '<div class="icon-pause"></div>';
+    if(floatPlayBtn) floatPlayBtn.innerHTML = '<div class="icon-pause"></div>';
     
     // Only shows the floating player if NOT in the common room
     if(floatPlayer && !isInCommonRoom) floatPlayer.classList.add('active'); 
@@ -1105,20 +1105,31 @@ function showFootprints(pinEl) {
     const endX = pRect.left + pRect.width / 2 - mapRect.left;
     const endY = pRect.top + pRect.height / 2 - mapRect.top;
 
-    const steps = 5;
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const distance = Math.hypot(dx, dy);
+    const steps = Math.max(3, Math.floor(distance / 60)); // Adjust step gap to 60px
+    const angle = Math.atan2(dy, dx);
+
     for (let i = 1; i <= steps; i++) {
         const t = i / steps;
         const fp = document.createElement('span');
         fp.className = 'footprint';
-        fp.textContent = '👣';
-        fp.style.left = (startX + (endX - startX) * t) + 'px';
-        fp.style.top = (startY + (endY - startY) * t) + 'px';
-        fp.style.animationDelay = (i * 120) + 'ms';
+        fp.innerHTML = '<div class="icon-footprint"></div>';
+        
+        // Add a slight alternating wobble (about 8 degrees) so they don't form a perfect line
+        const side = (i % 2 === 0) ? 1 : -1;
+        const wobble = side * 0.15; 
+        
+        fp.style.left = (startX + dx * t) + 'px';
+        fp.style.top = (startY + dy * t) + 'px';
+        fp.style.setProperty('--rot', `${angle + Math.PI / 2 + wobble}rad`);
+        fp.style.animationDelay = (i * 50) + 'ms';
         layer.appendChild(fp);
     }
 
     clearTimeout(layer._clearTimer);
-    layer._clearTimer = setTimeout(() => { layer.innerHTML = ''; }, steps * 120 + 1200);
+    layer._clearTimer = setTimeout(() => { layer.innerHTML = ''; }, steps * 50 + 1200);
 }
 
 function initMapPins() {

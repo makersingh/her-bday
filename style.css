@@ -1500,15 +1500,62 @@ body.slytherin-theme-active .slytherin-banner {
 
 .footprint {
     position: absolute;
-    font-size: 0.85rem;
     opacity: 0;
-    animation: footstepAppear 0.6s ease forwards;
+    margin-left: -4px; margin-top: -9px; /* Center the 8x18 icon */
+    animation: footstepAppear 0.3s ease forwards;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.4));
+}
+
+.icon-footprint {
+    width: 20px;
+    height: 18px;
+    position: relative;
+    display: inline-block;
+}
+.icon-footprint::before { /* Sole */
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 10px;
+    background: #000;
+    border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+    box-shadow: 12px 3px 0 0 #000; /* Right foot sole */
+}
+.icon-footprint::after { /* Heel */
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 1px;
+    width: 6px; height: 6px;
+    background: #000;
+    border-radius: 50%;
+    box-shadow: 12px 3px 0 0 #000; /* Right foot heel */
+}
+
+.icon-play {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent currentColor;
+    margin-left: 4px; /* visually center the triangle */
+    vertical-align: middle;
+}
+
+.icon-pause {
+    display: inline-block;
+    width: 12px;
+    height: 16px;
+    border-left: 4px solid currentColor;
+    border-right: 4px solid currentColor;
+    box-sizing: border-box;
+    vertical-align: middle;
 }
 
 @keyframes footstepAppear {
-    0% { opacity: 0; transform: scale(0.5); }
-    40% { opacity: 0.85; transform: scale(1); }
-    100% { opacity: 0.45; transform: scale(1); }
+    0% { opacity: 0; transform: rotate(var(--rot, 0deg)) scale(0.5); }
+    40% { opacity: 0.65; transform: rotate(var(--rot, 0deg)) scale(1.1); }
+    100% { opacity: 0.5; transform: rotate(var(--rot, 0deg)) scale(1); }
 }
 
 /*  PENSIEVE: FOG + SEPIA TIERS + PAN (Chapter 6) */
