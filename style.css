@@ -1080,6 +1080,8 @@ body.slytherin-theme-active .slytherin-banner {
     justify-content: center;
 }
 
+
+
 .magical-transition-text {
     color: var(--gold) !important;
     font-family: var(--font-display); 
@@ -1290,14 +1292,15 @@ body.slytherin-theme-active .slytherin-banner {
     position: absolute;
     top: -18px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(var(--flame-bend, 0deg));
+    transform-origin: bottom center;
     width: 12px;
     height: 20px;
     background: radial-gradient(circle, #a8ffc8 0%, #2f8f53 60%, transparent 100%);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     opacity: 0.2;
     filter: blur(0.5px);
-    transition: opacity 0.8s ease;
+    transition: opacity 0.8s ease, transform 0.1s ease-out;
     animation: flameFlicker 2.2s ease-in-out infinite;
 }
 
@@ -1305,15 +1308,15 @@ body.slytherin-theme-active .slytherin-banner {
 .candle.flicker-hard::before { animation: flameFlickerHard 0.5s ease-in-out 2; }
 
 @keyframes flameFlicker {
-    0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
-    50% { transform: translateX(-50%) scale(1.08) rotate(2deg); }
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(var(--flame-bend, 0deg)); }
+    50% { transform: translateX(-50%) scale(1.08) rotate(calc(var(--flame-bend, 0deg) + 2deg)); }
 }
 
 @keyframes flameFlickerHard {
-    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
-    25% { opacity: 0.25; transform: translateX(-50%) scale(0.7) rotate(-6deg); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.15) rotate(5deg); }
-    75% { opacity: 0.3; transform: translateX(-50%) scale(0.8) rotate(-4deg); }
+    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1) rotate(var(--flame-bend, 0deg)); }
+    25% { opacity: 0.25; transform: translateX(-50%) scale(0.7) rotate(calc(var(--flame-bend, 0deg) - 6deg)); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.15) rotate(calc(var(--flame-bend, 0deg) + 5deg)); }
+    75% { opacity: 0.3; transform: translateX(-50%) scale(0.8) rotate(calc(var(--flame-bend, 0deg) - 4deg)); }
 }
 
 /* TRIVIA: WRONG-ANSWER RED FLASH + SEALS (Chapter 4)  */
@@ -1486,6 +1489,7 @@ body.slytherin-theme-active .slytherin-banner {
     padding: 2px 10px;
     opacity: 1;
 }
+
 
 .map-you-are-here {
     position: absolute;
@@ -2658,12 +2662,18 @@ body.ministry-theme-active #magic-world {
 .artifact-pod {
     display: flex; flex-direction: column; align-items: center; gap: 15px;
     opacity: 0; transform: scale(0.8) translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 0.8s ease, transform 0.3s ease;
+    cursor: pointer;
 }
 
 .artifact-pod.revealed { 
     opacity: 1; 
     transform: scale(1) translateY(0); 
+}
+
+.artifact-pod.revealed:hover {
+    transform: scale(1.6) translateY(0);
+    z-index: 20;
 }
 
 .artifact-label {
@@ -2740,6 +2750,9 @@ body.ministry-theme-active #magic-world {
     width: 90px; height: 90px; border-radius: 50%;
     background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, transparent 70%);
     box-shadow: 0 0 40px rgba(212,175,55,0.4); display: flex; justify-content: center; align-items: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
 }
 .relic-orb .time-value { font-size: 3rem; }
 
@@ -2834,6 +2847,26 @@ body.ministry-theme-active #magic-world {
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     animation: floating-animation 4s ease-in-out infinite;
 }
+
+/* ------------------------------------- */
+/*  MAGICAL DUST (Feature 1)             */
+/* ------------------------------------- */
+#dust-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+.magic-dust {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,215,0,0.5) 40%, transparent 100%);
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
 
 @keyframes floating-animation {
     0% { transform: translateY(0px); }
@@ -3352,6 +3385,26 @@ body.ministry-theme-active #magic-world {
     pointer-events: none;
 }
 
+.polaroid-frame {
+    background: #fff;
+    padding: 10px 10px 40px 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border-radius: 2px;
+    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    filter: sepia(0.6) contrast(1.1);
+}
+
+.wand-spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff, 0 0 20px #8df;
+    pointer-events: none;
+}
+
 /* Portal swirl at end */
 .portal-vortex {
     position: absolute;
@@ -3366,4 +3419,27 @@ body.ministry-theme-active #magic-world {
                 opacity 0.4s ease;
     z-index: 10;
     box-shadow: 0 0 80px rgba(212, 175, 55, 0.4), 0 0 160px rgba(100, 149, 237, 0.2);
+}
+
+/* ------------------------------------- */
+/*  MAGIC RIPPLE (Feature 6)             */
+/* ------------------------------------- */
+.magic-ripple {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 10000;
+    box-shadow: 0 0 15px var(--gold-bright), inset 0 0 10px var(--gold);
+    animation: magicRippleAnim 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes magicRippleAnim {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    50% { border-width: 4px; opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(5); opacity: 0; border-width: 0px; }
 }

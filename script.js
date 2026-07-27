@@ -23,8 +23,8 @@ function preloadAssets(isSecurePhase = false) {
         publicImages.forEach(src => { const img = new Image(); img.src = src; });
 
         const audioToPreload = [
-            "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3",
-            "marauders-map.mp3", "slytherin-common-room.mp3", "ministry-of-time.mp3", "great-hall.mp3", "headmasters-office.mp3"
+            "sorting-hat.mp3", "music1.mp3", "music2.mp3", "music3.mp3", "bg-music/music.mp3", "lumos.mp3", "click.mp3", "hover.mp3", "uiclick.mp3",
+            "bg-music/marauders-map.mp3", "bg-music/slytherin-common-room.mp3", "bg-music/ministry-of-time.mp3", "bg-music/great-hall.mp3", "bg-music/headmasters-office.mp3"
         ];
         audioToPreload.forEach(src => { const audio = new Audio(src); audio.load(); });
         console.log("Public assets preloaded!");
@@ -147,11 +147,11 @@ const AudioManager = {
 
     // ── Pre-created singleton Audio instances (one per track, never recreated) ──
     tracks: {
-        'marauders-map':     (() => { const a = new Audio('marauders-map.mp3');          a.loop = true; a.preload = 'auto'; return a; })(),
-        'slytherin-room':    (() => { const a = new Audio('slytherin-common-room.mp3');   a.loop = true; a.preload = 'auto'; return a; })(),
-        'ministry-of-time':  (() => { const a = new Audio('ministry-of-time.mp3');        a.loop = true; a.preload = 'auto'; return a; })(),
-        'great-hall':        (() => { const a = new Audio('great-hall.mp3');               a.loop = true; a.preload = 'auto'; return a; })(),
-        'headmaster-office': (() => { const a = new Audio('headmasters-office.mp3');       a.loop = true; a.preload = 'auto'; return a; })(),
+        'marauders-map':     (() => { const a = new Audio('bg-music/marauders-map.mp3');          a.loop = true; a.preload = 'auto'; return a; })(),
+        'slytherin-room':    (() => { const a = new Audio('bg-music/slytherin-common-room.mp3');   a.loop = true; a.preload = 'auto'; return a; })(),
+        'ministry-of-time':  (() => { const a = new Audio('bg-music/ministry-of-time.mp3');        a.loop = true; a.preload = 'auto'; return a; })(),
+        'great-hall':        (() => { const a = new Audio('bg-music/great-hall.mp3');               a.loop = true; a.preload = 'auto'; return a; })(),
+        'headmaster-office': (() => { const a = new Audio('bg-music/headmasters-office.mp3');       a.loop = true; a.preload = 'auto'; return a; })()
     },
 
     // ── Individual Volume Levels ──
@@ -986,54 +986,54 @@ function travelTo(roomId) {
         return; // Don't execute the normal room-switching logic below
     }
 
-    if (roomId === 'ministry-of-time') {
-        document.body.classList.add('ministry-theme-active');
-    } else {
-        document.body.classList.remove('ministry-theme-active');
-    }
 
-    const floatPlayer = document.getElementById('floating-player');
-    const globalAudio = document.getElementById('global-audio');
-    
-    // Is the playlist music actually playing?
-    const isPlaying = globalAudio && !globalAudio.paused;
-
-    if (floatPlayer && isPlaying) {
-        // Hide floating player in the playlist room and in Ministry (Ministry overrides everything)
-        if (roomId === 'slytherin-room' || roomId === 'ministry-of-time') {
-            floatPlayer.classList.remove('active');
+        if (roomId === 'ministry-of-time') {
+            document.body.classList.add('ministry-theme-active');
         } else {
-            floatPlayer.classList.add('active');
+            document.body.classList.remove('ministry-theme-active');
         }
-    }
 
-    allRooms.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.classList.remove('visible-room');
-            el.classList.add('hidden-room');
+        const floatPlayer = document.getElementById('floating-player');
+        const globalAudio = document.getElementById('global-audio');
+        
+        // Is the playlist music actually playing?
+        const isPlaying = globalAudio && !globalAudio.paused;
+
+        if (floatPlayer && isPlaying) {
+            // Hide floating player in the playlist room and in Ministry (Ministry overrides everything)
+            if (roomId === 'slytherin-room' || roomId === 'ministry-of-time') {
+                floatPlayer.classList.remove('active');
+            } else {
+                floatPlayer.classList.add('active');
+            }
         }
-    });
 
-    const targetRoom = document.getElementById(roomId);
-    if (targetRoom) {
-        targetRoom.classList.remove('hidden-room');
-        targetRoom.classList.add('visible-room');
-        window.scrollTo(0, 0);
-    }
+        allRooms.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('visible-room');
+                el.classList.add('hidden-room');
+            }
+        });
 
-    // Hide intro sections to restrict scrolling and unlock scroll
-    const intro = document.getElementById('intro-sections');
-    if (intro) intro.classList.add('hidden-room');
-    unlockScroll();
+        const targetRoom = document.getElementById(roomId);
+        if (targetRoom) {
+            targetRoom.classList.remove('hidden-room');
+            targetRoom.classList.add('visible-room');
+            window.scrollTo(0, 0);
+        }
 
-    // ── Audio Manager handles all ambient/playlist transitions ──
-    AudioManager.enterRoom(roomId);
+        // Hide intro sections to restrict scrolling and unlock scroll
+        const intro = document.getElementById('intro-sections');
+        if (intro) intro.classList.add('hidden-room');
+        unlockScroll();
 
-    if (roomId === 'great-hall') {
-        setTimeout(revealHeartCollage, 500);
-    }
-    
+        // ── Audio Manager handles all ambient/playlist transitions ──
+        AudioManager.enterRoom(roomId);
+
+        if (roomId === 'great-hall') {
+            setTimeout(revealHeartCollage, 500);
+        }
 }
 
 function returnToMap() {
@@ -1063,8 +1063,6 @@ function returnToMap() {
         lockScroll(); // Full-screen takeover
     }
 
-    // ── Audio Manager handles ambient restoration ──
-    // If playlist is playing, AudioManager will NOT start Marauder's Map ambient (playlist has priority)
     AudioManager.enterRoom('marauders-map');
 
     // Show floating player if playlist is actively playing (AudioManager may have restored it from Ministry)
@@ -1185,7 +1183,8 @@ function typeFullLetter(paragraphs) {
     function step() {
         if (pIndex < paragraphs.length) {
             if (charIndex < paragraphs[pIndex].length) {
-                el.innerHTML += paragraphs[pIndex].charAt(charIndex);
+                const char = paragraphs[pIndex].charAt(charIndex);
+                el.innerHTML += char;
                 charIndex++;
                 setTimeout(step, 40); 
             } else {
@@ -1208,7 +1207,8 @@ function typeGoldenCaption(text) {
     let i = 0;
     function step() {
         if (i < text.length) {
-            el.innerHTML += text.charAt(i);
+            const char = text.charAt(i);
+            el.innerHTML += char;
             i++;
             setTimeout(step, 70);
         } else {
@@ -1478,7 +1478,7 @@ if (authWandBtn) {
         
         // 2. Wait 1.5s for the wand to trace the full circle
         setTimeout(() => {
-            const encryptedMap = "U2FsdGVkX18CMYtaP6qt15jgH4SPC65UkrW5UORspR4TktrFTi0R0YKVPjtDTnyTlb5sqL+2Eu1o/ViBMkYSpaWLBaOAgjF0RveGU0fyMNCOCFljN7qPdVQZtw+Y5EhQR8QslDbx/3L/OLSiBtKfQXMSvim0TXSlPHXAHGNGFjJcIYHE7ioZyXKG9Bs5E9PlOoJkO0RnaDsiSoP+JckYsPVsKVhJq6rvhsnTYzsX/7bCT3btY02IeH71fJw/Gy0mnBWLKhfzymf7rW6rNBBZ78GM7/H9vUF26yieMc/JI1E8An9F8vaGbROwGsm41/XKGSIGrBYQZpS3PQnFeYpergdy4+QtKV0gdyYEv+lLuTUT2zcjfztDJ8iKlgkgwssM0bQHVrvMh06vinBBzK9ydL9UEm/Vzndp6fIi2hTgecWMdQjjKo5BtoFsKjQy6HOjlRWMK5BM3K2Mce5/B+fdUTg6JThalhuN2b+SqXI0gWqk92V0FpWTsyBQiEhQJHLbhdVhH5v//KqBVaWC+YQGf7m1a5bvVZInfAgM23QfxNr9Bp9JWhGxX/8k4sH1Pa0w16qGpAFft50HfYT24df09mB39N5MgOHKDlvbdg8naa/B4eRKQwz/DAdA3Fzgh4KTEjSzNF9mpVe3TT0Kzo4/xpZA9J/gZdOsrE4zf6hzZQKk9fJ+Iv7/FS53ZKh0VCVlv+H2oyFZhcxLT1uo9R5WJM+Zsz4yLBRWyYS+XipXdEWHwgZXris37vAn7JnCSHRK8zyMa+OkKeffUbKnv64OW0iaT7zzQGkbtByko1iZkVaS5fqT+YEPhaxciCQJ6qbSYhKtfhLQ9jB01EiDGByTlLZqqaanrVWkAKDQw5mYEnAxAMSI0husb7ytm/l47uLO6A4JDZg09IuEUjASghg55p0TXmNTdV46tMnWjHHFGY+xJ0iPuh6SFeNdkqRH7lTCaMXrz8GuhHI7z30x29FC7PKNeyHZrtZk1kJOjCoKJaWFAESMFoGHzzqyw39iuJq+Bgxsy2Q56S0AiUbJmeoHpLqi7MQlqb/6M6suG4R4ZPsQO+BxcuFxdnWGKYg9NTD83CPovNAzHOgWncfXpMViDx0TRys14iarz3gmvxsbj5ueoMyq02i8mgbZBn7S+eskseIoKNpB2lq0DnsCUzqTPoXNMOAGuU7m3EbJDkzk70/hT5lAJxuxjB8M8hKz/4ZjqNtSVYiJMlQnrLpjn/bn9/irv0Y6wPe7KCsntyw6mWPFykJl1I2cBUEYrle4riZFV5YDfpWmd/qtpSAVDNL72udUWGjL9Qrj97zgHrgP95OmTuRqVSzS0BNxgM532WwyLOoO8psPxd8/7mAu8jUS3cPPY0FciE7nM9SJDihCfB7n+KPmdcUaIosr0A9VGicKON+Nrh5zB2Odry/UhStWRy1G2/zp75W1/EuZAm8f17Ke5TvnLvCkZDgACKmA0jcXTX/aAfjB6jbakOyGekWI3irpjPnRy060LpLRnVAF/g395PUt7I7rSPK1qw5wasQu6J+/O3UrfmQBsz40dZQZ/wMN4Aqi9L2ZsvCrD8hEf6C+pMKOdw4C1gCXUiPlHrwW";
+            const encryptedMap = "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";
             
             try {
                 // Attempt to decrypt using the typed password
@@ -2739,3 +2739,150 @@ function triggerMemoryExplosion(onComplete) {
 
     animationFrameId = requestAnimationFrame(animate);
 }
+
+/* =========================================================================
+   MAGICAL PHYSICS SYSTEM (Dust, Candles, Global Interactions)
+   ========================================================================= */
+
+class MagicalPhysics {
+    constructor() {
+        this.dustParticles = [];
+        this.maxDust = 100;
+        this.mouseX = window.innerWidth / 2;
+        this.mouseY = window.innerHeight / 2;
+        this.scrollVel = 0;
+        this.mouseVelX = 0;
+        this.mouseVelY = 0;
+        this.lastMouseX = this.mouseX;
+        this.lastMouseY = this.mouseY;
+        this.lastScrollY = window.scrollY;
+        
+        this.flameBend = 0;
+        this.targetFlameBend = 0;
+        
+        this.initDust();
+        this.initListeners();
+        this.loop = this.loop.bind(this);
+        requestAnimationFrame(this.loop);
+    }
+    
+    initDust() {
+        const container = document.getElementById('dust-container');
+        if (!container) return;
+        
+        for (let i = 0; i < this.maxDust; i++) {
+            const el = document.createElement('div');
+            el.className = 'magic-dust';
+            
+            // Random properties
+            const size = Math.random() * 2 + 1;
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            
+            const p = {
+                el: el,
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: -Math.random() * 0.5 - 0.2, // Drift up
+                baseVy: -Math.random() * 0.5 - 0.2,
+                life: Math.random(),
+                speed: Math.random() * 0.02 + 0.01,
+            };
+            
+            this.dustParticles.push(p);
+            container.appendChild(el);
+        }
+    }
+    
+    initListeners() {
+        window.addEventListener('mousemove', (e) => {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+            
+            // Calculate velocity for candles
+            const dx = this.mouseX - this.lastMouseX;
+            this.mouseVelX = dx;
+            this.lastMouseX = this.mouseX;
+            this.lastMouseY = this.mouseY;
+            
+            // Target bend based on mouse X movement
+            this.targetFlameBend = Math.max(-45, Math.min(45, dx * 0.5));
+
+        });
+        
+        window.addEventListener('scroll', () => {
+            const dy = window.scrollY - this.lastScrollY;
+            this.scrollVel = dy;
+            this.lastScrollY = window.scrollY;
+        });
+        
+        // Magic Ripple on Click
+        window.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'magic-ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    }
+    
+    loop() {
+        // 1. DUST PHYSICS
+        const attractRadius = 150;
+        
+        this.dustParticles.forEach(p => {
+            // Mouse attraction
+            const dx = this.mouseX - p.x;
+            const dy = this.mouseY - p.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if (dist < attractRadius) {
+                const force = (attractRadius - dist) / attractRadius;
+                p.vx += (dx / dist) * force * 0.05;
+                p.vy += (dy / dist) * force * 0.05;
+            }
+            
+            // Apply velocity and drag
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vx *= 0.98; // Friction
+            
+            // Base upward drift recovery
+            p.vy += (p.baseVy - p.vy) * 0.05;
+            
+            // Screen wrap
+            if (p.y < -10) { p.y = window.innerHeight + 10; p.x = Math.random() * window.innerWidth; }
+            if (p.x < -10) { p.x = window.innerWidth + 10; }
+            if (p.x > window.innerWidth + 10) { p.x = -10; }
+            
+            // Twinkle
+            p.life += p.speed;
+            const opacity = (Math.sin(p.life * Math.PI * 2) + 1) / 2 * 0.8 + 0.1;
+            
+            p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
+            p.el.style.opacity = opacity;
+        });
+        
+        // 2. CANDLE PHYSICS
+        // Lerp flame bend
+        this.flameBend += (this.targetFlameBend - this.flameBend) * 0.1;
+        // Decay target bend back to 0
+        this.targetFlameBend *= 0.9;
+        
+        if (Math.abs(this.flameBend) > 0.1) {
+            document.documentElement.style.setProperty('--flame-bend', `${this.flameBend}deg`);
+        } else {
+            document.documentElement.style.setProperty('--flame-bend', `0deg`);
+        }
+        
+        requestAnimationFrame(this.loop);
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.magicalPhysics = new MagicalPhysics();
+});
