@@ -37,7 +37,8 @@ function preloadAssets(isSecurePhase = false) {
             "now1.jpg", "now2.jpg", "now3.jpg", "now4.jpg", "now5.jpg", 
             "collage1.jpg", "collage2.jpg", "collage3.jpg", "collage4.jpg", "collage5.jpg", 
             "collage6.jpg", "collage7.jpg", "collage8.jpg", "collage9.jpg", "collage10.jpg", 
-            "collage11.jpg", "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg"
+            "collage11.jpg", "collage12.jpg", "collage13.jpg", "collage14.jpg", "collage15.jpg",
+            ...Array.from({length: 22}, (_, i) => `gallery/gallery-${i + 1}.jpg`)
         ].map(getSecureURL);
         
         secureImages.forEach(src => { const img = new Image(); img.src = src; });
