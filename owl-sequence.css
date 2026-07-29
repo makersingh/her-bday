@@ -196,8 +196,8 @@
     letter-spacing: 1.2px;
     z-index: 2;
 }
-.address-name  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.85em; margin-bottom: 2px; }
-.address-line  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.35em; margin: 0; padding: 0; line-height: 1.3; }
+.address-name  { font-family: 'HarryPotter', sans-serif !important; font-size: 2rem; margin-bottom: 2px; padding-left: 10px !important;}
+.address-line  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.75em; margin: 0; padding: 0; line-height: 1.3; }
 .address-county { font-style: italic; }
 
 /* ── BACK FACE ── */
