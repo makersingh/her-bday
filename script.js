@@ -1906,7 +1906,7 @@ function triggerMischiefManaged() {
     // 3. final text
     const finaleText = document.createElement('div');
     finaleText.className = 'mischief-managed-text';
-    finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.25em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. Happy Birthday Chikki.<br>I Love You<span class='delayed-always'>Always...</span></span>";
+    finaleText.innerHTML = "<span class='hp-metallic-text'>Mischief Managed.</span><br><span style='font-size: 0.25em; color: var(--teal-silver); font-family: var(--font-display);'>Forever your partner in crime. <span style='display:inline-block'>Happy Birthday Chikki.</span><br>I Love You<span class='delayed-always'>Always...</span></span>";
     // 4. Attach everything to the page
     finaleOverlay.appendChild(finaleText);
     document.body.appendChild(finaleOverlay);
@@ -2390,7 +2390,7 @@ function updateTimeCalculations() {
 // Cleanup if the user leaves the room early
 document.querySelectorAll('.map-pin, .back-to-map-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        clearInterval(timeInterval);
+        // We let the clock interval keep running so it updates if they return
     });
 });
 
