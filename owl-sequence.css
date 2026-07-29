@@ -187,38 +187,68 @@
 
 .envelope-address {
     position: absolute;
-    top: 50%; left: 50%;
+    top: 50%; left: 45%; /* Shifted slightly to the left */
     transform: translate(-50%, -50%);
     text-align: center;
-    font-family: 'Pinyon Script', cursive;
+    font-family: 'HarryPotter', serif;
     color: #1a472a;
     line-height: 1.8;
+    letter-spacing: 1.2px;
     z-index: 2;
 }
-.address-name  { font-size: 1.35em; margin-bottom: 2px; }
-.address-line  { font-size: 1.05em; margin: 0; padding: 0; }
+.address-name  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.85em; margin-bottom: 2px; }
+.address-line  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.35em; margin: 0; padding: 0; line-height: 1.3; }
 .address-county { font-style: italic; }
 
 /* ── BACK FACE ── */
 .envelope-back {
-    background: linear-gradient(145deg,
-        #e8dcc5 0%, #ddd0b8 30%, #d5c8b0 60%, #e0d4be 100%);
+    background: #d1c3a8; /* Base color for the envelope interior showing through the back */
     border: 1px solid #c4b08a;
     transform: rotateY(180deg);
     box-shadow: inset 0 0 30px rgba(139,115,85,0.15), 0 4px 20px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.envelope-crest {
-    width: 55px; height: auto;
-    opacity: 0.45;
-    margin-top: 18px;
-    filter: brightness(0);
+/* Base textures (reused from front) */
+.envelope-back .envelope-texture,
+.envelope-back .envelope-stains {
+    z-index: 3;
+    mix-blend-mode: multiply;
 }
 
-/* ── ENVELOPE FLAP ── */
+/* Side Flaps */
+.envelope-back::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-left: 190px solid #e0d4be;
+    border-right: 190px solid #e0d4be;
+    border-top: 130px solid transparent;
+    border-bottom: 130px solid transparent;
+    pointer-events: none;
+    z-index: 1;
+    filter: drop-shadow(0 0 4px rgba(139,115,85,0.35));
+}
+
+/* Bottom Flap */
+.envelope-back::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-left: 190px solid transparent;
+    border-right: 190px solid transparent;
+    border-bottom: 145px solid #e8dcc5;
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 -3px 5px rgba(139,115,85,0.4));
+}
+
+/* ── ENVELOPE FLAP (Top Flap) ── */
 #envelope-flap {
     position: absolute;
     top: 0; left: 0;
@@ -227,22 +257,34 @@
     transform-style: preserve-3d;
     z-index: 5;
     pointer-events: none; /* Don't block seal clicks */
+    filter: drop-shadow(0 3px 6px rgba(139,115,85,0.45));
 }
 .flap-inner {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: linear-gradient(to bottom, #ddd0b8, #d5c8b0);
+    background: linear-gradient(to bottom, #ebe0ce, #d5c8b0);
     clip-path: polygon(0 0, 50% 100%, 100% 0);
-    border-bottom: 1px solid #c4b08a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; /* Push logo to the bottom point */
+    padding-bottom: 25px; /* Distance from the flap point */
+}
+
+.envelope-crest {
+    width: 65px; height: auto;
+    opacity: 0.65;
+    filter: brightness(0.2) sepia(1) hue-rotate(30deg) saturate(0.5); /* Faded ink look */
+    mix-blend-mode: multiply;
 }
 
 /* ── WAX SEAL ── */
 #wax-seal-container {
     position: absolute;
-    top: 42%; left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 90px; height: 90px;
+    width: 110px; height: 110px;
     cursor: pointer;
     z-index: 10;
 }
@@ -596,6 +638,20 @@
     #owl-container { width: 120px; }
 
     #envelope-3d { width: 300px; height: 210px; }
+    
+    /* Responsive flap borders for mobile */
+    .envelope-back::before {
+        border-left-width: 150px;
+        border-right-width: 150px;
+        border-top-width: 105px;
+        border-bottom-width: 105px;
+    }
+    .envelope-back::after {
+        border-left-width: 150px;
+        border-right-width: 150px;
+        border-bottom-width: 115px;
+    }
+
     .envelope-address { font-size: 0.65em; line-height: 1.7; }
 
     #letter-paper {
@@ -606,6 +662,6 @@
     .letter-body-text { font-size: 0.85rem; }
     .letter-crest { width: 65px; }
 
-    #wax-seal-container { width: 70px; height: 70px; }
-    .envelope-crest { width: 42px; }
+    #wax-seal-container { width: 85px; height: 85px; }
+    .envelope-crest { width: 50px; }
 }

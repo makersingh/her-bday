@@ -542,24 +542,28 @@
                 </g>
             </svg>
         </div>
-
         <!-- Envelope presentation (3D flip) -->
         <div id="envelope-scene">
             <div id="envelope-3d">
                 <div class="envelope-face envelope-front">
                     <div class="envelope-texture"></div>
                     <div class="envelope-stains"></div>
-                    <div class="envelope-address">
-                        <p class="address-line address-name">Ms. M. Pandey</p>
-                        <p class="address-line">The Cupboard under the Stairs</p>
-                        <p class="address-line">4 Privet Drive</p>
-                        <p class="address-line">Little Whinging</p>
-                        <p class="address-line address-county">Surrey</p>
+                    <div class="envelope-address" style="left: 45%; text-align: left;">
+                        <p class="address-line address-name" style="font-family: 'HarryPotter', sans-serif !important;">Ms. M. Pandey,</p>
+                        <p class="address-line" style="font-family: 'HarryPotter', sans-serif !important; padding-left: 20px;">The Cupboard under the Stairs,</p>
+                        <p class="address-line" style="font-family: 'HarryPotter', sans-serif !important; padding-left: 55px;">4, Privet Drive,</p>
+                        <p class="address-line" style="font-family: 'HarryPotter', sans-serif !important; padding-left: 75px;">Little Whinging,</p>
+                        <p class="address-line address-county" style="font-family: 'HarryPotter', sans-serif !important; padding-left: 100px;">Surrey</p>
                     </div>
                 </div>
                 <div class="envelope-face envelope-back">
-                    <img src="hogwarts-logo.png" class="envelope-crest" alt="">
-                    <div id="envelope-flap"><div class="flap-inner"></div></div>
+                    <div class="envelope-texture"></div>
+                    <div class="envelope-stains" style="transform: scaleX(-1);"></div>
+                    <div id="envelope-flap">
+                        <div class="flap-inner">
+                            <img src="hogwarts-logo.png" class="envelope-crest" alt="">
+                        </div>
+                    </div>
                     <div id="wax-seal-container">
                         <img src="red-seal.png" id="wax-seal" alt="Hogwarts Seal">
                         <div id="wax-seal-glow"></div>
