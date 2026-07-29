@@ -15,6 +15,7 @@
     
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="owl-sequence.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 
@@ -451,7 +452,157 @@
     </div>
 
     <div id="spell-caption" class="spell-caption"></div>
-    
+
+    <!-- ═══ OWL SEQUENCE OVERLAY ═══ -->
+    <div id="owl-sequence-overlay">
+        <div id="owl-blur-backdrop"></div>
+        <div id="owl-dust-container"></div>
+
+        <!-- Owl container (GSAP positions via transforms) -->
+        <div id="owl-container">
+            <div id="owl-shadow"></div>
+            <div id="owl-envelope-attached">
+                <div class="owl-string owl-string-left"></div>
+                <div class="owl-string owl-string-right"></div>
+                <div class="owl-mini-envelope"></div>
+            </div>
+            <svg id="owl-svg" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+                <!-- Body -->
+                <g id="owl-body-group">
+                    <ellipse cx="100" cy="160" rx="40" ry="55" fill="#f5f0e8" stroke="#c4b99a" stroke-width="0.5"/>
+                    <g id="owl-spots">
+                        <circle cx="85" cy="145" r="2" fill="#c4b99a" opacity="0.5"/>
+                        <circle cx="110" cy="150" r="1.8" fill="#c4b99a" opacity="0.4"/>
+                        <circle cx="92" cy="168" r="2.2" fill="#c4b99a" opacity="0.3"/>
+                        <circle cx="108" cy="140" r="1.5" fill="#c4b99a" opacity="0.5"/>
+                        <circle cx="78" cy="162" r="1.8" fill="#c4b99a" opacity="0.4"/>
+                        <circle cx="118" cy="158" r="1.5" fill="#c4b99a" opacity="0.35"/>
+                        <circle cx="95" cy="182" r="2" fill="#c4b99a" opacity="0.3"/>
+                        <circle cx="106" cy="176" r="1.5" fill="#c4b99a" opacity="0.4"/>
+                    </g>
+                    <g id="owl-chest-feathers">
+                        <path d="M88,148 Q92,155 88,161" fill="none" stroke="#ddd5c4" stroke-width="0.8" opacity="0.6"/>
+                        <path d="M95,146 Q99,153 95,160" fill="none" stroke="#ddd5c4" stroke-width="0.8" opacity="0.6"/>
+                        <path d="M102,145 Q106,152 102,159" fill="none" stroke="#ddd5c4" stroke-width="0.8" opacity="0.6"/>
+                        <path d="M109,147 Q113,154 109,160" fill="none" stroke="#ddd5c4" stroke-width="0.8" opacity="0.6"/>
+                    </g>
+                </g>
+                <!-- Left wing -->
+                <g id="owl-wing-left">
+                    <path d="M60,130 Q28,108 12,165 Q22,198 55,188 Q62,168 60,130 Z" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.5"/>
+                    <path d="M48,148 L26,143" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M46,158 L23,155" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M44,168 L20,167" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M46,178 L26,179" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                </g>
+                <!-- Right wing -->
+                <g id="owl-wing-right">
+                    <path d="M140,130 Q172,108 188,165 Q178,198 145,188 Q138,168 140,130 Z" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.5"/>
+                    <path d="M152,148 L174,143" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M154,158 L177,155" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M156,168 L180,167" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                    <path d="M154,178 L174,179" stroke="#c4b99a" stroke-width="0.6" opacity="0.5"/>
+                </g>
+                <!-- Head -->
+                <g id="owl-head">
+                    <circle cx="100" cy="100" r="33" fill="#f5f0e8" stroke="#c4b99a" stroke-width="0.4"/>
+                    <ellipse cx="84" cy="103" rx="14" ry="16" fill="#ede4d3" opacity="0.55"/>
+                    <ellipse cx="116" cy="103" rx="14" ry="16" fill="#ede4d3" opacity="0.55"/>
+                    <!-- Ear tufts -->
+                    <path d="M73,74 Q77,82 84,78" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.5"/>
+                    <path d="M127,74 Q123,82 116,78" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.5"/>
+                    <!-- Left eye -->
+                    <g id="owl-eye-left">
+                        <circle cx="84" cy="100" r="9" fill="#f5a623"/>
+                        <circle cx="84" cy="100" r="5" fill="#1a1a1a"/>
+                        <circle cx="82" cy="98" r="2" fill="white" opacity="0.7"/>
+                        <ellipse id="owl-lid-left" cx="84" cy="100" rx="10" ry="0" fill="#f5f0e8"/>
+                    </g>
+                    <!-- Right eye -->
+                    <g id="owl-eye-right">
+                        <circle cx="116" cy="100" r="9" fill="#f5a623"/>
+                        <circle cx="116" cy="100" r="5" fill="#1a1a1a"/>
+                        <circle cx="114" cy="98" r="2" fill="white" opacity="0.7"/>
+                        <ellipse id="owl-lid-right" cx="116" cy="100" rx="10" ry="0" fill="#f5f0e8"/>
+                    </g>
+                    <!-- Beak -->
+                    <path d="M97,112 L100,119 L103,112" fill="#5a4a3a"/>
+                </g>
+                <!-- Tail -->
+                <g id="owl-tail">
+                    <path d="M82,210 L78,232 L88,220" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.4"/>
+                    <path d="M92,212 L90,238 L98,224" fill="#ede4d3" stroke="#c4b99a" stroke-width="0.4"/>
+                    <path d="M102,212 L104,238 L96,224" fill="#ede4d3" stroke="#c4b99a" stroke-width="0.4"/>
+                    <path d="M112,210 L116,232 L106,220" fill="#e8e0d0" stroke="#c4b99a" stroke-width="0.4"/>
+                </g>
+                <!-- Talons -->
+                <g id="owl-talons">
+                    <path d="M84,210 Q80,218 76,226 M84,210 Q82,220 80,229 M84,210 Q86,220 84,228" fill="none" stroke="#5a4a3a" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M116,210 Q120,218 124,226 M116,210 Q118,220 120,229 M116,210 Q114,220 116,228" fill="none" stroke="#5a4a3a" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Envelope presentation (3D flip) -->
+        <div id="envelope-scene">
+            <div id="envelope-3d">
+                <div class="envelope-face envelope-front">
+                    <div class="envelope-texture"></div>
+                    <div class="envelope-stains"></div>
+                    <div class="envelope-address">
+                        <p class="address-line address-name">Ms. M. Pandey</p>
+                        <p class="address-line">The Cupboard under the Stairs</p>
+                        <p class="address-line">4 Privet Drive</p>
+                        <p class="address-line">Little Whinging</p>
+                        <p class="address-line address-county">Surrey</p>
+                    </div>
+                </div>
+                <div class="envelope-face envelope-back">
+                    <img src="hogwarts-logo.png" class="envelope-crest" alt="">
+                    <div id="envelope-flap"><div class="flap-inner"></div></div>
+                    <div id="wax-seal-container">
+                        <img src="red-seal.png" id="wax-seal" alt="Hogwarts Seal">
+                        <div id="wax-seal-glow"></div>
+                        <div id="seal-particles"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hogwarts Letter -->
+        <div id="letter-scene">
+            <div id="letter-paper">
+                <div class="letter-texture"></div>
+                <div class="letter-content">
+                    <img src="hogwarts-logo.png" class="letter-crest" alt="">
+                    <h2 class="letter-school-name">HOGWARTS SCHOOL<br><span class="letter-of">of</span> WITCHCRAFT <span class="letter-and">and</span> WIZARDRY</h2>
+                    <div class="letter-headmaster-info">
+                        <p>Headmaster: Albus Dumbledore</p>
+                        <p class="letter-hm-subtitle">(Order of Merlin, First Class)</p>
+                    </div>
+                    <hr class="letter-divider">
+                    <div class="letter-body-text">
+                        <p class="letter-dear">Dear Miss Pandey,</p>
+                        <p>We are delighted to inform you that, by a rare decree of birthday magic, you have been granted honorary admission to Hogwarts School of Witchcraft and Wizardry for one unforgettable day.</p>
+                        <p>Your presence has been eagerly awaited within these enchanted halls, where portraits whisper, candles float, and every corridor hides a new adventure.</p>
+                        <p>As you turn the pages of this magical journey, may laughter, friendship, and wonder accompany every spell cast in your honour.</p>
+                        <p>We look forward to welcoming you to the castle.</p>
+                    </div>
+                    <div class="letter-signature-block">
+                        <p class="letter-yours">Yours sincerely,</p>
+                        <p class="letter-sig-name">Minerva McGonagall</p>
+                        <p class="letter-sig-title">Deputy Headmistress</p>
+                    </div>
+                </div>
+            </div>
+            <button id="owl-close-btn" aria-label="Close letter">Close</button>
+            <div id="letter-dust-container"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+    <script src="owl-sequence.js"></script>
     <script src="script.js"></script>
 
 </body>

@@ -560,6 +560,10 @@ function startHeroSequence() {
                     subEl.style.transition = 'opacity 1.5s ease';
                     subEl.style.opacity = '1';
                 }
+                // Trigger owl sequence ~2s after subtitle appears
+                setTimeout(() => {
+                    if (typeof startOwlSequence === 'function') startOwlSequence();
+                }, 2000);
             }, heroTitleText.length * 55 + 600);
         }
     }

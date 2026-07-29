@@ -1,0 +1,611 @@
+/* ============================================================
+   HOGWARTS ACCEPTANCE LETTER — Cinematic Sequence Styles
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Pinyon+Script&display=swap');
+
+/* ── OVERLAY ── */
+#owl-sequence-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 15000;
+    display: none;
+    overflow: hidden;
+}
+
+/* ── BLUR BACKDROP ── */
+#owl-blur-backdrop {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── GOLDEN DUST PARTICLES ── */
+#owl-dust-container,
+#letter-dust-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.owl-dust-particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: radial-gradient(circle, #ffd700, #d4af37 50%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 4px #ffd700, 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+/* ── OWL CONTAINER ── */
+#owl-container {
+    position: absolute;
+    left: 0; top: 0;
+    z-index: 10;
+    width: 160px;
+    cursor: pointer;
+}
+
+#owl-svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.35));
+    overflow: visible;
+}
+
+#owl-wing-left,
+#owl-wing-right { will-change: transform; }
+
+/* ── OWL SHADOW ── */
+#owl-shadow {
+    position: absolute;
+    bottom: -15px; left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 20px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+/* ── ATTACHED MINI-ENVELOPE ── */
+#owl-envelope-attached {
+    position: absolute;
+    bottom: -45px; left: 50%;
+    transform: translateX(-50%);
+    width: 55px; height: 36px;
+    z-index: 5;
+}
+.owl-string {
+    position: absolute;
+    top: -22px;
+    width: 1px; height: 25px;
+    background: #8b7355;
+    opacity: 0.8;
+}
+.owl-string-left  { left: 10px; transform: rotate(-10deg); }
+.owl-string-right { right: 10px; transform: rotate(10deg); }
+
+.owl-mini-envelope {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #f0e6d3, #e8dcc5, #ddd0b8);
+    border: 1px solid #c4b08a;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.owl-mini-envelope::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 50%;
+    background:
+        linear-gradient(to bottom right, transparent 48%, #c4b08a 49%, #c4b08a 51%, transparent 52%),
+        linear-gradient(to bottom left,  transparent 48%, #c4b08a 49%, #c4b08a 51%, transparent 52%);
+}
+
+/* ── OWL HOVER SPARKLES ── */
+.owl-sparkle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: radial-gradient(circle, #fff, #ffd700 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 4px #ffd700;
+}
+
+/* ══════════════════════════════════════════
+   ENVELOPE SCENE — 3D flippable envelope
+   ══════════════════════════════════════════ */
+#envelope-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+}
+
+#envelope-3d {
+    width: 380px; height: 260px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.envelope-face {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 3px;
+}
+
+/* ── FRONT FACE ── */
+.envelope-front {
+    background: linear-gradient(145deg,
+        #f0e6d3 0%, #e8dcc5 20%, #ddd0b8 40%,
+        #e5d8c4 60%, #ebe0ce 80%, #f0e6d3 100%);
+    border: 1px solid #c4b08a;
+    box-shadow:
+        inset 0 0 30px rgba(139,115,85,0.15),
+        0 4px 20px rgba(0,0,0,0.3),
+        0 1px 3px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.envelope-texture {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background:
+        repeating-linear-gradient(0deg,
+            transparent, transparent 3px,
+            rgba(139,115,85,0.03) 3px, rgba(139,115,85,0.03) 4px),
+        repeating-linear-gradient(90deg,
+            transparent, transparent 5px,
+            rgba(139,115,85,0.02) 5px, rgba(139,115,85,0.02) 6px);
+    pointer-events: none;
+}
+.envelope-stains {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background:
+        radial-gradient(ellipse 40px 30px at 20% 30%, rgba(139,115,85,0.08), transparent),
+        radial-gradient(ellipse 50px 40px at 75% 70%, rgba(139,115,85,0.06), transparent),
+        radial-gradient(ellipse 30px 35px at 60% 15%, rgba(139,115,85,0.05), transparent);
+    pointer-events: none;
+}
+
+.envelope-address {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-family: 'Pinyon Script', cursive;
+    color: #1a472a;
+    line-height: 1.8;
+    z-index: 2;
+}
+.address-name  { font-size: 1.35em; margin-bottom: 2px; }
+.address-line  { font-size: 1.05em; margin: 0; padding: 0; }
+.address-county { font-style: italic; }
+
+/* ── BACK FACE ── */
+.envelope-back {
+    background: linear-gradient(145deg,
+        #e8dcc5 0%, #ddd0b8 30%, #d5c8b0 60%, #e0d4be 100%);
+    border: 1px solid #c4b08a;
+    transform: rotateY(180deg);
+    box-shadow: inset 0 0 30px rgba(139,115,85,0.15), 0 4px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.envelope-crest {
+    width: 55px; height: auto;
+    opacity: 0.45;
+    margin-top: 18px;
+    filter: brightness(0);
+}
+
+/* ── ENVELOPE FLAP ── */
+#envelope-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 50%;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    z-index: 5;
+    pointer-events: none; /* Don't block seal clicks */
+}
+.flap-inner {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom, #ddd0b8, #d5c8b0);
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    border-bottom: 1px solid #c4b08a;
+}
+
+/* ── WAX SEAL ── */
+#wax-seal-container {
+    position: absolute;
+    top: 42%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px; height: 90px;
+    cursor: pointer;
+    z-index: 10;
+}
+#wax-seal {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+#wax-seal-container:hover #wax-seal {
+    filter: drop-shadow(0 3px 10px rgba(139,0,0,0.5)) brightness(1.08);
+    transform: translateY(-3px);
+}
+#wax-seal-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.3), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+#wax-seal-container:hover #wax-seal-glow { opacity: 1; }
+
+#seal-particles {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+}
+.seal-particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 3px #ffd700;
+}
+
+/* ══════════════════════════════════════════════════════════
+   HOGWARTS LETTER — Premium Aged Parchment
+   ══════════════════════════════════════════════════════════ */
+
+/*
+   The letter uses flexbox centering on #letter-scene (inset:0)
+   so GSAP transforms don't break the centering.
+*/
+#letter-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: none;           /* JS sets to 'flex' */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* ── THE PAPER ── */
+#letter-paper {
+    width: 540px;
+    max-width: 94vw;
+    max-height: 82vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 50px 42px 40px;
+    border-radius: 2px;
+
+    /* Base aged parchment gradient */
+    background:
+        linear-gradient(160deg,
+            #f5edd8 0%, #efe5cc 12%, #e6dac0 25%,
+            #ebe0ce 40%, #f0e6d3 55%, #e8dcc5 70%,
+            #ece2cb 85%, #f3ebd6 100%);
+    border: 1px solid rgba(160,128,80,0.5);
+    box-shadow:
+        0 6px 40px rgba(0,0,0,0.45),
+        0 2px 8px rgba(0,0,0,0.2),
+        inset 0 0 60px rgba(139,115,85,0.12),
+        inset 0 2px 0 rgba(255,255,255,0.1);
+
+    /* Irregular torn/aged edges */
+    clip-path: polygon(
+        0.8% 0.4%, 2.5% 0%, 4% 0.7%, 6% 0.1%, 9% 0%, 12% 0.5%, 16% 0.1%,
+        20% 0%, 25% 0.4%, 30% 0%, 35% 0.3%, 40% 0%, 45% 0.5%, 50% 0.1%,
+        55% 0%, 60% 0.4%, 65% 0%, 70% 0.3%, 75% 0%, 80% 0.5%, 85% 0.1%,
+        90% 0%, 93% 0.4%, 96% 0%, 98% 0.6%, 99.2% 0.3%,
+
+        100% 1.2%, 99.5% 4%, 100% 8%, 99.6% 14%, 100% 20%,
+        99.7% 27%, 100% 33%, 99.5% 40%, 100% 47%, 99.6% 54%,
+        100% 60%, 99.7% 67%, 100% 74%, 99.5% 80%, 100% 86%,
+        99.6% 92%, 100% 96%, 99.5% 98.5%,
+
+        99.2% 99.6%, 97% 100%, 94% 99.5%, 90% 100%, 85% 99.7%,
+        80% 100%, 75% 99.5%, 70% 100%, 65% 99.7%, 60% 100%,
+        55% 99.5%, 50% 100%, 45% 99.6%, 40% 100%, 35% 99.7%,
+        30% 100%, 25% 99.5%, 20% 100%, 16% 99.6%, 12% 100%,
+        8% 99.7%, 5% 100%, 2.5% 99.5%, 0.8% 99.7%,
+
+        0% 98.5%, 0.5% 95%, 0% 90%, 0.4% 84%, 0% 78%,
+        0.3% 72%, 0% 66%, 0.5% 60%, 0% 54%, 0.4% 48%,
+        0% 42%, 0.3% 36%, 0% 30%, 0.5% 24%, 0% 18%,
+        0.4% 12%, 0% 6%, 0.5% 2%
+    );
+}
+
+/* Scrollbar */
+#letter-paper::-webkit-scrollbar       { width: 5px; }
+#letter-paper::-webkit-scrollbar-track { background: rgba(139,115,85,0.08); border-radius: 3px; }
+#letter-paper::-webkit-scrollbar-thumb { background: rgba(139,115,85,0.25); border-radius: 3px; }
+
+/* ── LAYER 1: Burn marks & age spots (::before) ── */
+#letter-paper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 2px;
+    background:
+        /* Corner burn marks */
+        radial-gradient(ellipse 45px 55px at 1%  1%,  rgba(55,30,10,0.14), transparent),
+        radial-gradient(ellipse 35px 40px at 99% 2%,  rgba(55,30,10,0.10), transparent),
+        radial-gradient(ellipse 50px 35px at 98% 99%, rgba(55,30,10,0.16), transparent),
+        radial-gradient(ellipse 30px 45px at 2%  98%, rgba(55,30,10,0.09), transparent),
+        /* Edge burn accents */
+        radial-gradient(ellipse 60px 15px at 50% 0%,  rgba(55,30,10,0.06), transparent),
+        radial-gradient(ellipse 15px 50px at 100% 50%, rgba(55,30,10,0.05), transparent),
+        /* Aged stain spots */
+        radial-gradient(ellipse 30px 25px at 25% 40%, rgba(120,95,60,0.07), transparent),
+        radial-gradient(ellipse 40px 30px at 70% 65%, rgba(120,95,60,0.06), transparent),
+        radial-gradient(ellipse 25px 35px at 55% 20%, rgba(120,95,60,0.05), transparent),
+        radial-gradient(ellipse 35px 20px at 15% 75%, rgba(120,95,60,0.06), transparent);
+}
+
+/* ── LAYER 2: Wrinkle lines (::after) ── */
+#letter-paper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 2px;
+    background:
+        /* Diagonal wrinkle creases */
+        linear-gradient(172deg, transparent 43.5%, rgba(139,115,85,0.07) 44%, rgba(139,115,85,0.04) 44.8%, transparent 45.3%),
+        linear-gradient(186deg, transparent 60.5%, rgba(139,115,85,0.06) 61%, rgba(139,115,85,0.03) 61.8%, transparent 62.3%),
+        linear-gradient(195deg, transparent 27.5%, rgba(139,115,85,0.05) 28%, rgba(139,115,85,0.03) 28.8%, transparent 29.3%),
+        linear-gradient(168deg, transparent 74.5%, rgba(139,115,85,0.06) 75%, rgba(139,115,85,0.03) 75.8%, transparent 76.3%),
+        linear-gradient(178deg, transparent 52.5%, rgba(139,115,85,0.04) 53%, rgba(139,115,85,0.02) 53.6%, transparent 54%),
+        /* Subtle vertical crumple */
+        linear-gradient(92deg, transparent 35%, rgba(139,115,85,0.03) 35.3%, transparent 35.6%),
+        linear-gradient(88deg, transparent 68%, rgba(139,115,85,0.03) 68.3%, transparent 68.6%);
+}
+
+/* ── LAYER 3: Paper fibre lines ── */
+.letter-texture {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background:
+        /* Horizontal fibres */
+        repeating-linear-gradient(0deg,
+            transparent, transparent 2px,
+            rgba(139,115,85,0.018) 2px, rgba(139,115,85,0.018) 3px),
+        /* Vertical fibres (finer) */
+        repeating-linear-gradient(90deg,
+            transparent, transparent 3px,
+            rgba(139,115,85,0.012) 3px, rgba(139,115,85,0.012) 4px),
+        /* Diagonal micro-grain */
+        repeating-linear-gradient(45deg,
+            transparent, transparent 4px,
+            rgba(139,115,85,0.008) 4px, rgba(139,115,85,0.008) 5px);
+}
+
+/* ── LAYER 4: Fold lines (::before on .letter-texture) ── */
+.letter-texture::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+        /* Primary horizontal fold at 1/3 */
+        linear-gradient(0deg, transparent 32.5%,
+            rgba(139,115,85,0.10) 33%,
+            rgba(255,255,255,0.04) 33.15%,
+            rgba(139,115,85,0.06) 33.3%,
+            transparent 33.8%),
+        /* Secondary horizontal fold at 2/3 */
+        linear-gradient(0deg, transparent 65.5%,
+            rgba(139,115,85,0.08) 66%,
+            rgba(255,255,255,0.03) 66.15%,
+            rgba(139,115,85,0.05) 66.3%,
+            transparent 66.8%),
+        /* Subtle vertical center fold */
+        linear-gradient(90deg, transparent 49%,
+            rgba(139,115,85,0.04) 49.5%,
+            rgba(255,255,255,0.02) 50%,
+            rgba(139,115,85,0.04) 50.5%,
+            transparent 51%);
+}
+
+/* ── LAYER 5: Main fold line shadow (::after on .letter-texture) ── */
+.letter-texture::after {
+    content: '';
+    position: absolute;
+    top: 33%; left: 3%;
+    width: 94%; height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(139,115,85,0.14) 15%,
+        rgba(139,115,85,0.14) 85%,
+        transparent 100%);
+    box-shadow: 0 1px 2px rgba(139,115,85,0.06);
+}
+
+/* ── LETTER CONTENT ── */
+.letter-content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+}
+
+.letter-crest {
+    width: 85px; height: auto;
+    display: block;
+    margin: 0 auto 14px;
+    opacity: 0.7;
+    filter: brightness(0);
+}
+
+.letter-school-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 2.5px;
+    line-height: 1.5;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+}
+.letter-of, .letter-and {
+    font-size: 0.8em;
+    font-weight: 400;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+}
+
+.letter-headmaster-info {
+    font-family: 'Georgia', serif;
+    font-size: 0.82rem;
+    color: #333;
+    margin-bottom: 14px;
+    line-height: 1.6;
+}
+.letter-hm-subtitle {
+    font-style: italic;
+    font-size: 0.75rem;
+    color: #555;
+}
+
+.letter-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c4b08a 20%, #c4b08a 80%, transparent);
+    margin: 16px 0;
+}
+
+.letter-body-text {
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+    text-align: left;
+    line-height: 1.85;
+    padding: 0 10px;
+}
+.letter-body-text p {
+    margin: 0 0 13px;
+    text-indent: 20px;
+}
+.letter-dear {
+    text-indent: 0 !important;
+    font-style: italic;
+    margin-bottom: 16px !important;
+}
+
+.letter-signature-block {
+    text-align: left;
+    padding: 10px 10px 0;
+    margin-top: 12px;
+}
+.letter-yours {
+    font-family: 'Georgia', serif;
+    font-size: 0.88rem;
+    color: #1a1a1a;
+    font-style: italic;
+    margin: 0 0 16px;
+}
+.letter-sig-name {
+    font-family: 'Homemade Apple', cursive;
+    font-size: 1rem;
+    color: #1a472a;
+    margin: 0 0 3px;
+}
+.letter-sig-title {
+    font-family: 'Georgia', serif;
+    font-size: 0.8rem;
+    color: #555;
+    font-style: italic;
+    margin: 0;
+}
+
+/* ── CLOSE BUTTON ── */
+#owl-close-btn {
+    margin-top: 20px;
+    padding: 11px 34px;
+    background: linear-gradient(135deg, #8b6914, #a07828, #8b6914);
+    border: 2px solid #d4af37;
+    border-radius: 25px;
+    color: #f5edd8;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 2px 10px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+#owl-close-btn:hover {
+    background: linear-gradient(135deg, #a07828, #b8922e, #a07828);
+    box-shadow:
+        0 4px 15px rgba(212,175,55,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+/* ── LETTER DUST ── */
+#letter-dust-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    #owl-container { width: 120px; }
+
+    #envelope-3d { width: 300px; height: 210px; }
+    .envelope-address { font-size: 0.65em; line-height: 1.7; }
+
+    #letter-paper {
+        width: 96vw;
+        padding: 30px 22px 28px;
+    }
+    .letter-school-name { font-size: 0.95rem; }
+    .letter-body-text { font-size: 0.85rem; }
+    .letter-crest { width: 65px; }
+
+    #wax-seal-container { width: 70px; height: 70px; }
+    .envelope-crest { width: 42px; }
+}
