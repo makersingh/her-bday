@@ -3231,7 +3231,7 @@ body.ministry-theme-active #magic-world {
     position: fixed;
     bottom: 80px;
     right: 15px;
-    z-index: 9999;
+    z-index: 9999999; /* Increased to be above Marauder's Map */
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -3260,7 +3260,7 @@ body.ministry-theme-active #magic-world {
     position: fixed;
     bottom: 135px;
     right: 15px;
-    z-index: 9998;
+    z-index: 9999998; /* Increased to be above Marauder's Map */
     background: rgba(10, 10, 10, 0.92);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(212, 175, 55, 0.3);
