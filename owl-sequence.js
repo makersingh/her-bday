@@ -175,9 +175,9 @@
         const tl = gsap.timeline();
         const dust = document.getElementById('owl-dust-container');
         tl.add(() => { lowerMusic(0.1); playWindSound(); })
-          .to({}, { duration: 0.2 })            // brief hush (faster)
+          .to({}, { duration: 0.8 })            // brief hush
           .add(() => startDust(dust))
-          .to({}, { duration: 0.3 });            // let a few motes appear (faster)
+          .to({}, { duration: 0.6 });            // let a few motes appear
         return tl;
     }
 
@@ -227,7 +227,7 @@
                 curviness: 1.5
             },
             scale: 1, rotation: 0,
-            duration: 1.4,
+            duration: 2.5,
             ease: 'power2.out'
         }, 0)
         .add(flap, 0)
@@ -594,7 +594,7 @@
         master.add(buildPause())
               .add(buildEntrance())
               .add(() => { wireOwlInteraction(); }) // Allow clicking immediately as it lands
-              .add(buildBlur(), '-=0.5')
+              .add(buildBlur(), '+=0') // Start blur exactly as owl lands
               .add(() => { startIdle(); });
     };
 
