@@ -569,9 +569,7 @@
         }, { once: true });
     }
 
-    // ══════════════════════════════════════════
     //  MASTER ENTRY POINT
-    // ══════════════════════════════════════════
 
     window.startOwlSequence = function () {
         if (sequenceActive) return;

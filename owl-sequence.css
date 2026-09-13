@@ -200,7 +200,7 @@
 .address-line  { font-family: 'HarryPotter', sans-serif !important; font-size: 1.75em; margin: 0; padding: 0; line-height: 1.3; }
 .address-county { font-style: italic; }
 
-/* ── BACK FACE ── */
+/* BACK FACE  */
 .envelope-back {
     background: #d1c3a8; /* Base color for the envelope interior showing through the back */
     border: 1px solid #c4b08a;
@@ -324,14 +324,7 @@
     box-shadow: 0 0 3px #ffd700;
 }
 
-/* ══════════════════════════════════════════════════════════
-   HOGWARTS LETTER — Premium Aged Parchment
-   ══════════════════════════════════════════════════════════ */
-
-/*
-   The letter uses flexbox centering on #letter-scene (inset:0)
-   so GSAP transforms don't break the centering.
-*/
+/* HOGWARTS LETTER — Premium Aged Parchment */
 #letter-scene {
     position: absolute;
     inset: 0;

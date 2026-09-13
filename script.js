@@ -775,7 +775,6 @@ function revealSlytherin() {
     const sortingContainer = document.querySelector('.sorting-container');
     const dimOverlay = document.getElementById('sorting-dim');
 
-    // 👇 NEW: Update the heading text instantly
     const sortingTitle = document.querySelector('.sorting-title');
     if (sortingTitle) {
         sortingTitle.innerText = "The Sorting Hat has decided your house!";
