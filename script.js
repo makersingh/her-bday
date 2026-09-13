@@ -805,6 +805,12 @@ function revealSlytherin() {
     setTimeout(() => {
         unlockScroll();
     }, 2000);
+
+    // Show "Alohomora" hint 3 seconds after theme change
+    setTimeout(() => {
+        const hint = document.getElementById('alohomora-hint');
+        if (hint) hint.classList.add('visible');
+    }, 3000);
 }
 
 // CHAPTER 4 — THE EXAMINATION CHAMBER 
@@ -1266,6 +1272,18 @@ function startPensieve() {
     typeFullLetter(fullLetter);
     
     setTimeout(advancePensieve, 4000);
+
+    // Show the "Expecto Patronum" hint after 5 seconds
+    setTimeout(() => {
+        const hint = document.getElementById('patronum-hint');
+        if (hint) hint.classList.add('visible');
+    }, 5000);
+
+    // Show the "Mischief Managed" hint after 15 seconds (giving time to read)
+    setTimeout(() => {
+        const hint = document.getElementById('mischief-hint');
+        if (hint) hint.classList.add('visible');
+    }, 15000);
 }
 
 if (pensieveSlider) {
@@ -1374,7 +1392,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = false;
+let sortingStarted = true;
 
 //sorting hat 
 function startMagicObservers() {
