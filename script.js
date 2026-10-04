@@ -1392,7 +1392,7 @@ function showFinaleText() {
     }, 5000);
 }
 
-let sortingStarted = true;
+let sortingStarted = false;
 
 //sorting hat 
 function startMagicObservers() {
